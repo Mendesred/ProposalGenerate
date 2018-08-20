@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Proposal Roles</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Proposal</th>
+      <th>Role</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @proposal_roles.each do |proposal_role| %>
+      <tr>
+        <td><%= proposal_role.proposal %></td>
+        <td><%= proposal_role.role %></td>
+        <td><%= link_to 'Show', proposal_role %></td>
+        <td><%= link_to 'Edit', edit_proposal_role_path(proposal_role) %></td>
+        <td><%= link_to 'Destroy', proposal_role, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Proposal role', new_proposal_role_path %>

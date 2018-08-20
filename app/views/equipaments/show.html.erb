@@ -1,0 +1,45 @@
+</br>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<strong>Equipamento ou Acessorio</strong>
+
+	</div>
+	<div class="panel-body">
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>Nome do Campo</th>
+						<th>Valor do campo</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr>
+						<td><strong>Name equipament:</strong></td>
+						<td><%= @equipament.name_equipament %></td>
+					</tr>
+
+					<tr>
+						<td><strong>Valor:</strong></td>
+						<td><%= @equipament.valor %></td>
+					</tr>
+
+					<tr>
+						<td><strong>Depreciacao:</strong></td>
+						<td><%= @equipament.depreciacao %></td>
+					</tr>
+
+				</tbody>
+			</table>
+			<%= link_to equipaments_path,class:"btn btn-default btn-sm ajusteButton", type:"button" do %>
+			<i class="fa fa-arrow-left"></i> Voltar
+			<% end %>
+			<%= link_to edit_equipament_path(@equipament),class:"btn btn-default btn-sm ajusteButton", type:"button" do %>
+			<i class="fa fa-edit"></i> Editar
+			<% end %>
+		</div>
+		<!-- /.table-responsive -->
+	</div>
+	<!-- /.panel-body -->
+</div>

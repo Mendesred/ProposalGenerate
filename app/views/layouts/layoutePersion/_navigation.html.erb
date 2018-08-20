@@ -1,0 +1,68 @@
+
+<div id="wrapper">
+
+	<!-- Navigation -->
+	<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+		<div class="navbar-header">
+			<span class="navbar-brand">Sistema de Proposta</span>
+			<span class="navbar-brand">Olá <%=current_admin.nome%></span>
+		</div>
+		<!-- /.navbar-header -->
+
+		<ul class="nav navbar-top-links navbar-right">
+			<li class="dropdown">
+
+				<%= link_to destroy_admin_session_path, method: :delete do %>
+					<i class="fa fa-sign-out fa-fw"></i> Sair
+				<%end%>
+					<!-- /.dropdown-user -->
+			</li>
+				<!-- /.dropdown -->
+		</ul>
+		<!-- /.navbar-top-links -->
+
+		<div class="navbar-default sidebar ajusteWidthADireita" role="navigation">
+			<div class="sidebar-nav navbar-collapse ajusteWidthADireita">
+				<ul class="nav ajusteWidthADireita" id="side-menu">
+						<li>
+							<a href="/"><i class="fa fa-home fa-fw"></i>Inicio</a>
+						</li>
+					<li>
+								<a href="/services/1/proposals"><i class="fa fa-clipboard fa-fw"></i>Proposta</a>
+					</li>
+						<% if policy(Admin).new? %>
+						<li>
+							<%= link_to dashboard_admin_index_path do %><i class="fa fa-users fa-fw"></i>Dashboard<%end%>
+						</li>
+						<li>
+									<a href="/calculations"><i class="fa fa-bar-chart-o fa-fw"></i>Campos de calculos</a>
+						</li>					
+						<li>
+									<a href="/companies"><i class="fa fa-building fa-fw"></i>Empresa</a>
+						</li>
+						<li>
+									<a href="/services"><i class="fa fa-briefcase fa-fw"></i>Serviço</a>
+						</li>
+						<li>
+									<a href="/roles"><i class="fa fa-user fa-fw"></i>Cargos</a>
+						</li>
+						<li>
+									<a href="/periods"><i class="fa fa-compress fa-fw"></i>Periodo</a>
+						</li>
+						<li>
+									<a href="/rotations"><i class="fa fa-plane fa-fw"></i>Escala</a>
+						</li>
+						<li>
+									<a href="/equipaments"><i class="fa fa-wrench fa-fw"></i>Equipamento e acessorios</a>
+						</li>
+						<li>
+									<a href="/cities"><i class="fa fa-hospital-o fa-fw"></i>Cidades</a>
+						</li>
+					<%end%>
+					
+				</ul>
+			</div>
+			<!-- /.sidebar-collapse -->
+		</div>
+	<!-- /.navbar-static-side -->
+	</nav>

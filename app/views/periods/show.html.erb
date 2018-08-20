@@ -1,0 +1,34 @@
+</br>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<strong>Periodo</strong>
+
+	</div>
+	<div class="panel-body">
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>Nome do Campo</th>
+						<th>Valor do campo</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr>
+						<td><strong>Periodo:</strong></td>
+						<td><%= @period.periodo %></td>
+					</tr>
+				</tbody>
+			</table>
+			<%= link_to periods_path,class:"btn btn-default btn-sm ajusteButton", type:"button" do %>
+			<i class="fa fa-arrow-left"></i> Voltar
+			<% end %>
+			<%= link_to edit_period_path(@period),class:"btn btn-default btn-sm ajusteButton", type:"button" do %>
+			<i class="fa fa-edit"></i> Editar
+			<% end %>
+		</div>
+		<!-- /.table-responsive -->
+	</div>
+	<!-- /.panel-body -->
+</div>

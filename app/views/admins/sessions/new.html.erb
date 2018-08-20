@@ -1,0 +1,49 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <div class="login-panel panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Log in</h3>
+        </div>
+        <div class="panel-body">
+          <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+          <form role="form">
+            <fieldset>
+              <div class="form-group">
+                <div class="field">
+                  <%= f.email_field :email, autofocus: true, autocomplete: "email",class:'form-control',placeholder: 'E-mail',type: 'email'%>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="field">
+                  <%= f.password_field :password, autocomplete: "off",class:'form-control' ,placeholder:'Password', type:'password' %>
+                </div>
+              </div>
+  
+                <label>
+                  <% if devise_mapping.rememberable? -%>
+                    <div class="field">
+                      <%= f.check_box :remember_me %>
+                      <%= f.label :remember_me %>
+                    </div>
+                  <% end -%>
+                </label>
+
+              <!-- Change this to a button or input when using this as a form -->
+              <div class="actions">
+                <%= f.submit "Log in",class: 'btn btn-lg btn-success btn-block'  %>
+              </div>
+              <% end %>
+            </fieldset>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% flash.each do |key, value| %>
+  <script>
+    $.notify("<%= value %>", "info");
+  </script>
+<% end %>

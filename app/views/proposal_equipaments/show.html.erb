@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Equipament:</strong>
+  <%= @proposal_equipament.equipament %>
+</p>
+
+<p>
+  <strong>Proposal:</strong>
+  <%= @proposal_equipament.proposal %>
+</p>
+
+<p>
+  <strong>Quantidade:</strong>
+  <%= @proposal_equipament.quantidade %>
+</p>
+
+<%= link_to 'Edit', edit_proposal_equipament_path(@proposal_equipament) %> |
+<%= link_to 'Back', proposal_equipaments_path %>

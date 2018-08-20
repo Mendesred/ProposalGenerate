@@ -1,0 +1,111 @@
+<h1 class="page-header topHeader">Lista de campos de calculos     
+<!--   <#%= link_to meals_path,class:"btn btn-default btn-sm pull-right ajusteButton", type:"button" do %>
+  <i class=""></i> Exibir lista de valores VR
+<#% end %> -->
+</h1>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong>Campos de calculos</strong>
+    <% @calculations.each do |calculation| %>
+    <%= link_to "/calculations/1/edit",class:"btn btn-default btn-sm pull-right ajusteButton", type:"button" do %>
+    <i class="fa fa-edit"></i> Editar
+    <% end %>
+    <%= link_to "/calculations/1",class:"btn btn-default btn-sm pull-right ajusteButton", type:"button" do %>
+    <i class="fa fa-search"></i> Exibir
+    <% end %>
+    <strong class="pull-right spaceRigt" style="padding-right: 10px;">Atualizado em:
+    <%= criate_date(calculation.updated_at) %></strong>
+
+  </div>
+  <div class="panel-body">
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Nome do Campo</th>
+            <th style="width: 20%;">Valor do campo em Decimal</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>Salario minimo</td>
+            <td><%= number_to_currency(calculation.salario_minimo) %></td>
+          </tr>
+          <tr>
+            <td>Fgts</td>
+            <td><%= calculation.fgts %> %</td>
+          </tr>
+          <tr>
+            <td>Inss</td>
+            <td><%= calculation.inss %> %</td>
+          </tr>
+          <tr>
+            <td>Sebrae</td>
+            <td><%= calculation.sebrae %> %</td>
+          </tr>
+          <tr>
+            <td>Incra</td>
+            <td><%= calculation.incra %> %</td>
+          </tr>
+          <tr>
+            <td>Salario_educacao</td>
+            <td><%= calculation.salario_educacao %> %</td>
+          </tr>
+          <tr>
+            <td>Sesc</td>
+            <td><%= calculation.sesc %> %</td>
+          </tr>
+          <tr>
+            <td>Senac</td>
+            <td><%= calculation.senac %> %</td>
+          </tr>
+          <tr>
+            <td>Decimo terceito salario</td>
+            <td><%= calculation.decimo_terceito %> %</td>
+          </tr>
+          <tr>
+            <td>Um terço constitucional</td>
+            <td><%= calculation.um_terco_constitucional %> %</td>
+          </tr>
+          <tr>
+            <td>Ferias</td>
+            <td><%= calculation.ferias %> %</td>
+          </tr>
+          <tr>
+            <td>Porsentagem do Inss sob soma decimo mais um terco de ferias</td>
+            <td><%= calculation.pct_inss_sob_soma_decimo_um_terco_ferias %> %</td>
+          </tr>
+          <tr>
+            <td>Porsentagem Fgts sob soma decimo mais um terco de ferias</td>
+            <td><%= calculation.pct_fgts_sob_soma_decimo_um_terco_ferias %> %</td>
+          </tr>
+          <tr>
+            <td>Aviso previo</td>
+            <td><%= calculation.aviso_previo %> %</td>
+          </tr>
+          <tr>
+            <td>Indenização Fgts</td>
+            <td><%= calculation.indenizacao_fgts %> %</td>
+          </tr>
+          <tr>
+            <td>Indice Administrativo:</td>
+            <td><%= calculation.indiceAdministrativo%> %</td>
+          </tr>
+          <tr>
+            <td>Idice Operacional:</td>
+            <td><%= calculation.indiceOperacional%> %</td>
+          </tr>
+          <tr>
+            <td>Horas de calculo adicional noturno:</td>
+            <td><%= calculation.horasDeCalculoAdNoturno%> %</td>
+          </tr>
+        </tbody>
+      </table>
+      <% end %>
+    </div>
+    <!-- /.table-responsive -->
+  </div>
+  <!-- /.panel-body -->
+</div>

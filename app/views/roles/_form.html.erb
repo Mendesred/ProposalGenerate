@@ -1,0 +1,112 @@
+<div class="col-lg-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Formulario de criação
+    </div>
+
+
+
+    <div class="panel-body">
+      <div class="col-lg-12">
+        <%= form_for(@role) do |f| %>
+          <% if @role.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@role.errors.count, "error") %> prohibited this role from being saved:</h2>
+
+              <ul>
+              <% @role.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <div class="inline">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="field">
+                  <%= f.label :cargo %><br>
+                  <%= f.text_field :cargo,class:'form-control', placeholder:'Nome do cargo'  %>
+                </div>
+              </div> 
+              <div class="col-sm-4">
+                <div class="field">
+                  <%= f.label :salario %><br>
+                  <%= f.text_field :salario,:value => number_with_precision(f.object.salario,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'Valor do salario',  step: 0.01 %>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="field">
+                  <%= f.label :gratificacao %><br>
+                  <%= f.text_field :gratificacao,class:'form-control', placeholder:'Valor da gratificacao' , step: 0.01 %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="inline">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="field">
+                  <%= f.label :vale_refeicao %><br>
+                  <%= f.text_field :vale_refeicao,:value => number_with_precision(f.object.vale_refeicao,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'Valor do vale refeicao' , step: 0.01 %>
+                </div>
+              </div>
+              <div class="col-sm-4"> 
+                <div class="field">
+                  <%= f.label :assist_medica %><br>
+                  <%= f.text_field :assist_medica,:value => number_with_precision(f.object.assist_medica,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'Valor da assitencia medica' , step: 0.01 %>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="field">
+                  <%= f.label :seg_vida %><br>
+                  <%= f.text_field :seg_vida,:value => number_with_precision(f.object.seg_vida,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'Valor do seguro de vida' , step: 0.01 %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="inline">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="field">
+                  <%= f.label :uniformes %><br>
+                  <%= f.text_field :uniformes,:value => number_with_precision(f.object.uniformes,precision: 2, locale: :"pt-BR"), class:'form-control', placeholder:'Valor do uniformes', step: 0.01 %>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="field">
+                  <%= f.label :assis_Social_Familiar %><br>
+                  <%= f.text_field :assist_Soc_Familiar,:value => number_with_precision(f.object.ppr,precision: 2, locale: :"pt-BR"), class:'form-control', class:'form-control', placeholder:'Valor da assistencia social familiar', step: 0.01 %>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="field">
+                  <%= f.label :benefício_Natalidade %><br>
+                  <%= f.text_field :beneficio_Natalidade , :value => number_with_precision(f.object.beneficio_Natalidade,precision: 2, locale: :"pt-BR"), class:'form-control', placeholder:'Valor beneficio natalidade', step: 0.01 %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="inline">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="field">
+                  <%= f.label :ppr %><br>
+                  <%= f.text_field :ppr, :value => number_with_precision(f.object.ppr,precision: 2, locale: :"pt-BR"), class:'form-control', placeholder:'Valor beneficio natalidade', step: 0.01 %>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="field">
+                  <%= f.label :service_id %><br>
+                  <%= collection_select(:role, :service_id, @select_all_service, :id, :tipo_servico,{},class:'form-control') %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="actions">
+            <button type="submit" class="btn btn-outline btn-success">Salvar</button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

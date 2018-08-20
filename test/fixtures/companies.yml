@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nameCompany: MyString
+  irrf: 1.5
+  csll: 1.5
+  pis: 1.5
+  cofins: 1.5
+  cesta: 1.5
+
+two:
+  nameCompany: MyString
+  irrf: 1.5
+  csll: 1.5
+  pis: 1.5
+  cofins: 1.5
+  cesta: 1.5

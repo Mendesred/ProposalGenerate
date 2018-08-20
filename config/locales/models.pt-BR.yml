@@ -1,0 +1,9 @@
+'pt-BR':
+  activerecord:
+    errors:
+      messages:
+        error_extra_all: "asdasadasd!!123123123"
+    models:
+      proposals:
+        dias_jornada_ex_semana_all: 'Quatidade de dias de horas extras para todas as semanas'
+        

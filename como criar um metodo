@@ -1,0 +1,1120 @@
+class Proposal < ActiveRecord::Base
+	belongs_to :city
+	belongs_to :rotation
+	belongs_to :company
+	belongs_to :admin
+	#belongs_to :role  #por hora a conecção sera has_many
+
+	has_many :proposal_equipaments
+	has_many :proposal_roles
+	#has_many :equipaments, :through => :proposal_equipaments
+
+	## Js Original com funções do collapse na pasta Bug_somente_consulta ##
+
+	# Associações
+	accepts_nested_attributes_for :proposal_equipaments, allow_destroy:true
+	accepts_nested_attributes_for :proposal_roles, allow_destroy:true
+
+
+	after_save :sum_equipament
+	after_save :prenche_vasio
+
+	#validates :cliente, presence: true
+	validate :valida_dias_semana
+	def valida_dias_semana
+		if (dias_jornada_ex_semana_all.to_f + dias_refeicao_ex_semana_all.to_f )>7 && ((h_extra_jornada_all==1) && (h_extra_refeicao_all==1))
+			
+			errors.add(:dias_jornada_ex_semana_all ,"A soma da quantidade de dias da semana entre jornada e refeição não pode ser superior a 7 por favor corrigir.")
+		end
+	end
+
+
+	private
+
+	  TurnoMatutino=1
+
+		def calculoVrAll(numeroDiasTrabMes,numeroDiasTrabSemana,ajustePgVrAll,feriadoParcial,qtdPostos)
+			begin
+				return ((numeroDiasTrabMes/numeroDiasTrabSemana*ajustePgVrAll)+feriadoParcial)*(qtdPostos)
+			rescue
+				return 0
+			end
+		end
+
+		##
+		# Nome do metodo calculoVrParcial
+		# Variaveis : 
+		# vrTurno = asdasd
+		# turno = asdasdas
+		#
+		##
+		def calculoVrParcial(vrTurno,turno,rotationId,diasPgVrSemanaTurno,diasPgVrFeriadoTurno,
+															ajustePgVrTurno,feriadoParcial,feriadoCidade,controleValorFuncionario,numeroDiasTrabMes,numeroDiasTrabSemana)
+			if (vrTurno == turno)&&((rotationId== 8)||(rotationId == 9))
+					if (diasPgVrSemanaTurno > 5)
+						ajustePgVrTurno = 5
+					else
+						ajustePgVrTurno = diasPgVrSemanaTurno.to_f
+					end
+
+					if ((diasPgVrSemanaTurno < 6) && (diasPgVrFeriadoTurno == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (feriadoCidade/12)
+					else	
+						feriadoParcial = 0
+					end
+							# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					return calculoVrAll(numeroDiasTrabMes,numeroDiasTrabSemana,ajustePgVrTurno.to_f,(feriadoParcial).round(2),controleValorFuncionario.to_f)
+						#((4.35*diasPgVrSemanaTurno)+dias_pg_vr_feriado_matu.to_f)*controleValorFuncionario.to_f
+				else
+					return 0
+				end
+		end
+
+		def select_calculation
+			select_all_calculation = Calculation.first
+		end
+		def prenche_vasio
+
+			if (cliente.blank?)
+				cliente = Faker::DragonBall.character
+				update_column(:cliente,(cliente))
+			end
+
+			if (codigo_cliente.blank?)
+				codigo_cliente = rand(10000000..99999999)
+				update_column(:codigo_cliente,(codigo_cliente))
+
+			end
+		end
+
+	def sum_equipament
+		vA = 0,totalEquipamento = 0.0,efetivoTotal = 0,totalSalarios = 0, baseCalculoSalarioMedio = 0,valorDeInsalubridade = 0,salario = 0, 
+		valorDePericulosidade = 0,valorPeriOuIsalubri = 0,totalHrExtrasAlmoco = 0,totalFuncionarios = 0,
+		efetivoIndivitual = 0,totalHrsAdNoturnoVespertino = 0,totalHrsAdNoturno = 0, acumuladorFuncionarios = 0, hAlmoco = 0,obgFGTS = 0,
+		obgINSS = 0, obgseguro_aci_trabalho = 0,seguro_aci_trabalho = 0, obgsebrae = 0, obgincra = 0, obgsalario_educacao = 0, 
+		obgsesc = 0 , obgsenac  = 0 ,totalIncargosDiretos = 0,totalferiasUmDozeAvos = 0,totalumTercoConstiUmDozeAvos = 0,
+		totaldecimoTerceiroUmDozeAvos = 0,totalInssSobFeriasUnTercoDecimo = 0,totalFgtsSobFeriasUnTercoDecimo = 0,totalAvisoPrevio = 0,
+		totalIndenizacaoSobreFGTS = 0,reservaTecnica = 0,totCesta = 0,totVR = 0,totAssiteciaMedica = 0,totSeguroVida = 0,totVT = 0,
+		totReciclagem = 0,totUniforme = 0,vDeCalculoTotal = 0,pctTotal = 0, valorCofins= 0, valorPis = 0, vUniAssistMedica = 0,
+		vUniUniforme = 0,vUniVR = 0,vUniSegVida = 0, horas_vespertino = 0,vUniPpr = 0,desconto_vr = 0,tipo_servico = 0, v_cesta  = 0
+		v_Soc_Familiar = 0,v_ben_Natalidade = 0, multiplicador = 0,totSocialFamiliar = 0,totBenNatalidade = 0,horas_trabalhadas = 0,
+		h_refeicao = 0,  h_feriado = 0, qtdPostos = 0
+
+		self.proposal_equipaments.each do |proposal_equipament| # for usado para pegar todos os equipamentos adcionados na proposta.
+		totalEquipamento += (proposal_equipament.quantidade*
+													(proposal_equipament.equipament.valor.to_f / 
+														proposal_equipament.equipament.depreciacao.to_f ))# total do valor de equipamento (usar na soma de totais).
+		end
+		self.proposal_roles.each do |proposal_role| # for para contar e somar quantidades de funcionarios e somar seus salarios.
+			 
+					#  vA = (((proposal_role.role.salario.to_f).round(2)*((proposal_role.role.gratificacao.to_f/100).round(2)+1)).round(2)*
+					#      proposal.rotation.efetivo).round(2) #Calculo de salario multiplicado pela porcentagem da gratificação e depois pelo efetivo.
+			totalSalarios = totalSalarios+((proposal_role.role.salario.to_f*((proposal_role.role.gratificacao.to_f/100).round(2)+1)).round(2)*self.rotation.efetivo)*proposal_role.qtd_postos.to_f #acumulador de totais da soma de cima.
+
+			efetivoTotal += self.rotation.efetivo*proposal_role.qtd_postos.to_f #total do efetivo da escala (efetivo*quantidade de postos)
+
+			qtdPostos = qtdPostos+(proposal_role.qtd_postos) #total de Postos
+			##total Efetivo no posto  
+			salario = proposal_role.role.salario.to_f
+			##total Salario no posto  
+			efetivoIndivitual = self.rotation.efetivo/self.rotation.qtd_funcionarios.to_f
+			
+			acumuladorFuncionarios+=self.rotation.qtd_funcionarios*proposal_role.qtd_postos
+			######## Abaixo esta alguns valores que será usado para calculos mais abaixo 
+			####### aproveitei a requisição de porposal roles para armasenar o valor do ultimo cago adcionado
+			####### Estou ciente que não é a melhor forma de pegar este dado porem foi a unica que encontei
+			####### NOTA PARA FUTURAS MANUTENÇÕES
+			vUniAssistMedica = proposal_role.role.assist_medica.to_f
+
+			desconto_vr = proposal_role.role.service.desconto_vr.to_f
+
+			v_cesta = proposal_role.role.service.cesta.to_f
+
+			v_Soc_Familiar = proposal_role.role.assist_Soc_Familiar.to_f
+
+			v_ben_Natalidade = proposal_role.role.beneficio_Natalidade.to_f
+
+			tipo_servico = proposal_role.role.service.tipo_servico
+			
+			vUniUniforme = proposal_role.role.uniformes.to_f
+
+			vUniPpr = proposal_role.role.ppr.to_f
+			
+			vUniVR = proposal_role.role.vale_refeicao.to_f
+			
+			vUniSegVida = proposal_role.role.seg_vida.to_f
+		end # fim do for proposal_role.
+		efetivoTotal =(efetivoTotal).round(2)
+		if (totalEquipamento == 0)
+			update_column(:totalEquipamento, (totalEquipamento))
+		else 
+			totalEquipamento = 0
+			update_column(:totalEquipamento, (totalEquipamento))
+		end
+
+		update_column(:salario, (salario))
+		update_column(:qtd_postos, (qtdPostos))
+		update_column(:totalSalarios, (totalSalarios).round(2))
+		update_column(:efetivoTotal, (efetivoTotal))
+		update_column(:efetivoIndivitual, (efetivoIndivitual))
+		update_column(:acumuladorFuncionarios, (acumuladorFuncionarios))
+		update_column(:vUniAssistMedica, (vUniAssistMedica))
+		update_column(:vUniUniforme, (vUniUniforme))
+		update_column(:vUniVR, (vUniVR))
+		update_column(:vUniSegVida, (vUniSegVida))
+		update_column(:vUniPpr, (vUniPpr))
+		update_column(:tipo_servico, (tipo_servico))
+		update_column(:v_cesta, (v_cesta))
+		update_column(:v_ben_Natalidade, (v_ben_Natalidade))
+		update_column(:v_Soc_Familiar, (v_Soc_Familiar))
+
+		baseCalculoSalarioMedio = (totalSalarios/efetivoTotal).round(2)#divide o total do salario pelo efetivo para fins de calculos em outras formulas
+		totalFuncionarios = efetivoTotal/efetivoIndivitual  # total de quantidade de funcionarios (soma quantidade de funcionarios definidos na escala com base na quantidade de postos)
+		update_column(:totalFuncionarios, (totalFuncionarios))
+
+		###############################################################################################################################################
+		## calculos de periculosidade e insalubridade #################################################################################################
+		
+		totalSalarios = (totalSalarios).round(2) #arredonda o total do salario
+		valorDePericulosidade = (0.3*salario.to_f).round(2)
+		valorDeInsalubridade = (grau_de_insalubridade*select_calculation.salario_minimo.to_f).round(2)
+		if (adcional_periculosidade_insalubridade == 1)
+			if valorDePericulosidade>valorDeInsalubridade
+				valorPeriOuIsalubri = valorDePericulosidade
+			else
+				valorPeriOuIsalubri = valorDeInsalubridade
+			end
+		else
+				valorPeriOuIsalubri = 0.0
+		end
+
+		update_column(:valorPeriOuIsalubri, (valorPeriOuIsalubri))
+
+
+		###############################################################################################################################################
+		## adicional noturno e vespertino #############################################################################################################
+		umTerco = totalFuncionarios/3
+		if (rotation.ad_noturno == 0) # testa quando não tem adicional noturno
+			ajusteDivPorZero = 0 # ajuste de divizão por 0
+			umTerco = 0 # transforma 1 terço em 0
+			doisTerco = totalFuncionarios # pega total de funcionarios para calculo de horas feriados
+		else
+			ajusteDivPorZero = rotation.ad_noturno/rotation.ad_noturno # correção de erro de divizão por 0
+			doisTerco =umTerco*2 # pega apenas 2 terços quando adicional noturno for diferente de 0 e acrecenta para o calculo de horas extras feriados
+		end 
+		update_column(:ajusteDivPorZero,(ajusteDivPorZero))
+		update_column(:umTerco,(umTerco))
+		update_column(:doisTerco,(doisTerco))
+
+		if period_id == 2 || period_id == 4 || period_id == 6 || period_id == 7
+			horas_vespertino = (((rotation.ad_vespertido_noturno*100)/select_calculation.horasDeCalculoAdNoturno).round(4)*rotation.fator_escala).round(4)
+			update_column(:horas_vespertino,(horas_vespertino))
+			totalHrsAdNoturnoVespertino=((((((baseCalculoSalarioMedio+valorPeriOuIsalubri).round(2)/220))*0.2*
+																				horas_vespertino)*((totalFuncionarios/rotation.qtd_funcionarios)))/efetivoTotal).round(2) #adicional noturno vespertino
+			update_column(:totalHrsAdNoturnoVespertino, (totalHrsAdNoturnoVespertino))
+		else
+			horas_vespertino
+			update_column(:horas_vespertino,(horas_vespertino))
+			update_column(:totalHrsAdNoturnoVespertino, (totalHrsAdNoturnoVespertino))
+		end
+
+		totalHrsAdNoturno = (((((baseCalculoSalarioMedio + valorPeriOuIsalubri).round(2)/220)) * 0.2 *
+													(((ajusteDivPorZero * 60)/select_calculation.horasDeCalculoAdNoturno).round(6) * rotation.fator_escala * rotation.ad_noturno))*
+															(totalFuncionarios/rotation.qtd_funcionarios)/efetivoTotal).round(2) #adicional noturno
+		update_column(:totalHrsAdNoturno, (totalHrsAdNoturno))
+
+		
+
+		###############################################################################################################################################
+		###### Começo dos ifs para hora extra  ########################################################################################################
+		teste1 = 0
+		teste2 = 0
+		teste3 = 0
+		teste4 = 0
+		hExtraRefeicaoAll = 0
+		hExFeriadoJornadaAll = 0
+		horaEmMinutos = 60
+		somaHorasExJornRefeiDiurno = 0
+		somaHorasExJornRefeiNoturno = 0
+		hExJornada_all = 0
+		mExJornada_all = 0
+		hExJornadaAll = h_ex_jornada_all.to_f
+		mExJornadaAll = m_ex_jornada_all.to_f
+		multiplicaHorasDiurno = 0
+		multiplicaHorasNoturno = 0
+		horaExtraFeriadoAll = 0
+		diasJornadaExSemanaAll = dias_jornada_ex_semana_all.to_f
+		diasRefeicaoExSemanaAll = dias_refeicao_ex_semana_all.to_f
+		mediasDeDiasDoMes = (30.44/7).round(2)
+		somaDiasAllRefeicaoEJornada = 0
+
+		#### Este if serve para definir qual a quantidade de dias que sera mutiplicado para todos All ### 
+		if ((diasJornadaExSemanaAll+diasRefeicaoExSemanaAll)>=7) && (h_extra_jornada_all == 1 && h_extra_refeicao_all == 1)
+			somaDiasAllRefeicaoEJornada = 7
+		elsif(h_extra_jornada_all == 1 && h_extra_refeicao_all == 1) && ((diasJornadaExSemanaAll+diasRefeicaoExSemanaAll)<7)
+			somaDiasAllRefeicaoEJornada = (diasJornadaExSemanaAll+diasRefeicaoExSemanaAll)
+		elsif(h_extra_jornada_all == 0 && h_extra_refeicao_all == 1)
+			somaDiasAllRefeicaoEJornada = diasRefeicaoExSemanaAll
+		elsif(h_extra_jornada_all == 1 && h_extra_refeicao_all == 0) 
+			somaDiasAllRefeicaoEJornada = diasJornadaExSemanaAll
+		end
+
+		#### Este if uso para zerar valores de campos que dever ser zero caso horas extras de jornada seja não ### 
+		if h_extra_jornada_all != 1
+			dias_jornada_ex_semana_all = 0.0
+			hExJornadaAll = 0.0
+			mExJornadaAll = 0.0
+			h_ex_feriado_jornada_all = 0.0
+		end
+
+		#### Este if uso para zerar valores de campos que dever ser zero caso horas extras de refeição seja não ### 
+		if (h_extra_refeicao_all != 1)
+			dias_refeicao_ex_semana_all = 0.0
+			h_refeicao_ex_feriado_all = 0.0
+		end
+		########## Horas extras feriados para todos os periodos ####
+
+
+		########## Horas extras feriados para todos os periodos ####
+
+		#### transformo minutos em 0 caso horas seja dois para não ter conflito de horario #### 
+		if (h_ex_jornada_all >= 2)
+			mExJornadaAll = 0
+		end
+
+		if (h_ex_feriado_jornada_all != 0 || h_refeicao_ex_feriado_all != 0)
+			horaExtraFeriadoAll = (city.feriado/12).round(2)
+		end
+			update_column(:hora_extra_feriado_all, (horaExtraFeriadoAll))###APAGAR TESTE
+
+		# Soma horas e minutos de cada periodo individualmente tanto horas refeição quanto horas jornada
+				somaHorasExJornRefeiMatutino = ((((hExJornadaAll*horaEmMinutos)+mExJornadaAll+(horaExtraFeriadoAll.to_f*horaEmMinutos))/horaEmMinutos)*umTerco*30.44)
+				somaHorasExJornRefeiVespertino = ((((hExJornadaAll*horaEmMinutos)+mExJornadaAll+(horaExtraFeriadoAll.to_f*horaEmMinutos))/horaEmMinutos)*umTerco*30.44)
+				somaHorasExJornRefeiNoturno = ((((hExJornadaAll*horaEmMinutos)+mExJornadaAll+(horaExtraFeriadoAll.to_f*horaEmMinutos))/select_calculation.horasDeCalculoAdNoturno)*umTerco*30.44)
+		
+
+		if (controle_hora_extra == 0)
+			if (h_extra_jornada_all == 0 && h_extra_refeicao_all == 0)
+				totalHrExtrasAlmoco = 0
+				update_column(:totalHrExtrasAlmoco, (totalHrExtrasAlmoco))
+			else
+				# aqui estou somando horas e minutos com de jornada com horas e minutos de almoço para os todos periodos
+				somaHorasExJornRefeiDia = (((((hExJornadaAll*horaEmMinutos)+mExJornadaAll)/horaEmMinutos)*doisTerco*30.44)+
+																				((mediasDeDiasDoMes*somaDiasAllRefeicaoEJornada)+horaExtraFeriadoAll))
+
+				somaHorasExJornRefeiNoite = (((((hExJornadaAll*horaEmMinutos)+mExJornadaAll)/select_calculation.horasDeCalculoAdNoturno)*umTerco*30.44)+
+																				((mediasDeDiasDoMes*somaDiasAllRefeicaoEJornada)+horaExtraFeriadoAll)).round(2)
+
+				#((rotation.fator_escala/7)*dias_jornada_ex_semana_all.to_f+hExFeriadoJornadaAll)+(rotation.fator_escala*acumuladorFuncionarios)
+			end
+		elsif (controle_hora_extra == 1)
+			x =0
+		end
+		update_column(:soma_horas_ex_jorn_refeicao_dia, (somaHorasExJornRefeiDia))
+		update_column(:soma_horas_ex_jorn_refeicao_noite, (somaHorasExJornRefeiNoite))
+		###############################################################################################################################################
+		## calculos horas extras ######################################################################################################################
+
+		if (h_refeicao == 0) #Condicional criada para testar se a hora de almço é calculada  
+			totalHrExtrasAlmoco = 0
+			update_column(:totalHrExtrasAlmoco, (totalHrExtrasAlmoco))
+		elsif (h_refeicao == 1)
+			totalHrExtrasAlmoco = (((((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220)*1.6)*
+																	(acumuladorFuncionarios*rotation.fator_escala))/efetivoTotal).round(2)
+															#o calculo a cima é para calcular a cobrança de horas em extras de almoço (calculo de horas extras a mais é calculado de forma diferente)
+			update_column(:totalHrExtrasAlmoco, (totalHrExtrasAlmoco))
+		end
+
+		vFeriadosDeCitiesMV = (city.feriado*0.6108) #Valor de feriado para carga horaia de matutino vespertino
+			update_column(:vFeriadosDeCitiesMV, (vFeriadosDeCitiesMV))
+
+		vFeriadosDeCitiesN = (city.feriado*0.583) #Valor de feriado para carga horaia de matutino vespertino
+			update_column(:vFeriadosDeCitiesN, (vFeriadosDeCitiesN))
+
+		if (h_feriado == 1)
+		totalHrExtrasFeriado = (((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220)*
+															((vFeriadosDeCitiesMV*doisTerco)+(vFeriadosDeCitiesN*umTerco)).round(2)/(efetivoTotal)).round(2)
+			update_column(:totalHrExtrasFeriado, (totalHrExtrasFeriado))
+		elsif (h_feriado == 0)
+			umTerco = 0.0
+			doisTerco = 0.0
+			totalHrExtrasFeriado = 0.0
+			update_column(:totalHrExtrasFeriado, (totalHrExtrasFeriado))
+		end
+
+								#Calculo para definir o valor de horas extras feriados feito apartir de horas trabalhadas dia pelas quantidade de feriados
+		refexoDSR = ((totalHrsAdNoturnoVespertino+ totalHrsAdNoturno+ totalHrExtrasAlmoco+ totalHrExtrasFeriado)/25.09*5.35).round(2)
+			update_column(:refexoDSR, (refexoDSR))
+		salarioMedioFinal = (baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+ totalHrsAdNoturno+ totalHrExtrasAlmoco+ totalHrExtrasFeriado+refexoDSR).round(2)
+			update_column(:salarioMedioFinal, (salarioMedioFinal))
+		massaSalarial = (salarioMedioFinal*efetivoTotal).round(2)
+			update_column(:massaSalarial, (massaSalarial))
+ 
+		###############################################################################################################################################
+		## > Obrigações sociais sobre massa salarial ##################################################################################################
+		###############################################################################################################################################
+
+
+		obgFGTS = ((select_calculation.fgts/100)*massaSalarial).round(2)
+		obgINSS = ((select_calculation.inss/100)*massaSalarial).round(2)
+		seguro_aci_trabalho = (company.seguro_aci_trabalho)
+		obgseguro_aci_trabalho = ((company.seguro_aci_trabalho/100)*massaSalarial).round(2)
+		obgsebrae = ((select_calculation.sebrae/100)*massaSalarial).round(2)
+		obgincra = ((select_calculation.incra/100)*massaSalarial).round(2)
+		obgsalario_educacao = ((select_calculation.salario_educacao/100)*massaSalarial).round(2)
+		obgsesc = ((select_calculation.sesc/100)*massaSalarial).round(2)
+		obgsenac = ((select_calculation.senac/100)*massaSalarial).round(2)
+		update_column(:obgFGTS, (obgFGTS))
+		update_column(:obgINSS, (obgINSS))
+		update_column(:seguro_aci_trabalho, (seguro_aci_trabalho))
+		update_column(:obgseguro_aci_trabalho, (obgseguro_aci_trabalho))
+		update_column(:obgsebrae, (obgsebrae))
+		update_column(:obgincra, (obgincra))
+		update_column(:obgsalario_educacao, (obgsalario_educacao))
+		update_column(:obgsesc, (obgsesc))
+		update_column(:obgsenac, (obgsenac))
+
+		totalIncargosDiretos = (obgFGTS+obgINSS+obgseguro_aci_trabalho+obgsebrae+obgincra+obgsalario_educacao+obgsesc+obgsenac).round(2)
+		update_column(:totalIncargosDiretos, (totalIncargosDiretos))
+
+		###############################################################################################################################################
+		## >  Provisões sobre massa salarial ##########################################################################################################
+		###############################################################################################################################################
+
+		
+		totalferiasUmDozeAvos = ((efetivoTotal*salarioMedioFinal)*((select_calculation.ferias)/100)).round(2)
+		totalumTercoConstiUmDozeAvos =((efetivoTotal*salarioMedioFinal)*((select_calculation.um_terco_constitucional)/100)).round(2)
+		totaldecimoTerceiroUmDozeAvos = ((efetivoTotal*salarioMedioFinal)*((select_calculation.decimo_terceito)/100)).round(2)
+		totalInssSobFeriasUnTercoDecimo = ((totalferiasUmDozeAvos+totalumTercoConstiUmDozeAvos+totaldecimoTerceiroUmDozeAvos)*(select_calculation.pct_inss_sob_soma_decimo_um_terco_ferias/100)).round(2)
+		totalFgtsSobFeriasUnTercoDecimo = ((totalferiasUmDozeAvos+totalumTercoConstiUmDozeAvos+totaldecimoTerceiroUmDozeAvos)*(select_calculation.pct_fgts_sob_soma_decimo_um_terco_ferias/100)).round(2)
+		totalAvisoPrevio = ((select_calculation.aviso_previo/100)*massaSalarial).round(2)
+		totalIndenizacaoSobreFGTS = ((totalFgtsSobFeriasUnTercoDecimo+obgFGTS)*(select_calculation.indenizacao_fgts/100)).round(2)
+
+
+		totalProvisaoMassaSalarial = (totalferiasUmDozeAvos+totalumTercoConstiUmDozeAvos+totaldecimoTerceiroUmDozeAvos+
+																		totalInssSobFeriasUnTercoDecimo+totalFgtsSobFeriasUnTercoDecimo+totalAvisoPrevio+totalIndenizacaoSobreFGTS  ).round(2)
+
+		update_column(:totalferiasUmDozeAvos, (totalferiasUmDozeAvos))
+		update_column(:totalumTercoConstiUmDozeAvos, (totalumTercoConstiUmDozeAvos))
+		update_column(:totaldecimoTerceiroUmDozeAvos, (totaldecimoTerceiroUmDozeAvos))
+		update_column(:totalInssSobFeriasUnTercoDecimo, (totalInssSobFeriasUnTercoDecimo))
+		update_column(:totalFgtsSobFeriasUnTercoDecimo, (totalFgtsSobFeriasUnTercoDecimo))
+		update_column(:totalAvisoPrevio, (totalAvisoPrevio))
+		update_column(:totalIndenizacaoSobreFGTS, (totalIndenizacaoSobreFGTS))
+		update_column(:totalProvisaoMassaSalarial, (totalProvisaoMassaSalarial))  
+
+
+		###############################################################################################################################################
+		## > Benefícios por Funcionário  ##############################################################################################################
+		###############################################################################################################################################
+
+		totCesta = (v_cesta*efetivoTotal).round(2)
+######################colar aqui
+		controleDePostosParaCalculoVt = 0
+		if umTerco == 0
+			controleValorFuncionario = efetivoIndivitual*qtdPostos
+			controleValorFuncionarioSemEfetivo = qtdPostos
+		end
+		#teste4 = qtdPostos
+		if (controle_vr == 0)
+			if (vr_all == 0)
+				qtdVrPagas = 0
+			elsif (vr_all == 1)
+				if (rotation.dias_trabalhados == 25.3646)  #if que trata escala 5 por 1
+					if (dias_pg_vr_semana_all > 7)
+						ajustePgVrAll = 7
+					else
+						ajustePgVrAll = dias_pg_vr_semana_all.to_f
+					end
+					if ((dias_pg_vr_semana_matu < 7) && (dias_pg_vr_feriado_all == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					if (rotation.id == 1) # if usado para tratar quando e Matutino/Vespertino/Noturno
+								qtdVrPagas = calculoVr(30.44,7,ajustePgVrAll,feriadoParcial,qtdPostos)+##((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)+
+															((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)+
+																((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)
+
+					elsif ((rotation.id == 2)||(rotation.id == 3)||(rotation.id == 4))# if usado para tratar quando e Matutino ou Vespertino ou Noturno
+								qtdVrPagas = ((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)
+
+					elsif ((rotation.id == 5)||(rotation.id == 6)||(rotation.id == 7)) # if usado para tratar quando e Matutino/Vespertino ou Matutino/Noturno ou Vespertino/Vespertino
+								qtdVrPagas = ((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)+
+															((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)
+					end
+
+				elsif (rotation.dias_trabalhados == 21.75)  #if que trata escala 5 por 2
+					if (dias_pg_vr_semana_all > 5)
+						ajustePgVrAll = 5
+						feriadoParcial = (city.feriado/12)
+					else
+						ajustePgVrAll = dias_pg_vr_semana_all.to_f
+						feriadoParcial = 0
+					end
+
+					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					if (rotation.id == 8) # if usado para tratar quando e Matutino/Noturno
+								qtdVrPagas = ((21.75/5 *ajustePgVrAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)+
+															((21.75/5 *ajustePgVrAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+					elsif (rotation.id == 9)||(rotation.id == 10)# if usado para tratar quando e Matutino ou Noturno
+								qtdVrPagas = ((21.75/5 *ajustePgVrAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+					end
+				elsif (rotation.dias_trabalhados == 26.1)  #if que trata escala 6 por 1
+					if dias_pg_vr_semana_all > 6
+						ajustePgVrAll = 6
+						feriadoParcial = (city.feriado/12)
+					else
+						ajustePgVrAll = dias_pg_vr_semana_all.to_f
+						feriadoParcial = 0
+					end
+					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a6
+					if (rotation.id == 11)# if usado para tratar quando e Matutino/Noturno
+						qtdVrPagas = ((26.1/6 *ajustePgVrAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)+
+													((26.1/6 *ajustePgVrAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+					elsif (rotation.id == 12)||(rotation.id == 13)# if usado para tratar quando e Matutino ou Noturno
+						qtdVrPagas = ((26.1/6 *ajustePgVrAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+					end   
+				elsif (rotation.dias_trabalhados == 15.22)  #if que trata escala 12 X 36
+					if (dias_pg_vr_semana_all >= 6)
+						ajustePgVrAll = 6
+						feriadoParcial = (city.feriado/12)
+					else
+						ajustePgVrAll = dias_pg_vr_semana_all.to_f
+						feriadoParcial = 0
+					end
+					if (rotation.id == 11) # if usado para tratar quando e Matutino/Noturno
+					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a7
+							qtdVrPagas = ((15.22/7 *ajustePgVrAll)+feriadoParcial)*(controleValorFuncionario)+
+														((15.22/7 *ajustePgVrAll)+feriadoParcial)*(controleValorFuncionario)
+					elsif (rotation.id == 12)||(rotation.id == 13)# if usado para tratar quando e Matutino ou Noturno
+							qtdVrPagas = ((15.22/7 *ajustePgVrAll)+feriadoParcial)*(controleValorFuncionario)
+					end
+				end
+			end
+		else #(controle_vr == 1)
+			
+
+			if (rotation.dias_trabalhados == 25.3646)  #if que trata escala 5 por 1
+
+				calculoVrParcial(vr_matu,Matutino,rotation.id,dias_pg_vr_semana_matu,
+					dias_pg_vr_feriado_matu,ajustePgVrMatu,feriadoParcial,city.feriado,qtdPostos)
+
+
+				if (vr_matu == 1)&&((rotation.id == 1)||(rotation.id == 2)||(rotation.id == 5)||(rotation.id == 6))
+
+					if (dias_pg_vr_semana_matu > 7)# teste dias se maior que 7 e tranforma e 7
+						ajustePgVrMatu = 7
+					else
+						ajustePgVrMatu = dias_pg_vr_semana_matu.to_f
+					end
+
+					if ((dias_pg_vr_semana_matu < 7) && (dias_pg_vr_feriado_matu == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+						teste5 = "to aqui no"
+					else	
+						feriadoParcial = 0
+					end
+						# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					qtdVrPagas1 = ((30.44/7 *ajustePgVrMatu)+(feriadoParcial).round(2))*(qtdPostos)
+					#teste1 = qtdVrPagas1 = (controleValorFuncionario.to_f)
+				else
+					qtdVrPagas1 = 0
+				end
+				if (vr_vesp == 1)&&((rotation.id == 1)||(rotation.id == 3)||(rotation.id == 5)||(rotation.id == 7))
+
+					if (dias_pg_vr_semana_vesp > 7) # teste dias se maior que 7 e tranforma e 7
+						ajustePgVrVesp = 7
+					else
+						ajustePgVrVesp = dias_pg_vr_semana_vesp.to_f
+					end
+
+					if ((dias_pg_vr_semana_matu < 7) && (dias_pg_vr_feriado_vesp == 1)) # teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+					qtdVrPagas2 = ((30.44/7 *ajustePgVrVesp.to_f)+feriadoParcial)*(qtdPostos.to_f)
+				else
+					qtdVrPagas2 = 0   
+				end
+				if (vr_notur == 1)&&((rotation.id == 1)||(rotation.id == 4)||(rotation.id == 6)||(rotation.id == 7))
+
+					if (dias_pg_vr_semana_notur > 7)# teste dias se maior que 7 e tranforma e 7
+						ajustePgVrNotur = 7
+					else
+						ajustePgVrNotur = dias_pg_vr_semana_notur.to_f
+					end
+
+					if ((dias_pg_vr_semana_matu < 7) && (dias_pg_vr_feriado_notur == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+						qtdVrPagas3 = ((30.44/7 *ajustePgVrNotur.to_f)+feriadoParcial)*(qtdPostos.to_f)
+				else
+					qtdVrPagas3 = 0
+				end
+					qtdVrPagas = qtdVrPagas1+qtdVrPagas2+qtdVrPagas3
+			elsif (rotation.dias_trabalhados == 21.75)  #if que trata escala 5 por 2
+				if (vr_matu == 1)&&((rotation.id == 8)||(rotation.id == 9))
+					if (dias_pg_vr_semana_matu > 5)
+						ajustePgVrMatu = 5
+					else
+						ajustePgVrMatu = dias_pg_vr_semana_matu.to_f
+					end
+
+					if ((dias_pg_vr_semana_matu < 6) && (dias_pg_vr_feriado_matu == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+							# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					qtdVrPagas1 = ((21.75/5 *ajustePgVrMatu.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+						#((4.35*dias_pg_vr_semana_matu)+dias_pg_vr_feriado_matu.to_f)*controleValorFuncionario.to_f
+				else
+					qtdVrPagas1 = 0
+				end
+
+				if (vr_notur == 1)&&((rotation.id == 8)||(rotation.id == 10))
+
+					if (dias_pg_vr_semana_notur > 5)
+						ajustePgVrNotur = 5
+						feriadoParcial = (city.feriado/12)
+					else
+						ajustePgVrNotur = dias_pg_vr_semana_notur.to_f
+						feriadoParcial = 0
+					end
+
+					if ((dias_pg_vr_semana_matu < 6) && (dias_pg_vr_feriado_notur == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+					qtdVrPagas3 = ((21.75/5 *ajustePgVrNotur.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+				else
+					qtdVrPagas3 = 0
+				end
+				qtdVrPagas = qtdVrPagas1+qtdVrPagas3
+			elsif (rotation.dias_trabalhados == 26.1)  #if que trata escala 6 por 1
+				if (vr_matu == 1)&&((rotation.id == 11)||(rotation.id == 12))
+					if (dias_pg_vr_semana_matu > 6)
+						ajustePgVrMatu = 6
+					else
+						ajustePgVrMatu = dias_pg_vr_semana_matu.to_f
+					end
+
+					if ((dias_pg_vr_semana_matu < 6) && (dias_pg_vr_feriado_matu == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+						# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					qtdVrPagas1 = ((26.1/6 *ajustePgVrMatu.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+				else
+					qtdVrPagas1 = 0
+				end
+
+				if (vr_notur == 1)&&((rotation.id == 11)||(rotation.id == 13))
+					if (dias_pg_vr_semana_notur > 6)
+						ajustePgVrNotur = 6
+					else
+						ajustePgVrNotur = dias_pg_vr_semana_notur.to_f
+					end
+
+					if ((dias_pg_vr_semana_matu < 6) && (dias_pg_vr_feriado_notur == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+					qtdVrPagas3 = ((26.1/6 *ajustePgVrNotur.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+				else
+					qtdVrPagas3 = 0
+				end
+				qtdVrPagas = qtdVrPagas1+qtdVrPagas3
+			elsif (rotation.dias_trabalhados == 15.22)  #if que trata escala 12 X 36
+				if (vr_matu == 1)&&((rotation.id == 14)||(rotation.id == 15))
+					if (dias_pg_vr_semana_matu > 7)
+						ajustePgVrMatu = 7
+					else
+						ajustePgVrMatu = dias_pg_vr_semana_matu.to_f
+					end
+
+					if ((dias_pg_vr_semana_matu < 6) && (dias_pg_vr_feriado_matu == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+						# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					qtdVrPagas1 = (15.22/7 *ajustePgVrMatu)*(controleValorFuncionario)
+						#((4.35*dias_pg_vr_semana_matu)+dias_pg_vr_feriado_matu)*controleValorFuncionario
+				else
+					qtdVrPagas1 = 0
+				end
+				if (vr_notur == 1)&&((rotation.id == 14)||(rotation.id == 16))
+					if (dias_pg_vr_semana_notur > 7)
+						ajustePgVrNotur = 7
+					else
+						ajustePgVrNotur = dias_pg_vr_semana_notur.to_f
+					end
+
+					if ((dias_pg_vr_semana_matu < 6) && (dias_pg_vr_feriado_notur == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+					qtdVrPagas3 = (15.22/7 *ajustePgVrNotur)*(controleValorFuncionario)
+				else
+					qtdVrPagas3 = 0
+				end
+				qtdVrPagas = qtdVrPagas1+qtdVrPagas3
+			end# fim do if que trata escala
+		end
+
+		update_column(:qtd_vr_pagas, (qtdVrPagas))
+
+		if (desconto_vr == 0.13)
+			multiplicador = 0.0
+			multiplicador = (((qtdVrPagas).round(2))+(efetivoTotal*(0.08333))).round(2) 
+			totVR = ( multiplicador * (vUniVR-desconto_vr)).round(2)
+
+			totSocialFamiliar = (efetivoTotal*v_Soc_Familiar).round(2) 
+			totBenNatalidade = (efetivoTotal*v_ben_Natalidade).round(2) 
+
+
+			update_column(:multiplicador, (multiplicador))
+			update_column(:totSocialFamiliar, (totSocialFamiliar))
+			update_column(:totBenNatalidade, (totBenNatalidade))
+
+		else
+			multiplicador = (qtdVrPagas).round(2)
+			totVR = (multiplicador * (vUniVR*desconto_vr)).round(1)
+			update_column(:multiplicador, (multiplicador).round(1))
+			update_column(:totSocialFamiliar, (totSocialFamiliar))
+			update_column(:totBenNatalidade, (totBenNatalidade))
+		end
+		if (vUniAssistMedica == 0)
+			totAssiteciaMedica = 0
+		else
+			totAssiteciaMedica = ((vUniAssistMedica*efetivoTotal)-((salario*0.05)*efetivoTotal)).round(2)   
+		end
+
+		#teste4 = qtdPostos
+		if (controle_vt == 0)
+			if (vt_all == 0)
+				qtdVtPagas = 0
+			elsif (vt_all == 1)
+				if (rotation.dias_trabalhados == 25.3646)  #if que trata escala 5 por 1
+					if (dias_pg_vt_semana_all > 7)
+						ajustePgVtAll = 7
+					else
+						ajustePgVtAll = dias_pg_vt_semana_all.to_f
+					end
+					if ((dias_pg_vt_semana_all < 7) && (dias_pg_vt_feriado_all == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					if (rotation.id == 1) # if usado para tratar quando e Matutino/Vespertino/Noturno
+								qtdVtPagas = ((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)+
+															((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)+
+																((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)
+						controleDePostosParaCalculoVt = qtdPostos*3
+					elsif ((rotation.id == 2)||(rotation.id == 3)||(rotation.id == 4))# if usado para tratar quando e Matutino ou Vespertino ou Noturno
+								qtdVtPagas = ((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)
+						controleDePostosParaCalculoVt = qtdPostos
+					elsif ((rotation.id == 5)||(rotation.id == 6)||(rotation.id == 7)) # if usado para tratar quando e Matutino/Vespertino ou Matutino/Noturno ou Vespertino/Vespertino
+								qtdVtPagas = ((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)+
+															((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)
+						controleDePostosParaCalculoVt = qtdPostos*2
+					end
+					teste1 = 30.44/7 
+					teste2 = ajustePgVtAll
+					teste3 = feriadoParcial
+					teste4 = ((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)
+
+				elsif (rotation.dias_trabalhados == 21.75)  #if que trata escala 5 por 2
+					if (dias_pg_vt_semana_all > 5)
+						ajustePgVtAll = 5
+					else
+						ajustePgVtAll = dias_pg_vt_semana_all.to_f
+					end
+
+					if ((dias_pg_vt_semana_all < 7) && (dias_pg_vt_feriado_all == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					if (rotation.id == 8) # if usado para tratar quando e Matutino/Noturno
+								qtdVtPagas = ((21.75/5 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)+
+															((21.75/5 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+						controleDePostosParaCalculoVt = qtdPostos*2
+					elsif (rotation.id == 9)||(rotation.id == 10)# if usado para tratar quando e Matutino ou Noturno
+								qtdVtPagas = ((21.75/5 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+						controleDePostosParaCalculoVt = qtdPostos
+					end
+				elsif (rotation.dias_trabalhados == 26.1)  #if que trata escala 6 por 1
+					if dias_pg_vt_semana_all > 6
+						ajustePgVtAll = 6
+						feriadoParcial = (city.feriado/12)
+					else
+						ajustePgVtAll = dias_pg_vt_semana_all.to_f
+						feriadoParcial = 0
+					end
+					if ((dias_pg_vt_semana_matu < 7) && (dias_pg_vt_feriado_all == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a6
+					if (rotation.id == 11)# if usado para tratar quando e Matutino/Noturno
+						qtdVtPagas = ((26.1/6 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)+
+													((26.1/6 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+						controleDePostosParaCalculoVt = qtdPostos*2
+					elsif (rotation.id == 12)||(rotation.id == 13)# if usado para tratar quando e Matutino ou Noturno
+						qtdVtPagas = ((26.1/6 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+						controleDePostosParaCalculoVt = qtdPostos
+					end   
+				elsif (rotation.dias_trabalhados == 15.22)  #if que trata escala 12 X 36
+					if (dias_pg_vt_semana_all >= 6)
+						ajustePgVtAll = 6
+					else
+						ajustePgVtAll = dias_pg_vt_semana_all.to_f
+					end
+
+					if ((dias_pg_vt_semana_matu < 7) && (dias_pg_vt_feriado_all == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+					if (rotation.id == 11) # if usado para tratar quando e Matutino/Noturno
+					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a7
+							qtdVtPagas = ((15.22/7 *ajustePgVtAll)+feriadoParcial)*(controleValorFuncionario)+
+														((15.22/7 *ajustePgVtAll)+feriadoParcial)*(controleValorFuncionario)
+						controleDePostosParaCalculoVt = qtdPostos*2
+					elsif (rotation.id == 12)||(rotation.id == 13)# if usado para tratar quando e Matutino ou Noturno
+							qtdVtPagas = ((15.22/7 *ajustePgVtAll)+feriadoParcial)*(controleValorFuncionario)
+						controleDePostosParaCalculoVt = qtdPostos
+					end
+				end
+			end
+		else #(controle_vt == 1)
+
+			if (rotation.dias_trabalhados == 25.3646)  #if que trata escala 5 por 1
+				if (vt_matu == 1)&&((rotation.id == 1)||(rotation.id == 2)||(rotation.id == 5)||(rotation.id == 6))
+
+					if (dias_pg_vt_semana_matu > 7)# teste dias se maior que 7 e tranforma e 7
+						ajustePgVtMatu = 7
+					else
+						ajustePgVtMatu = dias_pg_vt_semana_matu.to_f
+					end
+
+					if ((dias_pg_vt_semana_matu < 7) && (dias_pg_vt_feriado_matu == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+						# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					qtdVtPagas1 = ((30.44/7 *ajustePgVtMatu)+(feriadoParcial).round(2))*(qtdPostos)
+					#teste1 = qtdVtPagas1 = (controleValorFuncionario.to_f)
+				else
+					qtdVtPagas1 = 0
+				end
+				if (vt_vesp == 1)&&((rotation.id == 1)||(rotation.id == 3)||(rotation.id == 5)||(rotation.id == 7))
+
+					if (dias_pg_vt_semana_vesp > 7) # teste dias se maior que 7 e tranforma e 7
+						ajustePgVtVesp = 7
+					else
+						ajustePgVtVesp = dias_pg_vt_semana_vesp.to_f
+					end
+
+					if ((dias_pg_vt_semana_matu < 7) && (dias_pg_vt_feriado_vesp == 1)) # teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+					qtdVtPagas2 = ((30.44/7 *ajustePgVtVesp.to_f)+feriadoParcial)*(qtdPostos.to_f)
+				else
+					qtdVtPagas2 = 0   
+				end
+				if (vt_notur == 1)&&((rotation.id == 1)||(rotation.id == 4)||(rotation.id == 6)||(rotation.id == 7))
+
+					if (dias_pg_vt_semana_notur > 7)# teste dias se maior que 7 e tranforma e 7
+						ajustePgVtNotur = 7
+					else
+						ajustePgVtNotur = dias_pg_vt_semana_notur.to_f
+					end
+
+					if ((dias_pg_vt_semana_matu < 7) && (dias_pg_vt_feriado_notur == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+					qtdVtPagas3 = ((30.44/7 *ajustePgVtNotur.to_f)+feriadoParcial)*(qtdPostos.to_f)
+				else
+					qtdVtPagas3 = 0
+				end
+				if (qtdVtPagas1 != 0)
+					mut = 1
+				elsif (qtdVtPagas2 != 0)
+					mut = 2
+				elsif (qtdVtPagas3 != 0)
+					mut = 3
+				end
+				controleDePostosParaCalculoVt = qtdPostos*mut
+				qtdVtPagas = qtdVtPagas1+qtdVtPagas2+qtdVtPagas3
+			elsif (rotation.dias_trabalhados == 21.75)  #if que trata escala 5 por 2
+				if (vt_matu == 1)&&((rotation.id == 8)||(rotation.id == 9))
+					if (dias_pg_vt_semana_matu > 5)
+						ajustePgVtMatu = 5
+					else
+						ajustePgVtMatu = dias_pg_vt_semana_matu.to_f
+					end
+
+					if ((dias_pg_vt_semana_matu < 6) && (dias_pg_vt_feriado_matu == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+							# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					qtdVtPagas1 = ((21.75/5 *ajustePgVtMatu.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+						#((4.35*dias_pg_vt_semana_matu)+dias_pg_vt_feriado_matu.to_f)*controleValorFuncionario.to_f
+				else
+					qtdVtPagas1 = 0
+				end
+
+				if (vt_notur == 1)&&((rotation.id == 8)||(rotation.id == 10))
+
+					if (dias_pg_vt_semana_notur > 5)
+						ajustePgVtNotur = 5
+						feriadoParcial = (city.feriado/12)
+					else
+						ajustePgVtNotur = dias_pg_vt_semana_notur.to_f
+						feriadoParcial = 0
+					end
+
+					if ((dias_pg_vt_semana_matu < 6) && (dias_pg_vt_feriado_notur == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+					qtdVtPagas3 = ((21.75/5 *ajustePgVtNotur.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+				else
+					qtdVtPagas3 = 0
+				end
+				if (qtdVtPagas1 != 0)
+					mut = 1
+				elsif (qtdVtPagas3 != 0)
+					mut = 2
+				end
+				controleDePostosParaCalculoVt = qtdPostos*mut
+				qtdVtPagas = qtdVtPagas1+qtdVtPagas3
+			elsif (rotation.dias_trabalhados == 26.1)  #if que trata escala 6 por 1
+				if (vt_matu == 1)&&((rotation.id == 11)||(rotation.id == 12))
+					if (dias_pg_vt_semana_matu > 6)
+						ajustePgVtMatu = 6
+					else
+						ajustePgVtMatu = dias_pg_vt_semana_matu.to_f
+					end
+
+					if ((dias_pg_vt_semana_matu < 6) && (dias_pg_vt_feriado_matu == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+						# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					qtdVtPagas1 = ((26.1/6 *ajustePgVtMatu.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+				else
+					qtdVtPagas1 = 0
+				end
+
+				if (vt_notur == 1)&&((rotation.id == 11)||(rotation.id == 13))
+					if (dias_pg_vt_semana_notur > 6)
+						ajustePgVtNotur = 6
+					else
+						ajustePgVtNotur = dias_pg_vt_semana_notur.to_f
+					end
+
+					if ((dias_pg_vt_semana_matu < 6) && (dias_pg_vt_feriado_notur == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+					qtdVtPagas3 = ((26.1/6 *ajustePgVtNotur.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+				else
+					qtdVtPagas3 = 0
+				end
+				if (qtdVtPagas1 != 0)
+					mut = 1
+				elsif (qtdVtPagas3 != 0)
+					mut = 2
+				end
+				controleDePostosParaCalculoVt = qtdPostos*mut
+				qtdVtPagas = qtdVtPagas1+qtdVtPagas3
+			elsif (rotation.dias_trabalhados == 15.22)  #if que trata escala 12 X 36
+				if (vt_matu == 1)&&((rotation.id == 14)||(rotation.id == 15))
+					if (dias_pg_vt_semana_matu > 7)
+						ajustePgVtMatu = 7
+					else
+						ajustePgVtMatu = dias_pg_vt_semana_matu.to_f
+					end
+
+					if ((dias_pg_vt_semana_matu < 6) && (dias_pg_vt_feriado_matu == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+						# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					qtdVtPagas1 = (15.22/7 *ajustePgVtMatu)*(controleValorFuncionario)
+						#((4.35*dias_pg_vt_semana_matu)+dias_pg_vt_feriado_matu)*controleValorFuncionario
+				else
+					qtdVtPagas1 = 0
+				end
+				if (vt_notur == 1)&&((rotation.id == 14)||(rotation.id == 16))
+					if (dias_pg_vt_semana_notur > 7)
+						ajustePgVtNotur = 7
+					else
+						ajustePgVtNotur = dias_pg_vt_semana_notur.to_f
+					end
+
+					if ((dias_pg_vt_semana_matu < 6) && (dias_pg_vt_feriado_notur == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+					qtdVtPagas3 = (15.22/7 *ajustePgVtNotur)*(controleValorFuncionario)
+				else
+					qtdVtPagas3 = 0
+				end
+				if (qtdVtPagas1 != 0)
+					mut = 1
+				elsif (qtdVtPagas3 != 0)
+					mut = 2
+				end
+				controleDePostosParaCalculoVt = qtdPostos*mut
+				qtdVtPagas = (qtdVtPagas1+qtdVtPagas3)
+			end# fim do if que trata escala
+		end
+		update_column(:qtd_vt_pagas, (qtdVtPagas))
+
+		totSeguroVida = (vUniSegVida*efetivoTotal).round(2)
+		totVT = ((city.valeTransporte*((qtdVtPagas)*2))-((salario*(controleDePostosParaCalculoVt*efetivoIndivitual).round(2))*0.06)).round(2)
+		if totVT<0
+			totVT = 0
+		end
+
+		update_column(:teste1, (teste1))
+		update_column(:teste2, (teste2))
+		update_column(:teste3, (teste3))
+		update_column(:teste4, (teste4))
+		update_column(:teste5, (teste5))
+		if (company.id == 1)
+			totReciclagem = (rotation.v_reciclagem*efetivoTotal).round(2)
+		else
+			totReciclagem = 0.0
+		end    
+		if (company.id == 2)
+			totPpr = ((vUniPpr*efetivoTotal)/12).round(2)
+		else
+			totPpr = 0.0
+		end  
+		totUniforme = (vUniUniforme*efetivoTotal).round(2)
+
+		totBeneficios =(totCesta+totVR+totAssiteciaMedica+totSeguroVida+totVT+totReciclagem+totUniforme+totPpr+totSocialFamiliar+totBenNatalidade).round(2)
+
+		update_column(:totCesta, (totCesta))
+		update_column(:totVR, (totVR))
+		update_column(:totAssiteciaMedica, (totAssiteciaMedica))
+		update_column(:totSeguroVida, (totSeguroVida))
+		update_column(:totVT, (totVT))
+		update_column(:totReciclagem, (totReciclagem))
+		update_column(:totPpr, (totPpr))
+		update_column(:totUniforme, (totUniforme))
+		update_column(:totBeneficios, (totBeneficios))
+
+
+
+		###############################################################################################################################################
+		## > total mão de obra  #######################################################################################################################
+		###############################################################################################################################################
+
+		totMaoDeObraParcial = massaSalarial+totalIncargosDiretos+totalProvisaoMassaSalarial+totBeneficios
+		reservaTecnica = 157.6#(totMaoDeObraParcial/(1-(company.pct_reserva_tecnica+0.3601)/100)-totMaoDeObraParcial).round(2)
+
+		totMaoDeObra = totMaoDeObraParcial+reservaTecnica
+		update_column(:totMaoDeObra,(totMaoDeObra))
+		update_column(:reservaTecnica,(reservaTecnica))
+
+
+		###############################################################################################################################################
+		## > Administração e Operação #################################################################################################################
+		###############################################################################################################################################
+		###############################################################################################################################################
+		## > total de tudo sem o que tem porcentagem referencia circular na tabela  ###################################################################
+		###############################################################################################################################################
+
+		totParcialProposta = totMaoDeObra + totalEquipamento
+		update_column(:totParcialProposta,(totParcialProposta))
+
+
+
+		###############################################################################################################################################
+		## > calculo total mais lucro #################################################################################################################
+		pctTotal = (company.pis*(1-(city.issqn/100)))+company.cofins*(1-(city.issqn/100))+company.csll+company.irrf+city.issqn+select_calculation.indiceAdministrativo+select_calculation.indiceOperacional
+		update_column(:pctTotal,(pctTotal))
+
+		pctTotalAlicota = totParcialProposta/(1-((pctTotal)/100))-totParcialProposta
+		update_column(:pctTotalAlicota,(pctTotalAlicota))
+
+		vDeCalculoTotal = pctTotalAlicota+totParcialProposta  #####-> valor total de mão de obra <-#####
+		update_column(:vDeCalculoTotal,(vDeCalculoTotal))
+		
+		
+		valorIndiceOperacional = pctTotalAlicota*select_calculation.indiceOperacional/pctTotal
+		update_column(:valorIndiceOperacional,(valorIndiceOperacional))
+
+		###############################################################################################################################################
+		## > lucro ####################################################################################################################################
+
+		valorIndiceAdministrativo = pctTotalAlicota*select_calculation.indiceAdministrativo/pctTotal
+		update_column(:valorIndiceAdministrativo,(valorIndiceAdministrativo))
+		
+
+		###############################################################################################################################################
+		## > Impotos  #################################################################################################################################
+		###############################################################################################################################################
+		valorIssqn = pctTotalAlicota*city.issqn/pctTotal
+		update_column(:valorIssqn,(valorIssqn))
+
+		valorPis = pctTotalAlicota*company.pis*(1-(city.issqn/100))/pctTotal
+		valorCofins = pctTotalAlicota*company.cofins*(1-(city.issqn/100))/pctTotal
+		valorCsll = pctTotalAlicota*company.csll/pctTotal
+		valorIrrf = pctTotalAlicota*company.irrf/pctTotal
+		update_column(:valorPis,(valorPis))
+		update_column(:valorCofins,(valorCofins))
+		update_column(:valorCsll,(valorCsll))
+		update_column(:valorIrrf,(valorIrrf))
+		
+		## Total impostos sobre serviços ###
+
+		totImpostoSobServico = valorIndiceOperacional+valorIndiceAdministrativo+valorPis+valorCofins+valorCsll+valorIrrf+valorIssqn+totalEquipamento
+		update_column(:totImpostoSobServico,(totImpostoSobServico))
+
+	end  
+end

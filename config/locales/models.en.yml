@@ -1,0 +1,12 @@
+'en':
+  activerecord:
+    errors:
+      messages:
+        error_extra_all: "asdasadasd!!"
+    models:
+      proposals:
+        dias_jornada_ex_semana_all: 'bla bla bla'
+    attributes:
+      proposals:
+        dias_jornada_ex_semana_all: 'bla bla bla'
+        

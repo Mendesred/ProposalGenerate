@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tipo_escala: MyString
+  horas_trabalhadas: 1.5
+  efetivo: 1.5
+  qtd_dias: 1.5
+  fator_escala: 1.5
+  period_id: 
+  ad_vespertido_noturno: 1.5
+  ad_noturno: 1.5
+  h_extra: 1.5
+  h_extra_refeicao: 1.5
+
+two:
+  tipo_escala: MyString
+  horas_trabalhadas: 1.5
+  efetivo: 1.5
+  qtd_dias: 1.5
+  fator_escala: 1.5
+  period_id: 
+  ad_vespertido_noturno: 1.5
+  ad_noturno: 1.5
+  h_extra: 1.5
+  h_extra_refeicao: 1.5

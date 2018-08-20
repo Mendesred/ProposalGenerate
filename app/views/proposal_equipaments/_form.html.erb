@@ -1,0 +1,29 @@
+<%= form_for(@proposal_equipament) do |f| %>
+  <% if @proposal_equipament.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@proposal_equipament.errors.count, "error") %> prohibited this proposal_equipament from being saved:</h2>
+
+      <ul>
+      <% @proposal_equipament.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :equipament_id %><br>
+    <%= f.text_field :equipament_id %>
+  </div>
+  <div class="field">
+    <%= f.label :proposal_id %><br>
+    <%= f.text_field :proposal_id %>
+  </div>
+  <div class="field">
+    <%= f.label :quantidade %><br>
+    <%= f.text_field :quantidade %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

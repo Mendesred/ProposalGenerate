@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name_equipament: MyString
+  valor: 1.5
+  depreciacao: 1.5
+  proposal_id: 
+
+two:
+  name_equipament: MyString
+  valor: 1.5
+  depreciacao: 1.5
+  proposal_id: 

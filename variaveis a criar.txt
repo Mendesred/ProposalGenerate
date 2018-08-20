@@ -1,0 +1,295 @@
+valorDePericulosidade
+valorDeInsalubridade
+valorPeriOuIsalubri
+totalHrsAdNoturnoVespertino
+totalHrsAdNoturno
+hAlmoco
+totalHrExtrasAlmoco
+totalHrExtrasFeriado
+refexoDSR
+salarioMedioFinal
+ObgFGTS
+ObgINSS
+Obgseguro_aci_trabalho
+Obgsebrae
+Obgincra
+Obgsalario_educacao
+Obgsesc
+Obgsenac
+totalferiasUmDozeAvos
+totalumTercoConstiUmDozeAvos
+totaldecimoTerceiroUmDozeAvos
+totalInssSobFeriasUnTercoDecimo
+totalFgtsSobFeriasUnTercoDecimo
+totalAvisoPrevio
+totalIndenizacaoSobreFGTS
+totalreservaTecnica
+totalProvisaoMassaSalarial
+totCesta
+totVR
+totAssiteciaMedica
+totSeguroVida
+totVT
+totReciclagem
+totUniforme
+totalEquipamento
+totMaoDeObra
+pctTotal
+pctTotalAlicota
+vDeCalculoTotal
+
+		#teste4 = qtdPostos
+		if (controle_vr == 0)
+			if (vr_all == 0)
+				qtdVrPagas = 0
+			elsif (vr_all == 1)
+				if (rotation.dias_trabalhados == 25.3646)  #if que trata escala 5 por 1
+					if (dias_pg_vr_semana_all > 7)
+						ajustePgVrAll = 7
+					else
+						ajustePgVrAll = dias_pg_vr_semana_all.to_f
+					end
+					if ((dias_pg_vr_semana_all < 7) && (dias_pg_vr_feriado_all == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					if (rotation.id == 1) # if usado para tratar quando e Matutino/Vespertino/Noturno
+								qtdVrPagas = ((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)+
+															((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)+
+																((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)
+
+					elsif ((rotation.id == 2)||(rotation.id == 3)||(rotation.id == 4))# if usado para tratar quando e Matutino ou Vespertino ou Noturno
+								qtdVrPagas = ((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)
+
+					elsif ((rotation.id == 5)||(rotation.id == 6)||(rotation.id == 7)) # if usado para tratar quando e Matutino/Vespertino ou Matutino/Noturno ou Vespertino/Vespertino
+								qtdVrPagas = ((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)+
+															((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)
+					end
+
+				elsif (rotation.dias_trabalhados == 21.75)  #if que trata escala 5 por 2
+					if (dias_pg_vr_semana_all > 5)
+						ajustePgVrAll = 5
+						feriadoParcial = (city.feriado/12)
+					else
+						ajustePgVrAll = dias_pg_vr_semana_all.to_f
+						feriadoParcial = 0
+					end
+
+					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					if (rotation.id == 8) # if usado para tratar quando e Matutino/Noturno
+								qtdVrPagas = ((21.75/5 *diasJornadaExSemanaAll)+feriadoParcial)*(qtdPostos)*(hExJornadaAll+hExJornadaAll)+
+															((21.75/5 *ajustePgVrAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+					elsif (rotation.id == 9)||(rotation.id == 10)# if usado para tratar quando e Matutino ou Noturno
+								qtdVrPagas = ((21.75/5 *ajustePgVrAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+					end
+				elsif (rotation.dias_trabalhados == 26.1)  #if que trata escala 6 por 1
+					if dias_pg_vr_semana_all > 6
+						ajustePgVrAll = 6
+						feriadoParcial = (city.feriado/12)
+					else
+						ajustePgVrAll = dias_pg_vr_semana_all.to_f
+						feriadoParcial = 0
+					end
+					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a6
+					if (rotation.id == 11)# if usado para tratar quando e Matutino/Noturno
+						qtdVrPagas = ((26.1/6 *ajustePgVrAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)+
+													((26.1/6 *ajustePgVrAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+					elsif (rotation.id == 12)||(rotation.id == 13)# if usado para tratar quando e Matutino ou Noturno
+						qtdVrPagas = ((26.1/6 *ajustePgVrAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+					end   
+				elsif (rotation.dias_trabalhados == 15.22)  #if que trata escala 12 X 36
+					if (dias_pg_vr_semana_all >= 6)
+						ajustePgVrAll = 6
+						feriadoParcial = (city.feriado/12)
+					else
+						ajustePgVrAll = dias_pg_vr_semana_all.to_f
+						feriadoParcial = 0
+					end
+					if (rotation.id == 14) # if usado para tratar quando e Matutino/Noturno
+					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a7
+							qtdVrPagas = ((15.22/7 *ajustePgVrAll)+feriadoParcial)*(controleValorFuncionario)+
+														((15.22/7 *ajustePgVrAll)+feriadoParcial)*(controleValorFuncionario)
+					elsif (rotation.id == 15)||(rotation.id == 16)# if usado para tratar quando e Matutino ou Noturno
+							qtdVrPagas = ((15.22/7 *ajustePgVrAll)+feriadoParcial)*(controleValorFuncionario)
+					end
+				end
+			end
+		else #(controle_vr == 1)
+
+			if (rotation.dias_trabalhados == 25.3646)  #if que trata escala 5 por 1
+				if (vr_matu == 1)&&((rotation.id == 1)||(rotation.id == 2)||(rotation.id == 5)||(rotation.id == 6))
+
+					if (dias_pg_vr_semana_matu > 7)# teste dias se maior que 7 e tranforma e 7
+						ajustePgVrMatu = 7
+					else
+						ajustePgVrMatu = dias_pg_vr_semana_matu.to_f
+					end
+
+					if ((dias_pg_vr_semana_matu < 7) && (dias_pg_vr_feriado_matu == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+						teste5 = "to aqui no"
+					else	
+						feriadoParcial = 0
+					end
+						# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					qtdVrPagas1 = ((30.44/7 *ajustePgVrMatu)+(feriadoParcial).round(2))*(qtdPostos)
+				else
+					qtdVrPagas1 = 0
+				end
+				if (vr_vesp == 1)&&((rotation.id == 1)||(rotation.id == 3)||(rotation.id == 5)||(rotation.id == 7))
+
+					if (dias_pg_vr_semana_vesp > 7) # teste dias se maior que 7 e tranforma e 7
+						ajustePgVrVesp = 7
+					else
+						ajustePgVrVesp = dias_pg_vr_semana_vesp.to_f
+					end
+
+					if ((dias_pg_vr_semana_matu < 7) && (dias_pg_vr_feriado_vesp == 1)) # teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+					qtdVrPagas2 = ((30.44/7 *ajustePgVrVesp.to_f)+feriadoParcial)*(qtdPostos.to_f)
+				else
+					qtdVrPagas2 = 0   
+				end
+				if (vr_notur == 1)&&((rotation.id == 1)||(rotation.id == 4)||(rotation.id == 6)||(rotation.id == 7))
+
+					if (dias_pg_vr_semana_notur > 7)# teste dias se maior que 7 e tranforma e 7
+						ajustePgVrNotur = 7
+					else
+						ajustePgVrNotur = dias_pg_vr_semana_notur.to_f
+					end
+
+					if ((dias_pg_vr_semana_matu < 7) && (dias_pg_vr_feriado_notur == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+						qtdVrPagas3 = ((30.44/7 *ajustePgVrNotur.to_f)+feriadoParcial)*(qtdPostos.to_f)
+				else
+					qtdVrPagas3 = 0
+				end
+					qtdVrPagas = qtdVrPagas1+qtdVrPagas2+qtdVrPagas3
+			elsif (rotation.dias_trabalhados == 21.75)  #if que trata escala 5 por 2
+				if (vr_matu == 1)&&((rotation.id == 8)||(rotation.id == 9))
+					if (dias_pg_vr_semana_matu > 5)
+						ajustePgVrMatu = 5
+					else
+						ajustePgVrMatu = dias_pg_vr_semana_matu.to_f
+					end
+
+					if ((dias_pg_vr_semana_matu < 6) && (dias_pg_vr_feriado_matu == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+							# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					qtdVrPagas1 = ((21.75/5 *ajustePgVrMatu.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+						#((4.35*dias_pg_vr_semana_matu)+dias_pg_vr_feriado_matu.to_f)*controleValorFuncionario.to_f
+				else
+					qtdVrPagas1 = 0
+				end
+
+				if (vr_notur == 1)&&((rotation.id == 8)||(rotation.id == 10))
+
+					if (dias_pg_vr_semana_notur > 5)
+						ajustePgVrNotur = 5
+						feriadoParcial = (city.feriado/12)
+					else
+						ajustePgVrNotur = dias_pg_vr_semana_notur.to_f
+						feriadoParcial = 0
+					end
+
+					if ((dias_pg_vr_semana_matu < 6) && (dias_pg_vr_feriado_notur == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+					qtdVrPagas3 = ((21.75/5 *ajustePgVrNotur.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+				else
+					qtdVrPagas3 = 0
+				end
+				qtdVrPagas = qtdVrPagas1+qtdVrPagas3
+			elsif (rotation.dias_trabalhados == 26.1)  #if que trata escala 6 por 1
+				if (vr_matu == 1)&&((rotation.id == 11)||(rotation.id == 12))
+					if (dias_pg_vr_semana_matu > 6)
+						ajustePgVrMatu = 6
+					else
+						ajustePgVrMatu = dias_pg_vr_semana_matu.to_f
+					end
+
+					if ((dias_pg_vr_semana_matu < 6) && (dias_pg_vr_feriado_matu == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+						# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					qtdVrPagas1 = ((26.1/6 *ajustePgVrMatu.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+				else
+					qtdVrPagas1 = 0
+				end
+
+				if (vr_notur == 1)&&((rotation.id == 11)||(rotation.id == 13))
+					if (dias_pg_vr_semana_notur > 6)
+						ajustePgVrNotur = 6
+					else
+						ajustePgVrNotur = dias_pg_vr_semana_notur.to_f
+					end
+
+					if ((dias_pg_vr_semana_matu < 6) && (dias_pg_vr_feriado_notur == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+					qtdVrPagas3 = ((26.1/6 *ajustePgVrNotur.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+				else
+					qtdVrPagas3 = 0
+				end
+				qtdVrPagas = qtdVrPagas1+qtdVrPagas3
+			elsif (rotation.dias_trabalhados == 15.22)  #if que trata escala 12 X 36
+				if (vr_matu == 1)&&((rotation.id == 14)||(rotation.id == 15))
+					if (dias_pg_vr_semana_matu > 7)
+						ajustePgVrMatu = 7
+					else
+						ajustePgVrMatu = dias_pg_vr_semana_matu.to_f
+					end
+
+					if ((dias_pg_vr_semana_matu < 6) && (dias_pg_vr_feriado_matu == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+						# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
+					qtdVrPagas1 = (15.22/7 *ajustePgVrMatu)*(controleValorFuncionario)
+						#((4.35*dias_pg_vr_semana_matu)+dias_pg_vr_feriado_matu)*controleValorFuncionario
+				else
+					qtdVrPagas1 = 0
+				end
+				if (vr_notur == 1)&&((rotation.id == 14)||(rotation.id == 16))
+					if (dias_pg_vr_semana_notur > 7)
+						ajustePgVrNotur = 7
+					else
+						ajustePgVrNotur = dias_pg_vr_semana_notur.to_f
+					end
+
+					if ((dias_pg_vr_semana_matu < 6) && (dias_pg_vr_feriado_notur == 1))# teste dias se menor que 7 para calcular feriado
+						feriadoParcial = (city.feriado/12)
+					else	
+						feriadoParcial = 0
+					end
+
+					qtdVrPagas3 = (15.22/7 *ajustePgVrNotur)*(controleValorFuncionario)
+				else
+					qtdVrPagas3 = 0
+				end
+				qtdVrPagas = qtdVrPagas1+qtdVrPagas3
+			end# fim do if que trata escala
+		end

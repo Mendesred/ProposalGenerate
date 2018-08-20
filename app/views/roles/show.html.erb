@@ -1,0 +1,78 @@
+</br>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong>Cargo</strong>
+
+  </div>
+  <div class="panel-body">
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Nome do Campo</th>
+            <th>Valor do campo</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td><strong>Cargo:</strong></td>
+            <td><%= @role.cargo %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Salario:</strong></td>
+            <td><%= @role.salario %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Gratificacao:</strong></td>
+            <td><%= @role.gratificacao %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Vale refeicao:</strong></td>
+            <td><%= @role.vale_refeicao %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Service:</strong></td>
+            <td><%= @role.service.tipo_servico%></td> 
+          </tr>
+          <tr>
+            <td><strong>assist_medica:</strong></td>
+            <td><%= @role.assist_medica %></td>
+          </tr>
+          <tr>
+            <td><strong>seg_vida:</strong></td>
+            <td><%= @role.seg_vida %></td>
+          </tr>
+          <tr>
+            <td><strong>uniformes:</strong></td>
+            <td><%= @role.uniformes %></td>
+          </tr>
+          <tr>
+            <td><strong>assist_Soc_Familiar:</strong></td>
+            <td><%= @role.assist_Soc_Familiar %></td>
+          </tr>
+          <tr>
+            <td><strong>beneficio_Natalidade:</strong></td>
+            <td><%= @role.beneficio_Natalidade %></td>
+          </tr>
+          <tr>
+            <td><strong>ppr:</strong></td>
+            <td><%= @role.ppr %></td>
+          </tr>
+        </tbody>
+      </table>
+      <%= link_to roles_path,class:"btn btn-default btn-sm ajusteButton", type:"button" do %>
+      <i class="fa fa-arrow-left"></i> Voltar
+      <% end %>
+      <%= link_to edit_role_path(@role),class:"btn btn-default btn-sm ajusteButton", type:"button" do %>
+      <i class="fa fa-edit"></i> Editar
+      <% end %>
+    </div>
+    <!-- /.table-responsive -->
+  </div>
+  <!-- /.panel-body -->
+</div>

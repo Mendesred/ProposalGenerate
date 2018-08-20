@@ -1,0 +1,733 @@
+<div class="col-lg-12">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Formulario de criação
+		</div>
+
+		<div class="panel-body">
+			<div class="col-lg-12">
+				<%= form_for [@selected_service,@proposal] do |f| %>
+				<% if @proposal.errors.any? %>
+				<div id="error_explanatio" class="alert alert-danger" >
+					<h4>
+						<%= pluralize(@proposal.errors.count, "error") %> prohibited this proposal from being saved:
+					</h4>
+					<ul>
+						<% @proposal.errors.values.each do |message| %>
+						<li>
+							<%= message[0] %>
+						</li>
+						<% end %>
+					</ul>
+				</div>
+				<% end %>
+
+				<%= f.collection_select :company_id, @select_all_company, :id, :name_company,{value:  @selected_service.company_id},style: "display:none"  %> <!--part de cliente codigo e cidade--> 
+				<div class="inline">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Cliente:</strong><br>
+								<%= f.text_field :cliente, class:'form-control', placeholder:'Nomedo cliente' %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Codigo do Cliente:</strong><br>
+								<%= f.text_field :codigo_cliente, class:'form-control', placeholder:'Codigo do cliente' %><!--:required =>true-->
+							</div>
+						</div>
+
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Cidade:</strong><br>
+								<%= collection_select(:proposal, :city_id, @select_all_city, :id, :nome,{},class:'form-control' ) %>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--part de escala insalubridade e periculosidade--> 
+				<div class="inline">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Escala:</strong><br>
+								<%= collection_select(:proposal, :rotation_id, @select_all_rotarion, :id, :tipo_escala,{},class:'form-control' ) %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Add. de periculosidade ou insalubridade?</strong><br>
+								<%= f.select :adcional_periculosidade_insalubridade, options_for_select([["Não",0],["Periculosidade",1],["Insalubridade",2]], @proposal.adcional_periculosidade_insalubridade),{},class:'form-control' %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Grau de Insalubridade:</strong><br>
+									<%= f.select :grau_de_insalubridade, options_for_select([["Sem grau de insalubridade",0],["Mínimo",0.10],["Médio",0.20],["máximo",0.40]], @proposal.grau_de_insalubridade),{},class:'form-control' %>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="inline">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Horas feriado</strong><br>
+								<%= f.select :h_feriado, options_for_select([["Sim",1],["Não",0]], @proposal.h_feriado),{},class:'form-control' %>
+							</div>
+						</div>
+						<!--Valor para VT--> 
+
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Valor de vale transpote unitário</strong><br>
+								<%= f.text_field :intermunicipal, :value => number_with_precision(f.object.intermunicipal,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:88%",:data => {:mask=> '99.99'} %>
+								<div class="tooltip-demo">
+									<button type="button" class="btn btn-warning btn-circle pull-right" data-toggle="tooltip" data-placement="botton" title="So Precher se o valor do vale Transporte seja maior que o da cidade selecionada" style="position: relative;bottom: 33px;"><i class="fa fa-info"></i></button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12" style="height: 22px;position: relative;bottom: 10px;"> 
+					<hr style="margin-top: 10px;margin-bottom: 10px;">
+				</div> 
+				<!--part Adicionar funcionarios--> 
+				<div class="inline">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="field">
+								<div class="proposal_roles">
+									<%= link_to_add_association 'Add Cargo', f, :proposal_roles, class: 'btn btn-outline btn-info', data: { association_insertion_node: '.proposal_roles', association_insertion_method: :append} %><br>
+									<%= f.fields_for :proposal_roles do |er|%>
+									<%= render 'proposal_role_fields', f: er %>
+									<% end %>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!--horas extras--> 
+				<div class="inline">
+					<div class="col-lg-12">
+						<div class="row">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									Horas Extras
+								</div>
+								<!-- /.panel-heading -->
+								<div class="panel-body">
+									<div class="form-group">
+										<label>Aplicar para:</label>
+										<label class="">
+											<%=f.radio_button :controle_hora_extra, 0, :id => "proposal_radio_h_extra_all",style:"position:relative;top:2px;",:checked=>true %><label for="0" title="all">Todos os periodos</label>
+												<%=f.radio_button :controle_hora_extra, 1, :id => "proposal_radio_h_extra_parcial",style:"position:relative;top:2px;" %>
+												<label for="1" title="partial">Parcial</label>
+											</label>
+										</div>
+
+										<!-- Nav tabs -->
+										<div id="tab_all" class="panel-collapse  collapse">
+											<ul  class="nav nav-tabs">
+												<li id="hExtraAllTab" class="active">         
+													<a href="#hExtraAll" data-toggle="tab" aria-expanded="true">Todos os periodos</a>
+												</li>
+											</ul>
+
+
+											<!-- Tab panes -->
+											<div class="tab-content">
+												<div class="tab-pane fade active in" id="hExtraAll">
+													<p>
+														<div class="inline">
+															<div class="row">
+																<div class="col-sm-4">
+																	<div class="field">
+																		<strong>Horas extra.</strong><br>
+																		<%= f.select :h_extra_jornada_all, options_for_select([["Não",0],["Sim",1]], @proposal.h_extra_jornada_all),{},class:'form-control' %>
+																	</div>
+																	<div class="card mb-2 border-0">
+																		<div class="inline">
+																			<div class="row">
+																				<div id="hExtraSim"class="panel-collapse  collapse">
+																					<div class="col-sm-12">
+																						<div class="field">
+																							<strong>Qtd. dias na semana </strong></br>
+																							<%= f.select :dias_jornada_ex_semana_all, options_for_select([["Integral",7],["1 dias",1],["2 dias",2],["3 dias",3],["4 dias",4],["5 dias",5],["6 dias",6]], @proposal.dias_jornada_ex_semana_all),{},class:'form-control' %>
+																							<div class="field">
+																								<strong>Quantas horas de jornada.</strong><br>
+																								H<%= f.select  :h_ex_jornada_all, options_for_select([["0",0],["1",1],["2",2]],@proposal.h_ex_jornada_all),{},class:'' %>:
+																								M<%= f.select  :m_ex_jornada_all, options_for_select((0..59).map {|i| [i,i] },@proposal.m_ex_jornada_all),{},class:'' %>
+																							</div>
+																							<div class="field">
+																								<strong>Horas paga no feriado.</strong><br>
+																								<%= f.select :h_ex_feriado_jornada_all, options_for_select([["Não",0],["Sim",1]], @proposal.h_ex_feriado_jornada_all),{},class:'form-control' %>
+																							</div>
+																						</div>
+																					</div> 
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div><!--/.row-->
+														</div><!--/.inline--> 
+													</p><!--/P-->
+												</div><!--/.tab-pane fade active in-->
+											</div><!-- /.tab-content -->
+										</div><!-- /.Panel-Collapse -->
+
+										<div id="tab_parcial" class="panel-collapse  collapse">
+											<ul  class="nav nav-tabs">
+												<li class="active">
+													<a href="#hExtraMatutino" data-toggle="tab" aria-expanded="true">Matutino</a>
+												</li>
+												<li class="">
+													<a href="#hExtraVespertino" data-toggle="tab" aria-expanded="false">Vespertino</a>
+												</li>
+												<li class="">
+													<a href="#hExtraNoturno" data-toggle="tab" aria-expanded="false">Noturno</a>
+												</li>
+											</ul>
+
+											<div class="tab-content">
+												<div class="tab-pane fade active in" id="hExtraMatutino">
+													<p>
+														<div class="inline">
+															<div class="row">
+																<div class="col-sm-4">
+																	<div class="field">
+																		<strong>Horas extra.</strong><br>
+																		<%= f.select :h_extra_jornada_matu, options_for_select([["Não",0],["Sim",1]], @proposal.h_extra_jornada_matu),{},class:'form-control' %>
+																	</div>
+																	<div class="card mb-2 border-0">
+																		<div class="inline">
+																			<div class="row">
+																				<div id="hExtraMatutinoJornada" class="panel-collapse  collapse">
+																					<div class="col-sm-12">
+																						<div class="field">
+																							<strong>Qtd. dias na semana </strong><br>
+																							<%= f.select :dias_ex_semana_matu, options_for_select([["Integral",7],["1 dias",1],["2 dias",2],["3 dias",3],["4 dias",4],["5 dias",5],["6 dias",6]], @proposal.dias_ex_semana_matu),{},class:'form-control' %>
+																							<div class="field">
+																								<strong>Quantas horas de jornada.</strong><br>
+																								H<%= f.select  :h_ex_jornada_matu, options_for_select([["0",0],["1",1],["2",2]],@proposal.h_ex_jornada_matu) %>:
+																								M<%= f.select  :m_ex_jornada_matu, options_for_select((0..59).map {|i| [i,i] },@proposal.m_ex_jornada_matu ) %>
+																							</div>
+																							<div class="field">
+																								<strong>Horas paga no feriado.</strong><br>
+																								<%= f.select :h_ex_feriado_jornada_matu, options_for_select([["Não",0],["Sim",1]], @proposal.h_ex_feriado_jornada_matu),{},class:'form-control' %>
+																							</div>
+																						</div>
+																					</div> 
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div> 
+													</p>        
+												</div>
+												<div class="tab-pane fade" id="hExtraVespertino">
+													<p>
+														<div class="inline">
+															<div class="row">
+																<div class="col-sm-4">
+																	<div class="field">
+																		<strong>Horas extra.</strong><br>
+																		<%= f.select :h_extra_jornada_vesp, options_for_select([["Não",0],["Sim",1]], @proposal.h_extra_jornada_vesp),{},class:'form-control' %>
+																	</div>
+																	<div class="card mb-2 border-0">
+																		<div class="inline">
+																			<div class="row">
+																				<div id="hExtraVespertinoJornda" class="panel-collapse  collapse">
+																					<div class="col-sm-12">
+																						<div class="field">
+																							<strong>Qtd. dias na semana </strong><br>
+																							<%= f.select :dias_ex_semana_vesp, options_for_select([["Integral",7],["1 dias",1],["2 dias",2],["3 dias",3],["4 dias",4],["5 dias",5],["6 dias",6]], @proposal.dias_ex_semana_vesp),{},class:'form-control' %>
+																							<div class="field">
+																								<strong>Quantas horas de jornada.</strong><br>
+																								H<%= f.select  :h_ex_jornada_vesp, options_for_select([["0",0],["1",1],["2",2]],@proposal.h_ex_jornada_vesp) %> :
+																								M<%= f.select  :m_ex_jornada_vesp, options_for_select((0..59).map {|i| [i,i] },@proposal.m_ex_jornada_vesp ) %>
+																							</div>
+																							<div class="field">
+																								<strong>Horas paga no feriado.</strong><br>
+																								<%= f.select :h_ex_feriado_jornada_vesp, options_for_select([["Não",0],["Sim",1]], @proposal.h_ex_feriado_jornada_vesp),{},class:'form-control' %>
+																							</div>
+																						</div>
+																					</div> 
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div> 
+													</p>        
+												</div>
+												<div class="tab-pane fade" id="hExtraNoturno">
+													<p>
+														<div class="inline">
+															<div class="row">
+																<div class="col-sm-4">
+																	<div class="field">
+																		<strong>Horas extra.</strong><br>
+																		<%= f.select :h_extra_jornada_notur, options_for_select([["Não",0],["Sim",1]], @proposal.h_extra_jornada_notur),{},class:'form-control' %>
+																	</div>
+																	<div class="card mb-2 border-0">
+																		<div class="inline">
+																			<div class="row">
+																				<div id="hExtraNoturnoJornada"class="panel-collapse  collapse">
+																					<div class="col-sm-12">
+																						<div class="field">
+																							<strong>Qtd. dias na semana </strong><br>
+																							<%= f.select :dias_ex_semana_notur, options_for_select([["Integral",7],["1 dias",1],["2 dias",2],["3 dias",3],["4 dias",4],["5 dias",5],["6 dias",6]], @proposal.dias_ex_semana_notur),{},class:'form-control' %>
+																							<div class="field">
+																								<strong>Quantas horas de jornada.</strong><br>
+																								H<%= f.select  :h_ex_jornada_notur, options_for_select([["0",0],["1",1],["2",2]],@proposal.h_ex_jornada_notur) %>:
+																								M<%= f.select  :m_ex_jornada_notur, options_for_select((0..59).map {|i| [i,i] },@proposal.m_ex_jornada_notur ) %>
+																							</div>
+																							<div class="field">
+																								<strong>Horas paga no feriado.</strong><br>
+																								<%= f.select :h_ex_feriado_jornada_notur, options_for_select([["Não",0],["Sim",1]], @proposal.h_ex_feriado_jornada_notur),{},class:'form-control' %>
+																							</div>
+																						</div>
+																					</div> 
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div> 
+													</p>
+												</div>
+											</div>
+										</div><!--/.panel-collapse-->
+									</div><!-- /.tab-content -->
+								</div>
+								<!-- /.panel -->
+							</div>
+						</div>
+					</div>
+					<!--Vale refeição--> 
+					<div class="inline">
+						<div class="col-lg-6">
+							<div class="row">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										Vale refeição
+										<div class="tooltip-demo">
+											<button type="button" class="btn btn-warning btn-circle pull-right" data-toggle="tooltip" data-placement="left" title="Caso seja parcial a escalas 5X2,6x1 e 12x36 preencher apenas Matutino e Noturno" style="margin-bottom: 0px;position: relative;top: -25px;"><i class="fa fa-info"></i></button>
+										</div>
+									</div>
+
+									<!-- /.panel-heading -->
+									<div class="panel-body">
+										<div class="form-group">
+											<label>Aplicar para:</label>
+											<label class="">
+												<%=f.radio_button :controle_vr, 0, :id => "proposal_radio_vr_extra_all",style:"position:relative;top:2px;",:checked=>true %><label for="0" title="all">Todos os periodos</label>
+												<%=f.radio_button :controle_vr, 1, :id => "proposal_radio_vr_extra_parcial",style:"position:relative;top:2px;" %><label for="1" title="partial">Parcial</label>
+											</label>
+										</div>
+
+										<!-- pt1 vr -->
+										<!-- Nav tabs -->
+										<div id="tab_all_vr" class="panel-collapse  collapse">
+											<ul class="nav nav-tabs">
+												<li class="active">
+													<a href="#allDaysVR" data-toggle="tab" aria-expanded="true">Todos os periodos</a>
+												</li>
+											</ul>
+
+											<!-- Tab panes -->
+											<div class="tab-content">
+												<div class="tab-pane fade active in" id="allDaysVR">
+													<p>
+														<div class="inline">
+															<div class="row">
+																<div class="col-sm-12">
+																	<div class="field">
+																		<strong>Vale refeição:</strong><br>
+																		<%= f.select :vr_all, options_for_select([["Não",0],["Sim",1]], @proposal.vr_all),{},class:'form-control' %>
+																	</div>
+																	<div class="card mb-2 border-0">
+																		<div class="inline">
+																			<div class="row">
+																				<div id="allDiasVR"class="panel-collapse  collapse">
+																					<div class="col-sm-12">
+																						<div class="field">
+																							<strong>Qtd. dias na semana </strong><br>
+																							<%= f.select :dias_pg_vr_semana_all, options_for_select([["Integral",7],["1 dias",1],["2 dias",2],["3 dias",3],["4 dias",4],["5 dias",5],["6 dias",6]], @proposal.dias_pg_vr_semana_all),{},class:'form-control' %>
+																						</div>
+																						<div class="field">
+																							<strong>Paga no feriado.</strong><br>
+																							<%= f.select :dias_pg_vr_feriado_all, options_for_select([["Não",0],["Sim",1]], @proposal.dias_pg_vr_feriado_all),{},class:'form-control' %>
+																						</div>
+																					</div> 
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div> 
+													</p>
+												</div>
+											</div> <!-- tab-content -->
+										</div>
+										<!-- /#dab_all_vr.panel-collapse  collapse -->
+
+
+										<!-- pt2 vr -->
+										<div id="tab_parcial_vr" class="panel-collapse  collapse">
+											<ul class="nav nav-tabs">
+												<li class="active">
+													<a href="#matutinVR" data-toggle="tab" aria-expanded="true">Matutino</a>
+												</li>
+												<li class="">
+													<a href="#vespertinoVR" data-toggle="tab" aria-expanded="false">Vespertino</a>
+												</li>
+												<li class="">
+													<a href="#noturnoVR" data-toggle="tab" aria-expanded="false">Noturno</a>
+												</li>
+											</ul>
+
+											<div class="tab-content">
+												<div class="tab-pane fade active in" id="matutinVR">
+													<p>
+														<div class="inline">
+															<div class="row">
+																<div class="col-sm-12">
+																	<div class="field">
+																		<strong>Vale refeição:</strong><br>
+																		<%= f.select :vr_matu, options_for_select([["Não",0],["Sim",1]], @proposal.vr_matu),{},class:'form-control' %>
+																	</div>
+																	<div class="card mb-2 border-0">
+																		<div class="inline">
+																			<div class="row">
+																				<div id="matutinoVr"class="panel-collapse  collapse">
+																					<div class="col-sm-12">
+																						<div class="field">
+																							<strong>Qtd. dias na semana </strong><br>
+																							<%= f.select :dias_pg_vr_semana_matu, options_for_select([["Integral",7],["1 dias",1],["2 dias",2],["3 dias",3],["4 dias",4],["5 dias",5],["6 dias",6]], @proposal.dias_pg_vr_semana_matu),{},class:'form-control' %>
+																						</div>
+																						<div class="field">
+																							<strong>Paga no feriado.</strong><br>
+																							<%= f.select :dias_pg_vr_feriado_matu, options_for_select([["Não",0],["Sim",1]], @proposal.dias_pg_vr_feriado_matu),{},class:'form-control' %>
+																						</div>
+																					</div> 
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>  
+													</p>        
+												</div>
+												<div class="tab-pane fade" id="vespertinoVR">
+													<p>
+														<div class="inline">
+															<div class="row">
+																<div class="col-sm-12">
+																	<div class="field">
+																		<strong>Vale refeição:</strong><br>
+																		<%= f.select :vr_vesp, options_for_select([["Não",0],["Sim",1]], @proposal.vr_vesp),{},class:'form-control' %>
+																	</div>
+																	<div class="card mb-2 border-0">
+																		<div class="inline">
+																			<div class="row">
+																				<div id="vespertinoVrOption"class="panel-collapse  collapse">
+																					<div class="col-sm-12">
+																						<div class="field">
+																							<strong>Qtd. dias na semana </strong><br>
+																							<%= f.select :dias_pg_vr_semana_vesp, options_for_select([["Integral",7],["1 dias",1],["2 dias",2],["3 dias",3],["4 dias",4],["5 dias",5],["6 dias",6]], @proposal.dias_pg_vr_semana_vesp),{},class:'form-control' %>
+																						</div>
+																						<div class="field">
+																							<strong>Paga no feriado.</strong><br>
+																							<%= f.select :dias_pg_vr_feriado_vesp, options_for_select([["Não",0],["Sim",1]], @proposal.dias_pg_vr_feriado_vesp),{},class:'form-control' %>
+																						</div>
+																					</div> 
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>  
+													</p>        
+												</div>
+												<div class="tab-pane fade" id="noturnoVR">
+													<p>
+														<div class="inline">
+															<div class="row">
+																<div class="col-sm-12">
+																	<div class="field">
+																		<strong>Vale refeição:</strong><br>
+																		<%= f.select :vr_notur, options_for_select([["Não",0],["Sim",1]], @proposal.vr_notur),{},class:'form-control' %>
+																	</div>
+																	<div class="card mb-2 border-0">
+																		<div class="inline">
+																			<div class="row">
+																				<div id="noturnoVrOption"class="panel-collapse  collapse">
+																					<div class="col-sm-12">
+																						<div class="field">
+																							<strong>Qtd. dias na semana </strong><br>
+																							<%= f.select :dias_pg_vr_semana_notur, options_for_select([["Integral",7],["1 dias",1],["2 dias",2],["3 dias",3],["4 dias",4],["5 dias",5],["6 dias",6]], @proposal.dias_pg_vr_semana_notur),{},class:'form-control' %>
+																						</div>
+																						<div class="field">
+																							<strong>Paga no feriado.</strong><br>
+																							<%= f.select :dias_pg_vr_feriado_notur, options_for_select([["Não",0],["Sim",1]], @proposal.dias_pg_vr_feriado_notur),{},class:'form-control' %>
+																						</div>
+																					</div> 
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>  
+													</p>
+												</div>
+											</div>
+										</div>
+										<!-- /#dab_parcials_vr.panel-collapse  collapse -->
+									</div>
+									<!-- /.panel-body -->
+								</div>
+								<!-- /.panel -->
+							</div>
+						</div>
+					</div>
+					<!--Vale transporte--> 
+					<div class="inline">
+						<div class="col-lg-6">
+							<div class="row">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										Vale Trasmporte
+										<div class="tooltip-demo">
+											<button type="button" class="btn btn-warning btn-circle pull-right" data-toggle="tooltip" data-placement="left" title="Caso seja parcial a escalas 5X2,6x1 e 12x36 preencher apenas Matutino e Noturno " style="margin-bottom: 0px;position: relative;top: -25px;"><i class="fa fa-info"></i></button>
+										</div>
+									</div>
+									<!-- /.panel-heading -->
+									<div class="panel-body">
+										<div class="form-group">
+											<label>Aplicar para:</label>
+											<label class="">
+												<%=f.radio_button :controle_vt, 0, :id => "proposal_radio_vt_extra_all",style:"position:relative;top:2px;",:checked=>true %><label for="0" title="all">Todos os periodos</label>
+												<%=f.radio_button :controle_vt, 1, :id => "proposal_radio_vt_extra_parcial",style:"position:relative;top:2px;" %><label for="1" title="partial">Parcial</label>
+											</label>
+										</div>
+
+										<div id="tab_all_vt" class="panel-collapse  collapse">
+
+											<!-- Nav tabs -->
+											<ul class="nav nav-tabs">
+												<li class="active">
+													<a href="#alldaysVT" data-toggle="tab" aria-expanded="true">Todos os periodos</a>
+												</li>
+											</ul>
+											<!-- Tab panes -->
+											<div class="tab-content">
+												<div class="tab-pane fade active in" id="alldaysVT">
+													<p>
+														<div class="inline">
+															<div class="row">
+																<div class="col-sm-12">
+																	<div class="field">
+																		<strong>Vale trasmporte:</strong><br>
+																		<%= f.select :vt_all, options_for_select([["Não",0],["Sim",1]], @proposal.vt_all),{},class:'form-control' %>
+																	</div>
+																	<div class="card mb-2 border-0">
+																		<div class="inline">
+																			<div class="row">
+																				<div id="allDiasVT"class="panel-collapse  collapse">
+																					<div class="col-sm-12">
+																						<div class="field">
+																							<strong>Qtd. dias na semana </strong><br>
+																							<%= f.select :dias_pg_vt_semana_all, options_for_select([["Integral",7],["1 dias",1],["2 dias",2],["3 dias",3],["4 dias",4],["5 dias",5],["6 dias",6]], @proposal.dias_pg_vt_semana_all),{},class:'form-control' %>
+																						</div>
+																						<div class="field">
+																							<strong>Paga no feriado.</strong><br>
+																							<%= f.select :dias_pg_vt_feriado_all, options_for_select([["Não",0],["Sim",1]], @proposal.dias_pg_vt_feriado_all),{},class:'form-control' %>
+																						</div>
+																					</div> 
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div> 
+													</p>
+												</div>
+											</div>
+										</div>
+
+										<div id="tab_parcial_vt" class="panel-collapse  collapse">
+											<ul class="nav nav-tabs">
+												<li class="active">
+													<a href="#matutinoVT" data-toggle="tab" aria-expanded="false">Matutino</a>
+												</li>
+												<li class="">
+													<a href="#VespertinoVT" data-toggle="tab" aria-expanded="false">Vespertino</a>
+												</li>
+												<li class="">
+													<a href="#noturnoVT" data-toggle="tab" aria-expanded="false">Noturno</a>
+												</li>
+											</ul>
+											<div class="tab-content">
+												<div class="tab-pane fade active in" id="matutinoVT">
+													<p>
+														<div class="inline">
+															<div class="row">
+																<div class="col-sm-12">
+																	<div class="field">
+																		<strong>Vale Transpoter:</strong><br>
+																		<%= f.select :vt_matu, options_for_select([["Não",0],["Sim",1]], @proposal.vt_matu),{},class:'form-control' %>
+																	</div>
+																	<div class="card mb-2 border-0">
+																		<div class="inline">
+																			<div class="row">
+																				<div id="peridMatutinoJornada"class="panel-collapse  collapse">
+																					<div class="col-sm-12">
+																						<div class="field">
+																							<strong>Qtd. dias na semana </strong><br>
+																							<%= f.select :dias_pg_vt_semana_matu, options_for_select([["Integral",7],["1 dias",1],["2 dias",2],["3 dias",3],["4 dias",4],["5 dias",5],["6 dias",6]], @proposal.dias_pg_vt_semana_matu),{},class:'form-control' %>
+																						</div>
+																						<div class="field">
+																							<strong>Paga no feriado.</strong><br>
+																							<%= f.select :dias_pg_vt_feriado_matu, options_for_select([["Não",0],["Sim",1]], @proposal.dias_pg_vt_feriado_matu),{},class:'form-control' %>
+																						</div>
+																					</div> 
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div> 
+													</p>        
+												</div>
+												<div class="tab-pane fade" id="VespertinoVT">
+													<p>
+														<div class="inline">
+															<div class="row">
+																<div class="col-sm-12">
+																	<div class="field">
+																		<strong>Vale Transpoter:</strong><br>
+																		<%= f.select :vt_vesp, options_for_select([["Não",0],["Sim",1]], @proposal.vt_vesp),{},class:'form-control' %>
+																	</div>
+																	<div class="card mb-2 border-0">
+																		<div class="inline">
+																			<div class="row">
+																				<div id="periodVespJornada"class="panel-collapse  collapse">
+																					<div class="col-sm-12">
+																						<div class="field">
+																							<strong>Qtd. dias na semana </strong><br>
+																							<%= f.select :dias_pg_vt_semana_vesp, options_for_select([["Integral",7],["1 dias",1],["2 dias",2],["3 dias",3],["4 dias",4],["5 dias",5],["6 dias",6]], @proposal.dias_pg_vt_semana_vesp),{},class:'form-control' %>
+																						</div>
+																						<div class="field">
+																							<strong>Paga no feriado.</strong><br>
+																							<%= f.select :dias_pg_vt_feriado_vesp, options_for_select([["Não",0],["Sim",1]], @proposal.dias_pg_vt_feriado_vesp),{},class:'form-control' %>
+																						</div>
+																					</div> 
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>  
+													</p>        
+												</div>
+												<div class="tab-pane fade" id="noturnoVT">
+													<p>
+														<div class="inline">
+															<div class="row">
+																<div class="col-sm-12">
+																	<div class="field">
+																		<strong>Vale Transpoter:</strong><br>
+																		<%= f.select :vt_notur, options_for_select([["Não",0],["Sim",1]], @proposal.vt_notur),{},class:'form-control' %>
+																	</div>
+																	<div class="card mb-2 border-0">
+																		<div class="inline">
+																			<div class="row">
+																				<div id="periodNoturnoJornada"class="panel-collapse  collapse">
+																					<div class="col-sm-12">
+																						<div class="field">
+																							<strong>Qtd. dias na semana </strong><br>
+																							<%= f.select :dias_pg_vt_semana_notur, options_for_select([["Integral",7],["1 dias",1],["2 dias",2],["3 dias",3],["4 dias",4],["5 dias",5],["6 dias",6]], @proposal.dias_pg_vt_semana_notur),{},class:'form-control' %>
+																						</div>
+																						<div class="field">
+																							<strong>Paga no feriado.</strong><br>
+																							<%= f.select :dias_pg_vt_feriado_notur, options_for_select([["Não",0],["Sim",1]], @proposal.dias_pg_vt_feriado_notur),{},class:'form-control' %>
+																						</div>
+																					</div> 
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>  
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- /.panel-body -->
+								</div>
+								<!-- /.panel -->
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-12" style="height: 22px;position: relative;bottom: 10px;"> 
+						<hr style="margin-top: 10px;margin-bottom: 10px;">
+					</div>    
+					<!--Equipamentos--> 
+					<div class="inline">
+						<div class="row">
+							<!-- fields_for para equipamentos e acessorios -->
+							<div class="col-sm-4">
+								<div class="field">
+									<div class="proposal_equipaments">
+										<%= link_to_add_association 'Add Equip', f, :proposal_equipaments, class: 'btn btn-outline btn-info', data: { association_insertion_node: '.proposal_equipaments', association_insertion_method: :append } %><br>
+										<%= f.fields_for :proposal_equipaments do |ep|%>
+										<%= render 'proposal_equipament_fields', f: ep %>
+										<% end %>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--Botão subumiti-->
+					<div class="actions">
+						<button type="submit" class="btn btn-outline btn-success">Salvar</button>
+					</div>
+				</div>
+				<% end %>
+			</div>
+			<!-- /.col-lg-12 -->
+		</div>
+		<!-- /.panel-body -->
+	</div>
+	<!-- /.panel -->
+</div>
+<!-- /.col-lg-12 -->
+		<script>
+		// tooltip demo
+		$('.tooltip-demo').tooltip({
+				selector: "[data-toggle=tooltip]",
+				container: "body"
+		})
+		// popover demo
+		$("[data-toggle=popover]")
+				.popover()
+		</script>

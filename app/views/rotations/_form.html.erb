@@ -1,0 +1,100 @@
+<div class="col-lg-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Formulario de criação
+    </div>
+
+    <div class="panel-body">
+      <div class="col-lg-12">
+        <%= form_for(@rotation) do |f| %>
+        <% if @rotation.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@rotation.errors.count, "error") %> prohibited this rotation from being saved:</h2>
+
+          <ul>
+            <% @rotation.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+        <% end %>
+
+        <div class="inline">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="field">
+                <%= f.label :tipo_escala %><br>
+                <%= f.text_field :tipo_escala,class:'form-control', placeholder:'Nome da Escala'  %>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="field">
+                <%= f.label :dias_trabalhados %><strong> no mês</strong> <br>
+                <%= f.text_field :dias_trabalhados, step: 0.01,class:'form-control' %>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="field">
+                <%= f.label :qtd_funcionarios %><br>
+                <%= f.text_field :qtd_funcionarios, step: 0.01,class:'form-control' %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="inline">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="field">
+                <%= f.label :efetivo %><br>
+                <%= f.text_field :efetivo, step: 0.01,class:'form-control' %>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="field">
+                <strong>Reciclagem (quando aplicavel)</strong><br>
+                <%= f.text_field :v_reciclagem, step: 0.01,class:'form-control' %>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="field">
+                <%= f.label :fator_escala %><br>
+                <%= f.text_field :fator_escala, step: 0.01,class:'form-control' %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="inline">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="field">
+                <%= f.label :period_id %><br>
+                <%= collection_select(:rotation, :period_id, @select_all_period, :id, :periodo,{},class:'form-control')%>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="field">
+                <%= f.label :ad_vespertido_noturno %><br>
+                <%= f.text_field :ad_vespertido_noturno, step: 0.01,class:'form-control' %>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="field">
+                <%= f.label :ad_noturno%><br>
+                <%= f.text_field :ad_noturno, step: 0.01,class:'form-control' %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <button type="submit" class="btn btn-outline btn-success">Salvar</button>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+

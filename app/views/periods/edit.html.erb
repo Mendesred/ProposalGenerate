@@ -1,0 +1,9 @@
+<%= link_to periods_path,class:"btn btn-outline btn-success pull-right topHeader", type:"button" do %>
+  <i class="fa fa-clipboard fa-fw"></i> Voltar
+<% end %>   
+<%= link_to @period,class:"btn btn-outline btn-success pull-right topHeader", type:"button" do %>
+  <i class="fa fa-clipboard fa-fw"></i> Exibir
+<% end %>
+<h1  class="page-header topHeader">Editing Periods</h1>
+
+<%= render 'form' %>

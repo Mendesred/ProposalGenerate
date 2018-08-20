@@ -1,0 +1,50 @@
+<div class="col-lg-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Formulario de criação
+    </div>
+
+    <div class="panel-body">
+      <div class="col-lg-12">
+        <%= form_for(@equipament) do |f| %>
+        <% if @equipament.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@equipament.errors.count, "error") %> prohibited this equipament from being saved:</h2>
+
+          <ul>
+            <% @equipament.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+        <% end %>
+        <div class="inline">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="field">
+                <%= f.label :name_equipament %><br>
+                <%= f.text_field :name_equipament, class:'form-control', placeholder:'Nome do Equipamento ou acessorios' %>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="field">
+                <%= f.label :valor %><br>
+                <%= f.text_field :valor, class:'form-control', placeholder:'Valor do Equipamento ou acessorios' %>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="field">
+                <%= f.label :depreciacao %><br>
+                <%= f.text_field :depreciacao, class:'form-control', placeholder:'Deprecição' %>
+              </div>
+            </div>
+          </div>
+          <div class="actions">
+            <button type="submit" class="btn btn-outline btn-success">Salvar</button>
+          </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

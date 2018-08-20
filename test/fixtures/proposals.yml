@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cliente: MyString
+  codigo_cliente: MyString
+  city_id: 
+  rotation_id: 
+  equip_accessory_id: 
+  role_id: 
+  indice_retorno: 1.5
+  taxa_admin: 1.5
+  intermunicipal: 1.5
+
+two:
+  cliente: MyString
+  codigo_cliente: MyString
+  city_id: 
+  rotation_id: 
+  equip_accessory_id: 
+  role_id: 
+  indice_retorno: 1.5
+  taxa_admin: 1.5
+  intermunicipal: 1.5

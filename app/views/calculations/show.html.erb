@@ -1,0 +1,110 @@
+</br>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong>Campo de Calculo</strong>
+
+  </div>
+  <div class="panel-body">
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Nome do Campo</th>
+            <th>Valor do campo</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td><strong>Salario minimo:</strong></td>
+            <td><%= @calculation.salario_minimo %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Fgts:</strong></td>
+            <td><%= @calculation.fgts %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Inss:</strong></td>
+            <td><%= @calculation.inss %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Sebrae:</strong></td>
+            <td><%= @calculation.sebrae %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Incra:</strong></td>
+            <td><%= @calculation.incra %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Salario educacao:</strong></td>
+            <td><%= @calculation.salario_educacao %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Sesc:</strong></td>
+            <td><%= @calculation.sesc %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Senac:</strong></td>
+            <td><%= @calculation.senac %></td>
+          </tr>
+
+          <tr>
+            <td><strong>decimo_terceito:</strong></td> 
+            <td><%=@calculation.decimo_terceito%> </td>
+          </tr>
+          <tr>
+            <td><strong>um_terco_constitucional:</strong></td>
+            <td><%=@calculation.um_terco_constitucional%></td>
+          </tr>
+          <tr>
+            <td><strong>ferias:</strong></td>
+            <td><%=@calculation.ferias%></td>
+          </tr>
+          <tr>
+            <td><strong>pct_inss_sob_soma_decimo_um_terco_ferias:</strong></td>
+            <td><%=@calculation.pct_inss_sob_soma_decimo_um_terco_ferias%></td>
+          </tr>
+          <tr>
+            <td><strong>pct_fgts_sob_soma_decimo_um_terco_ferias:</strong></td>
+            <td><%=@calculation.pct_fgts_sob_soma_decimo_um_terco_ferias%></td>
+          </tr>
+          <tr>
+            <td><strong>aviso_previo:</strong></td>
+            <td><%=@calculation.aviso_previo%></td>
+          </tr>
+          <tr>
+            <td><strong>indenizacao_fgts:</strong></td>
+            <td><%=@calculation.indenizacao_fgts%></td>
+          </tr>
+          <tr>
+            <td><strong>indiceAdministrativo:</strong></td>
+            <td><%=@calculation.indiceAdministrativo%></td>
+          </tr>
+          <tr>
+            <td><strong>indiceOperacional:</strong></td>
+            <td><%=@calculation.indiceOperacional%></td>
+          </tr>
+          <tr>
+            <td><strong>horasDeCalculoAdNoturno:</strong></td>
+            <td><%=@calculation.horasDeCalculoAdNoturno%></td>
+          </tr>
+        </tbody>
+      </table>
+      <%= link_to calculations_path,class:"btn btn-default btn-sm ajusteButton", type:"button" do %>
+      <i class="fa fa-arrow-left"></i> Voltar
+      <% end %>
+      <%= link_to edit_calculation_path(@calculation),class:"btn btn-default btn-sm ajusteButton", type:"button" do %>
+      <i class="fa fa-edit"></i> Editar
+      <% end %>
+    </div>
+    <!-- /.table-responsive -->
+  </div>
+  <!-- /.panel-body -->
+</div>

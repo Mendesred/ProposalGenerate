@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Proposal:</strong>
+  <%= @proposal_role.proposal %>
+</p>
+
+<p>
+  <strong>Role:</strong>
+  <%= @proposal_role.role %>
+</p>
+
+<%= link_to 'Edit', edit_proposal_role_path(@proposal_role) %> |
+<%= link_to 'Back', proposal_roles_path %>

@@ -1,0 +1,107 @@
+**************************************************************
+Primeira parte da tabela cargos e salários:
+
+- Somar valor dos postos e multiplicar por efetivo(efetivo é um valor variável definido em cada escala)
+- Multiplicar salario por efetivo e somar o salários ou somar todos os salários e multiplicar pelo efetivo base
+
+**************************************************************
+
+Segunda tabela valos adicionais de mão de obra:
+
+- Receber salario base multiplicar por gratificação do cargo(manter com duas casas decimais)
+-	- Adicional de periculosidade pegar valor do piso da categoria e multiplicar pelo adicional periculosidade
+- - Adicional de insalubridade pegar valor do salario minimo (instituído por lei federal) e multiplicar pelo adicional de insalubridade
+		- Pegar os dois adicionais e fazer calculo analisando qual é o de maior valor pois ele sera usado no calculo final.
+
+- Horas vespertino é (30.44*0.1905) descobri o que é o 30.44 e o 0.1905(para achar as horas cobradas) para o valor é feito o calculo da ((((soma de maior salario base)+ (o adcional de periculosidade ou insalubridade o que for maior))/220)*20%*(horas de vespertino)*((soma de funcionarios vespertino))/(efetivo))arredondado para 2
+descobri o que é o 220 e os 20%
+- Horas Noturno
+
+- Hora extra calcular quantidade de funcionários vezes (descobrir qual valor é este 30,44) vezes a quantidade de horas adicionais(extras)
+	- O calculo efetivo é feito multiplicando (maior salario base + adicional de periculosidade ou insalubridade(o que for de maior valor)+ adicional vespertino+ adicional noturno)* (1,6(DESCOBRIR O QUE É)total de horas feriados)/(efetivo(quantidade de funcionários vezes o efetivo))arredondado para 2
+
+- Horas extras feriados é igual a ((quantidade de horas trabalhadas no dia)+((quantidade de horas trabalhadas no dia/ por meses do ano)*(quantidade de meses do ano - a quantidade de feriados)))*(quandidade de funcionarios maturino e vespertino))+((quantidade de horas trabalhadas no dia)+((quantidade de horas trabalhadas no dia/ por meses do ano)*(quantidade de meses do ano - a quantidade de feriados)))*(quandidade de funcionarios noturno)) sendo que funcionarios notunos trabalha menos que os diurnos.
+	- O calculo efetivo é feito multiplicando (maior salario base + adicional de periculosidade ou insalubridade(o que for de maior valor)+ adicional vespertino+ adicional noturno)* (total de horas feriados)/(efetivo(quantidade de funcionários vezes o efetivo))arredondado para 2
+- Relfexo sobre a folha - DSR ((somar os valores de horas adicionais tanto extra como adicional noturno e vespertino)/25,09*5,35)
+descobri o que é o 25,09 e 5,35 arredondar para 2 casas decimais
+
+- Salario medio base (somar todos os valores resultantes da contas assima ou seja (salario medio base(valor maior)+adicionais(valor maior)+(horas extras)+(adicionais)+(reflexo sobre folha)))arredondar para 2 casas decimais
+
+- Massa salarial é o (valor total de efetivo)+(salario medio base final)arredondar para 2 casas decimais
+
+**************************************************************
+
+Obrigações sociais sobre a massa salarial:
+	- valo do beneficio FGTS * Massa salarial base arredondar para 2 casas decimais
+	- valo do beneficio INSS * Massa salarial base arredondar para 2 casas decimais
+	- valo do beneficio Seguro Acidente do Trabalho * Massa salarial base arredondar para 2 casas decimais
+	- valo do beneficio Sebrae * Massa salarial base arredondar para 2 casas decimais
+	- valo do beneficio Incra * Massa salarial base arredondar para 2 casas decimais
+	- valo do beneficio Salário Educação * Massa salarial base arredondar para 2 casas decimais
+	- valo do beneficio Sesc * Massa salarial base arredondar para 2 casas decimais
+	- valo do beneficio Senac * Massa salarial base arredondar para 2 casas decimais
+	- total de encargos diretos(somar todos os valores resultantes) arredondar para 2 casas decimais
+
+**************************************************************
+
+Provizões sobre massa salarial 
+	- Ferias (1/12 avos) (((Salario medio base)*total do efetivo)* taxa de ferias)arredondar para 2 casas decimais
+	- 1/3 constitucional (1/12 avos) (((Salario medio base)*total do efetivo)* taxa de 1/3 constitucional)arredondar para 2 casas decimais
+	- 13º salario (1/12 avos) (((Salario medio base)*total do efetivo)* taxa de 13º salario)arredondar para 2 casas decimais
+	- INSS sobre Ferias, 1/3 constitucional,13º salario ((soma dos 3 valores resultantes)* taxa do inss(valor diferente do de beneficio (descobrir o porque)))arredondar para 2 casas decimais
+	- FGTS sobre Ferias, 1/3 constitucional,13º salario ((soma dos 3 valores resultantes)* taxa do FGTS))
+	- Aviso previo (massa salarial * taxa do avizo)arredondar para 2 casas decimais
+
+	- Fgts sobre indenização dobre o fgts normal e o fgts do 13º salario(soma dos fgts* taxa de indenização)
+	-Rezera tecnica calcular depois de todos os calculos (valor da taxa*(valor total mensal-(total de equipamentos e acessorios+ total de tributos sobre serviço)))arredondar para 2 casas decimais
+
+	- total de proviões (somar todos os valores resultantes) arredondar para 2 casas decimais
+
+**************************************************************
+
+Beneficios:
+	- Cesta basica (mutiplicar valor da cesta pelo valor do efetivo total)
+	- Vale refeição
+	- Assistencia médica (Multiplicar o valor da assistencia pelo valor do efetivo total)
+	- Seguro de vida (Multiplicar o valor da seguro de vida pelo valor do efetivo total)
+	-	Vale transporte: primeio calculo a quantidade que seja nescessario(quantidade de funcionarios * quanditade de dias no mês(30,44)*(2 ida e volta)) tendo o valor que será usando é feito o calculo de custo para o cliente sendo assim((quantidade que será usanda mais o valor do passe)-((salario base da categoria*o efetivo)* 6 porcento))
+	- Reciclagem (valor do beneficio * efetivo) arredondar para 2 casas decimais
+	- uniforme (valor do beneficio * efetivo) arredondar para 2 casas decimais
+	- Soma de todos os resultados de calculos. arredondar para 2 casas decimais
+
+**************************************************************
+Total Mão de obra:
+ - massa salarial + total de encargos + total provisões + total benefícios
+**************************************************************
+
+Administração e operação:
+	- Enenter o calculo:
+	- Indice de lucro: recebido pelo vendedor
+
+**************************************************************
+
+Equipamentos e acessorios:
+
+	- Valor do equipamento dividido pela depreciação vezes a quantidade
+	- Deixar campo para disconto caso seja atribuido pelo vendedor
+	- somar todos os valores 
+
+**************************************************************
+Impostos:
+
+	- ISSqN(pegar valor de cada cidade) * o total mensal
+	- IRRF * o total mensal 
+ 	- CSLL * o total mensal
+ 	- PIS * o total mensal
+ 	- COFINS * o total mensal
+ 	Soma de todos os impostos
+
+**************************************************************
+Total de Taxas, Serviços e Impostos sobre Vendas:
+ 	- Soma de total taxas + lucro bruto + total de equipamentos + impostos sobre serviço
+**************************************************************
+
+Demonstativo de custo final 
+
+valor mão de obra = (total mão de obra)
+valor de taxas e impostos = (total de taxas e impostos)

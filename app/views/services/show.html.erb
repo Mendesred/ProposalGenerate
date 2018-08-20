@@ -1,0 +1,47 @@
+</br>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<strong>Servico</strong>
+
+	</div>
+	<div class="panel-body">
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>Nome do Campo</th>
+						<th>Valor do campo</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr>
+						<td><strong>Tipo servico:</strong></td>
+						<td><%= @service.tipo_servico %></td>
+					</tr>
+					<tr>
+						<td><strong>Company:</strong></td>
+						<td><%= @service.company.name_company %></td>
+					</tr>
+
+					<tr>
+						<td><strong>valor de desconto de Vr:</strong></td>
+						<td><%= @service.desconto_vr %></td>
+					</tr>
+					<tr>
+						<td><strong>Cesta:</strong></td>
+						<td><%= number_to_currency(@service.cesta) %></td>
+					</tr>
+				</tbody>
+			</table>		
+		<%= link_to services_path,class:"btn btn-default btn-sm ajusteButton", type:"button" do %>
+		<i class="fa fa-arrow-left"></i> Voltar
+		<% end %>
+		<%= link_to edit_service_path(@service),class:"btn btn-default btn-sm ajusteButton", type:"button" do %>
+		<i class="fa fa-edit"></i> Editar
+		<% end %>
+		</div>
+		<!-- /.table-responsive -->
+	</div>
+	<!-- /.panel-body -->
+</div>

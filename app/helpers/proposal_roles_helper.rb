@@ -1,0 +1,2 @@
+module ProposalRolesHelper
+end

@@ -1,0 +1,49 @@
+</br>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<strong>Cidade</strong>
+
+	</div>
+	<div class="panel-body">
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>Nome do Campo</th>
+						<th>Valor do campo</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr>
+						<td><strong>Nome:</strong></td>
+						<td><%= @city.nome %></td>
+					</tr>
+
+					<tr>
+						<td><strong>Feriado:</strong></td>
+						<td><%= @city.feriado %></td>
+					</tr>
+
+					<tr>
+						<td><strong>Valetransporte:</strong></td>
+						<td><%= @city.valeTransporte %></td>
+					</tr>
+
+					<tr>
+						<td><strong>Issqn:</strong></td>
+						<td><%= @city.issqn %></td>
+					</tr>
+				</tbody>
+			</table>
+			<%= link_to cities_path,class:"btn btn-default btn-sm ajusteButton", type:"button" do %>
+			<i class="fa fa-arrow-left"></i> Voltar
+			<% end %>
+			<%= link_to edit_city_path(@city),class:"btn btn-default btn-sm ajusteButton", type:"button" do %>
+			<i class="fa fa-edit"></i> Editar
+			<% end %>
+		</div>
+		<!-- /.table-responsive -->
+	</div>
+	<!-- /.panel-body -->
+</div>

@@ -1,0 +1,149 @@
+<div class="col-lg-12">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Formulario de criação
+		</div>
+
+		<div class="panel-body">
+			<div class="col-lg-12">
+				<%= form_for(@calculation) do |f| %>
+				<% if @calculation.errors.any? %>
+				<div id="error_explanation">
+					<h2><%= pluralize(@calculation.errors.count, "error") %> prohibited this calculation from being saved:</h2>
+
+					<ul>
+						<% @calculation.errors.full_messages.each do |message| %>
+						<li><%= message %></li>
+						<% end %>
+					</ul>
+				</div>
+				<% end %>
+				<div class="inline">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Salario minimo <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button></strong><br>
+								<%= f.text_field :salario_minimo, :value => number_with_precision(f.object.salario_minimo,precision: 2, locale: :"pt-BR"),class:'form-control' %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>FGTS <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button></strong><br>
+								<%= f.text_field :fgts,class:'form-control' %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>INSS <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button></strong><br>
+								<%= f.text_field :inss,class:'form-control' %>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="inline">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Sebrae <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button></strong><br>
+								<%= f.text_field :sebrae,class:'form-control' %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>INCRA <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button></strong><br>
+								<%= f.text_field :incra,class:'form-control' %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Salario educação <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button></strong><br>
+								<%= f.text_field :salario_educacao,class:'form-control' %>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="inline">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Decimo terceiro salario <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button></strong><br>
+								<%= f.text_field :decimo_terceito,class:'form-control' %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Um terço constitucional <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button></strong><br>
+								<%= f.text_field :um_terco_constitucional,class:'form-control' %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Ferias <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button></strong><br>
+								<%= f.text_field :ferias,class:'form-control' %>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="inline">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Porcentagem de INSS sobre a 1/12 avos de ferias, 1/3 constitucional e 13º Salario <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button></strong><br>
+								<%= f.text_field :pct_inss_sob_soma_decimo_um_terco_ferias,class:'form-control' %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Porcentagem de FGTS sobre a 1/12 avos de ferias, 1/3 constitucional e 13º Salario <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button></strong><br>
+								<%= f.text_field :pct_fgts_sob_soma_decimo_um_terco_ferias,class:'form-control' %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Aviso previo <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button></strong><br>
+								<%= f.text_field :aviso_previo,class:'form-control' %>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="inline">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Indenização FGTS <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button></strong><br>
+								<%= f.text_field :indenizacao_fgts,class:'form-control' %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Indice administrativo <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button></strong><br>
+								<%= f.text_field :indiceAdministrativo,class:'form-control' %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Indice operacional <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button></strong><br>
+								<%= f.text_field :indiceOperacional,class:'form-control' %>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="inline">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Horas de calculo adicional noturno <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button></strong><br>
+								<%= f.text_field :horasDeCalculoAdNoturno,class:'form-control' %>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="actions">
+					<button type="submit" class="btn btn-outline btn-success">Salvar</button>
+				</div>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>

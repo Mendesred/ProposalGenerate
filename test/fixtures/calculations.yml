@@ -1,0 +1,31 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  salario_minimo: 1.5
+  fgts: 1.5
+  inss: 1.5
+  seguro_aci_trabalho: 1.5
+  sebrae: 1.5
+  incra: 1.5
+  salario_educacao: 1.5
+  sesc: 1.5
+  senac: 1.5
+  irrf: 1.5
+  csll: 1.5
+  pis: 1.5
+  cofins: 1.5
+
+two:
+  salario_minimo: 1.5
+  fgts: 1.5
+  inss: 1.5
+  seguro_aci_trabalho: 1.5
+  sebrae: 1.5
+  incra: 1.5
+  salario_educacao: 1.5
+  sesc: 1.5
+  senac: 1.5
+  irrf: 1.5
+  csll: 1.5
+  pis: 1.5
+  cofins: 1.5

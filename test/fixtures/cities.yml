@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nome: MyString
+  feriado: 1.5
+  valeTranspote: 1.5
+  issqn: 1.5
+
+two:
+  nome: MyString
+  feriado: 1.5
+  valeTranspote: 1.5
+  issqn: 1.5

@@ -1,0 +1,60 @@
+<div class="col-lg-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Formulario de criação
+    </div>
+
+    <div class="panel-body">
+      <div class="col-lg-12">
+        <%= form_for(@service) do |f| %>
+        <% if @service.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@service.errors.count, "error") %> prohibited this service from being saved:</h2>
+
+          <ul>
+            <% @service.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+        <% end %>
+        <div class="inline">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="field">
+                <%= f.label :tipo_servico %><br>
+                <%= f.text_field :tipo_servico,class:'form-control'  %>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="field">
+                <strong>Empresa</strong><br>
+                <%= collection_select(:service, :company_id, @select_all_company, :id, :name_company,{},class:'form-control' ) %>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="field">
+                <strong>Desconto do VR</strong><br>
+                <%= f.text_field :desconto_vr,class:'form-control',  step: 0.01 %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="inline">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="field">
+                <%= f.label :cesta %><br>
+                <%= f.text_field :cesta,:value => number_with_precision(f.object.cesta,precision: 2, locale: :"pt-BR"),class:'form-control',  step: 0.01 %>
+              </div>
+            </div>
+          </div>   
+        </div>
+        <div class="actions">
+          <button type="submit" class="btn btn-outline btn-success">Salvar</button>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

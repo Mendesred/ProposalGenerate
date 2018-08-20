@@ -1,0 +1,74 @@
+</br>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong>Escala</strong>
+
+  </div>
+  <div class="panel-body">
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Nome do Campo</th>
+            <th>Valor do campo</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td><strong>Tipo escala:</strong></td>
+            <td><%= @rotation.tipo_escala %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Dias trabalhados:</strong></td>
+            <td><%= @rotation.dias_trabalhados %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Quantidade funcionarios:</strong></td>
+            <td><%= @rotation.qtd_funcionarios %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Efetivo:</strong></td>
+            <td><%= @rotation.efetivo %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Fator escala:</strong></td>
+            <td><%= @rotation.fator_escala %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Reciclagem:</strong></td>
+            <td><%= @rotation.v_reciclagem %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Period:</strong></td>
+            <td><%= @rotation.period.periodo %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Ad vespertido noturno:</strong></td>
+            <td><%= @rotation.ad_vespertido_noturno %></td>
+          </tr>
+
+          <tr>
+            <td><strong>Ad noturno:</strong></td>
+            <td><%= @rotation.ad_noturno %></td>
+          </tr>
+        </tbody>
+      </table>
+      <%= link_to rotations_path,class:"btn btn-default btn-sm ajusteButton", type:"button" do %>
+      <i class="fa fa-arrow-left"></i> Voltar
+      <% end %>
+      <%= link_to edit_rotation_path(@rotation),class:"btn btn-default btn-sm ajusteButton", type:"button" do %>
+      <i class="fa fa-edit"></i> Editar
+      <% end %>
+    </div>
+    <!-- /.table-responsive -->
+  </div>
+  <!-- /.panel-body -->
+</div>

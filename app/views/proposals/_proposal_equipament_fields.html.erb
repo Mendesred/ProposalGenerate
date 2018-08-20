@@ -1,0 +1,11 @@
+<div class="nested-fields">
+  <%= f.label "Equipamento e Acessório" %><br>
+  <%= f.collection_select(:equipament_id, @select_all_equip, :id, :name_select,{},class:'form-control',style:'width: 88%;' ) %>
+	<div class="tooltip-demo">
+  <%= link_to_remove_association '', f, class: 'btn btn-danger btn-circle pull-right fa fa-trash-o', style:'margin-top: -10%;', 'data-toggle'=>'tooltip', "data-placement"=>'right', title:'Remover equipamento adicionado'%>
+  </div>
+    <div class="field">
+			<%= f.label "quantidade" %><br>
+			<%= f.text_field :quantidade, step: 0.01,class:'form-control'%>
+		</div>
+</div>
