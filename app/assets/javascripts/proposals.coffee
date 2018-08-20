@@ -43,8 +43,8 @@ hash =
 $(document).ready ->
 	for key, val of hash
 		$(key).on 'change', check_value($(key), $(val))
-		console.log "val = #{$(key).val()}"
-		console.log "#{key} = #{val}"
+		#console.log "val = #{$(key).val()}"
+		#console.log "#{key} = #{val}"
 	return
 
 
