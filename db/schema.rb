@@ -120,10 +120,13 @@ ActiveRecord::Schema.define(version: 20180626181857) do
 
   create_table "proposal_roles", force: :cascade do |t|
     t.float    "qtd_postos"
+    t.string   "cargo"
+    t.float    "salario"
+    t.float    "gratificacao"
     t.integer  "proposal_id"
     t.integer  "role_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   add_index "proposal_roles", ["proposal_id"], name: "index_proposal_roles_on_proposal_id"
@@ -221,6 +224,7 @@ ActiveRecord::Schema.define(version: 20180626181857) do
     t.float    "equipament_nome"
     t.float    "equipament_valor"
     t.float    "equipament_depreciacao"
+    t.float    "valor_passagem"
     t.float    "salario"
     t.float    "qtd_postos"
     t.float    "totalSalarios"

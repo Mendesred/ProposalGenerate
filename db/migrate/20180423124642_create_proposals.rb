@@ -40,9 +40,7 @@ class CreateProposals < ActiveRecord::Migration
       t.integer :m_ex_jornada_all
       t.integer :h_ex_feriado_jornada_all
 
-      t.integer :h_extra_refeicao_all
-      t.integer :dias_refeicao_ex_semana_all
-      t.integer :h_refeicao_ex_feriado_all
+
       #para horas extras matutino
       t.integer :h_extra_jornada_matu
       t.integer :dias_ex_semana_matu
@@ -50,9 +48,6 @@ class CreateProposals < ActiveRecord::Migration
       t.integer :m_ex_jornada_matu
       t.integer :h_ex_feriado_jornada_matu
 
-      t.integer :h_extra_refeicao_matu
-      t.integer :dias_refeicao_ex_semana_matu
-      t.integer :h_refeicao_ex_feriado_matu
       #para horas extras vespertino
       t.integer :h_extra_jornada_vesp
       t.integer :dias_ex_semana_vesp
@@ -60,9 +55,6 @@ class CreateProposals < ActiveRecord::Migration
       t.integer :h_ex_jornada_vesp
       t.integer :h_ex_feriado_jornada_vesp
 
-      t.integer :h_extra_refeicao_vesp
-      t.integer :dias_refeicao_ex_semana_vesp
-      t.integer :h_refeicao_ex_feriado_vesp
       #para horas extras Noturno
       t.integer :h_extra_jornada_notur
       t.integer :dias_ex_semana_notur
@@ -70,9 +62,6 @@ class CreateProposals < ActiveRecord::Migration
       t.integer :m_ex_jornada_notur
       t.integer :h_ex_feriado_jornada_notur
 
-      t.integer :h_extra_refeicao_notur
-      t.integer :dias_refeicao_ex_semana_notur
-      t.integer :h_refeicao_ex_feriado_notur
 
       t.float :horas_extras
       ######################################
@@ -117,12 +106,6 @@ class CreateProposals < ActiveRecord::Migration
       t.integer :dias_pg_vt_semana_notur
       t.integer :dias_pg_vt_feriado_notur
 
-      ###################################################################
-      ### Abaxo campos salvos por calculo na proposa, campos de horas ###
-      ###################################################################
-      t.float :soma_horas_ex_jorn_refeicao_dia
-      t.float :soma_horas_ex_jorn_refeicao_noite
-
 
       ###################################################
       ### Abaxo campos salvos por calculo na proposta ###
@@ -131,6 +114,9 @@ class CreateProposals < ActiveRecord::Migration
       t.float :equipament_nome
       t.float :equipament_valor
       t.float :equipament_depreciacao
+      #t.float :gratificacao
+      
+      t.float :valor_passagem
 
       t.float :salario
       t.float :qtd_postos
@@ -141,7 +127,6 @@ class CreateProposals < ActiveRecord::Migration
       t.float :efetivoIndivitual
       t.float :acumuladorFuncionarios
       t.float :vUniAssistMedica
-      t.float :vUnitReciclagem
       t.float :vUniUniforme
       t.float :vUniVR
       t.float :vUniPpr
@@ -208,7 +193,6 @@ class CreateProposals < ActiveRecord::Migration
       t.float :valorCsll
       t.float :valorIrrf
       t.float :totImpostoSobServico
-      t.float :totPtoviMassaSalarialComReserva
 
 
       t.timestamps null: false

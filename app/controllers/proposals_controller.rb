@@ -77,7 +77,7 @@ class ProposalsController < ApplicationMainController
   def create
     @proposal = Proposal.new(proposal_params)
     @proposal.admin = current_admin
-    @proposal.user_criated=current_admin.nome
+    @proposal.user_criate=current_admin.nome
     selected_service
     selected_role
     select_period

@@ -87,10 +87,10 @@
 								<tr>
 									<!--td><%#= proposal_role.role.service.company.id %></td-->
 									<td class="showFonteSize">
-										<%= proposal_role.role.cargo %>
+										<%= proposal_role.cargo %>
 									</td><!--Nome do cargo-->
 									<td class="showFonteSize" class="showFonteSize">
-										<%= number_to_currency(((@proposal.salario).round(2)*(((proposal_role.role.gratificacao.to_f).round(2)/100)+1)).round(2))%>
+										<%= number_to_currency(((@proposal.salario).round(2)*(((proposal_role.gratificacao.to_f).round(2)/100)+1)).round(2))%>
 									</td><!--Salario com a gratificação-->
 									<td class="showFonteSize">
 										<%= @proposal.efetivoIndivitual %><!--valor total do efetivo-->
@@ -107,7 +107,7 @@
 											(@proposal.rotation.efetivo/@proposal.rotation.qtd_funcionarios.to_f)).round(2))%>
 										</td><!--Salario com  e efetivo-->
 										<td class="showFonteSize">
-											<%=  number_to_currency((((((proposal_role.role.salario.to_f)*(((proposal_role.role.gratificacao.to_f)/100)+1))*
+											<%=  number_to_currency((((((proposal_role.salario.to_f)*(((proposal_role.gratificacao.to_f)/100)+1))*
 											(@proposal.rotation.efetivo/@proposal.rotation.qtd_funcionarios.to_f)))*(@proposal.rotation.qtd_funcionarios*proposal_role.qtd_postos)).round(2)) %>
 										</td><!--Quandidade de funcionarios-->
 									</tr>
@@ -374,16 +374,12 @@
 										<tr>
 											<td class="showFonteSize">Vale Trasporte.</td>
 											<td class="showFonteSize"><%=(2*@proposal.qtd_vt_pagas.to_f).round(1)%></td>
-											<td class="showFonteSize"><%=if @proposal.intermunicipal == 0
-																											@proposal.city.valeTransporte
-																										else
-																												@proposal.intermunicipal
-																										end%></td>
-											<td class="showFonteSize"><%= if @proposal.totVT == 0.00
+											<td class="showFonteSize"><%=number_to_currency(@proposal.valor_passagem)%></td>
+											<td class="showFonteSize"><% if @proposal.totVT == 0.00%>
 																											"Não será cobrado"
-																										else
-																											number_to_currency(@proposal.totVT)
-																										end %></td>
+																										<%else%>
+																											<%=number_to_currency(@proposal.totVT)%>
+																										<%end %></td>
 										</tr>
 										<tr>
 											<td class="showFonteSize">Reciclagem</td>
@@ -436,7 +432,7 @@
 									<thead>
 										<tr>
 											<th class="padraoEspaco1">Tipo </th>
-											<th >Percentual </th>
+											<th>Percentual </th>
 											<th>Valor total:</th>
 										</tr>
 									</thead>

@@ -14,11 +14,11 @@ namespace :proposal do
 
   	proposta = Proposal.new()
     proposta.admin_id = Admin.first.id
-  	proposta.user_criate = Admin.first.id
+  	proposta.user_criate = Admin.first.nome
   	proposta.city_id = City.first.id#City.order("RANDOM()").first.id
   	proposta.rotation_id = Rotation.first.id
   	proposta.period_id = Period.order("RANDOM()").first.id
-  	proposta.intermunicipal = rand(0..99)
+  	proposta.intermunicipal = rand(0..10)
   	proposta.company_id = service.company_id
   	proposta.adcional_periculosidade_insalubridade = rand(0..3)
   	proposta.grau_de_insalubridade = [0,0.10,0.20,0.40].shuffle.first

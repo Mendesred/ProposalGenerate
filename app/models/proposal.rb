@@ -119,7 +119,7 @@ class Proposal < ActiveRecord::Base
 			tipo_servico = proposal_role.role.service.tipo_servico
 			
 			vUniUniforme = proposal_role.role.uniformes.to_f
-
+		
 			vUniPpr = proposal_role.role.ppr.to_f
 			
 			vUniVR = proposal_role.role.vale_refeicao.to_f
@@ -1251,6 +1251,8 @@ class Proposal < ActiveRecord::Base
 		else
 			valorPassagem = intermunicipal
 		end
+
+		update_column(:valor_passagem, (valorPassagem))
 
 		teste1 = city.valeTransporte
 		teste2 = valorPassagem
