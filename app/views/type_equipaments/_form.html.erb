@@ -1,0 +1,39 @@
+<div class="col-lg-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Formulario
+    </div>
+
+
+
+    <div class="panel-body">
+      <div class="col-lg-12">
+        <%= form_for(@type_equipament) do |f| %>
+        <% if @type_equipament.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@type_equipament.errors.count, "error") %> prohibited this type_equipament from being saved:</h2>
+          <ul>
+            <% @type_equipament.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+        <% end %>
+        <div class="inline">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="field">
+                <%= f.label :typeEquipament %><br>
+                <%= f.text_field :typeEquipament,class:'form-control' %>
+              </div>
+            </div>
+          </div>
+          <div class="actions">
+            <button type="submit" class="btn btn-outline btn-success">Salvar</button>
+          </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

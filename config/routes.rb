@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :type_equipaments
   resources :meals
   namespace :dashboard do
     resources :admin, except:[:show]

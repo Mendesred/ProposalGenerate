@@ -22,6 +22,12 @@
           <div class="row">
             <div class="col-sm-4">
               <div class="field">
+                <%= f.label :typeEquipament_id %><br>
+                <%= collection_select(:equipament, :typeEquipament_id, @select_all_type, :id, :typeEquipament,{},class:'form-control') %>
+              </div>
+              </div>
+            <div class="col-sm-4">
+              <div class="field">
                 <%= f.label :name_equipament %><br>
                 <%= f.text_field :name_equipament, class:'form-control', placeholder:'Nome do Equipamento ou acessorios' %>
               </div>

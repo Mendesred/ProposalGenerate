@@ -5,6 +5,7 @@ class CreateEquipaments < ActiveRecord::Migration
       t.float :valor
       t.float :depreciacao
       t.references :proposal, index: true, foreign_key: true
+      t.references :typeEquipament, index: true, foreign_key: true
 
       t.timestamps null: false
     end

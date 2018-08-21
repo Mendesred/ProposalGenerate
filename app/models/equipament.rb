@@ -1,5 +1,5 @@
 class Equipament < ActiveRecord::Base
-
+	belongs_to :typeEquipament
   #has_many :proposal_equipaments
   #has_many :proposals, :through => :proposal_equipaments
 

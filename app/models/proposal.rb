@@ -26,13 +26,13 @@ class Proposal < ActiveRecord::Base
 	after_save :prenche_vasio
 
 	#validates :cliente, presence: true
-	validate :valida_dias_semana
-	def valida_dias_semana
-		if (dias_jornada_ex_semana_all.to_f + dias_refeicao_ex_semana_all.to_f )>7 && ((h_extra_jornada_all==1) && (h_extra_refeicao_all==1))
-			
-			errors.add(:dias_jornada_ex_semana_all ,"A soma da quantidade de dias da semana entre jornada e refeição não pode ser superior a 7 por favor corrigir.")
-		end
-	end
+	#validate :valida_dias_semana
+	#def valida_dias_semana
+	#	if (dias_jornada_ex_semana_all.to_f + dias_refeicao_ex_semana_all.to_f )>7 && ((h_extra_jornada_all==1) && (h_extra_refeicao_all==1))
+	#		
+	#		errors.add(:dias_jornada_ex_semana_all ,"A soma da quantidade de dias da semana entre jornada e refeição não pode ser superior a 7 por favor corrigir.")
+	#	end
+	#end
 
 	private
 
@@ -67,56 +67,52 @@ class Proposal < ActiveRecord::Base
 		totaldecimoTerceiroUmDozeAvos = 0,totalInssSobFeriasUnTercoDecimo = 0,totalFgtsSobFeriasUnTercoDecimo = 0,totalAvisoPrevio = 0,
 		totalIndenizacaoSobreFGTS = 0,reservaTecnica = 0,totCesta = 0,totVR = 0,totAssiteciaMedica = 0,totSeguroVida = 0,totVT = 0,
 		totReciclagem = 0,totUniforme = 0,vDeCalculoTotal = 0,pctTotal = 0, valorCofins= 0, valorPis = 0, vUniAssistMedica = 0,
-		vUniUniforme = 0,vUniVR = 0,vUniSegVida = 0, horas_vespertino = 0,vUniPpr = 0,desconto_vr = 0,tipo_servico = 0, v_cesta  = 0,
-		v_Soc_Familiar = 0,v_ben_Natalidade = 0, multiplicador = 0,totSocialFamiliar = 0,totBenNatalidade = 0,horas_trabalhadas = 0,
+		vUniUniforme = 0,vUniVR = 0,vUniSegVida = 0, horas_vespertino = 0,vUniPpr = 0,descontoVr = 0,tipoServico = 0, valorCesta  = 0,
+		valorSocFamiliar = 0,valorBenNatalidade = 0, multiplicador = 0,totSocialFamiliar = 0,totBenNatalidade = 0,horas_trabalhadas = 0,
 		h_refeicao = 0, qtdPostos = 0,teste1 = 0,	teste2 = 0,	teste3 = 0,	teste4 = 0,#teste5 = 'to no inicio'
 
 		self.proposal_equipaments.each do |proposal_equipament| # for usado para pegar todos os equipamentos adcionados na proposta.
 			unless (proposal_equipament.quantidade.blank? || proposal_equipament.equipament.depreciacao.nil?)
-				#quantidade
-				#valor_equipament
-				#valor_depreciado
-				#equipamentNome = proposal_equipament.equipament.nome
-				#equipamentValor = proposal_equipament.equipament.valor
-				#equipamentDepreciacao = valor_depreciado
 				totalEquipamento += (proposal_equipament.quantidade*
 															(proposal_equipament.equipament.valor.to_f / 
 																proposal_equipament.equipament.depreciacao.to_f ))# total do valor de equipamento (usar na soma de totais).
-				#update_column(:equipament_nome, (equipamentNome))
-				#update_column(:equipament_valor, (equipamentValor))
-				#update_column(:equipament_depreciacao, (equipamentDepreciacao))
 			end
 		end
+
 		self.proposal_roles.each do |proposal_role| # for para contar e somar quantidades de funcionarios e somar seus salarios.
-			 
-					#  vA = (((proposal_role.role.salario.to_f).round(2)*((proposal_role.role.gratificacao.to_f/100).round(2)+1)).round(2)*
-					#      proposal.rotation.efetivo).round(2) #Calculo de salario multiplicado pela porcentagem da gratificação e depois pelo efetivo.
-			totalSalarios = totalSalarios+((proposal_role.role.salario.to_f*((proposal_role.role.gratificacao.to_f/100).round(2)+1)).round(2)*self.rotation.efetivo)*proposal_role.qtd_postos.to_f #acumulador de totais da soma de cima.
+			totalSalarios = totalSalarios+((proposal_role.role.salario.to_f*
+												((proposal_role.role.gratificacao.to_f/100).round(2)+1)).round(2)*self.rotation.efetivo)*
+													proposal_role.qtd_postos.to_f #acumulador de totais da soma de cima.
 
 			efetivoTotal += self.rotation.efetivo*proposal_role.qtd_postos.to_f #total do efetivo da escala (efetivo*quantidade de postos)
 
-			qtdPostos = qtdPostos+(proposal_role.qtd_postos) #total de Postos
-			##total Efetivo no posto  
-			salario = proposal_role.role.salario.to_f
-			##total Salario no posto  
+			qtdPostos = qtdPostos+(proposal_role.qtd_postos) #total de Postos #total Efetivo no posto 
+			 
+			salario = proposal_role.role.salario.to_f #total Salario no posto 
+			 
 			efetivoIndivitual = self.rotation.efetivo/self.rotation.qtd_funcionarios.to_f
 			
 			acumuladorFuncionarios+=self.rotation.qtd_funcionarios*proposal_role.qtd_postos
-			######## Abaixo esta alguns valores que será usado para calculos mais abaixo 
-			####### aproveitei a requisição de porposal roles para armasenar o valor do ultimo cago adcionado
-			####### Estou ciente que não é a melhor forma de pegar este dado porem foi a unica que encontei
-			####### NOTA PARA FUTURAS MANUTENÇÕES
+
+
+			##########################################################################################################
+			####### Abaixo esta alguns valores que será usado para calculos mais abaixo 											########
+			####### aproveitei a requisição de porposal roles para armasenar o valor do ultimo cago adcionado ########
+			####### Estou ciente que não é a melhor forma de pegar este dado porem foi a unica que encontei		########
+			####### NOTA PARA FUTURAS MANUTENÇÕES																															########
+			##########################################################################################################
+
 			vUniAssistMedica = proposal_role.role.assist_medica.to_f
 
-			desconto_vr = proposal_role.role.service.desconto_vr.to_f
+			descontoVr = proposal_role.role.service.desconto_vr.to_f
 
-			v_cesta = proposal_role.role.service.cesta.to_f
+			valorCesta = proposal_role.role.service.cesta.to_f
 
-			v_Soc_Familiar = proposal_role.role.assist_Soc_Familiar.to_f
+			valorSocFamiliar = proposal_role.role.assist_Soc_Familiar.to_f
 
-			v_ben_Natalidade = proposal_role.role.beneficio_Natalidade.to_f
+			valorBenNatalidade = proposal_role.role.beneficio_Natalidade.to_f
 
-			tipo_servico = proposal_role.role.service.tipo_servico
+			tipoServico = proposal_role.role.service.tipo_servico
 			
 			vUniUniforme = proposal_role.role.uniformes.to_f
 		
@@ -126,6 +122,7 @@ class Proposal < ActiveRecord::Base
 			
 			vUniSegVida = proposal_role.role.seg_vida.to_f
 		end # fim do for proposal_role.
+
 		efetivoTotal =(efetivoTotal).round(2)
 		
 		if (totalEquipamento.nil?)
@@ -137,23 +134,23 @@ class Proposal < ActiveRecord::Base
 
 		update_column(:salario, (salario))
 		update_column(:qtd_postos, (qtdPostos))
-		update_column(:totalSalarios, (totalSalarios).round(2))
-		update_column(:efetivoTotal, (efetivoTotal))
-		update_column(:efetivoIndivitual, (efetivoIndivitual))
-		update_column(:acumuladorFuncionarios, (acumuladorFuncionarios))
-		update_column(:vUniAssistMedica, (vUniAssistMedica))
-		update_column(:vUniUniforme, (vUniUniforme))
-		update_column(:vUniVR, (vUniVR))
-		update_column(:vUniSegVida, (vUniSegVida))
-		update_column(:vUniPpr, (vUniPpr))
-		update_column(:tipo_servico, (tipo_servico))
-		update_column(:v_cesta, (v_cesta))
-		update_column(:v_ben_Natalidade, (v_ben_Natalidade))
-		update_column(:v_Soc_Familiar, (v_Soc_Familiar))
+		update_column(:total_salarios, (totalSalarios).round(2))
+		update_column(:efetivo_total, (efetivoTotal))
+		update_column(:efetivo_indivitual, (efetivoIndivitual))
+		update_column(:acumulador_funcionarios, (acumuladorFuncionarios))
+		update_column(:valor_uni_assist_medica, (vUniAssistMedica))
+		update_column(:valor_unitario_uniforme, (vUniUniforme))
+		update_column(:valor_unitario_vr, (vUniVR))
+		update_column(:valor_unitario_seg_vida, (vUniSegVida))
+		update_column(:valor_unitario_ppr, (vUniPpr))
+		update_column(:tipo_servico, (tipoServico))
+		update_column(:valor_cesta, (valorCesta))
+		update_column(:valor_ben_natalidade, (valorBenNatalidade))
+		update_column(:valor_soc_familiar, (valorSocFamiliar))
 
 		baseCalculoSalarioMedio = (totalSalarios/efetivoTotal).round(2)#divide o total do salario pelo efetivo para fins de calculos em outras formulas
 		totalFuncionarios = efetivoTotal/efetivoIndivitual  # total de quantidade de funcionarios (soma quantidade de funcionarios definidos na escala com base na quantidade de postos)
-		update_column(:totalFuncionarios, (totalFuncionarios))
+		update_column(:total_funcionarios, (totalFuncionarios))
 
 		###############################################################################################################################################
 		## calculos de periculosidade e insalubridade #################################################################################################
@@ -174,7 +171,7 @@ class Proposal < ActiveRecord::Base
 				valorPeriOuIsalubri = 0.0
 		end
 
-		update_column(:valorPeriOuIsalubri, (valorPeriOuIsalubri))
+		update_column(:valor_peri_ou_isalubri, (valorPeriOuIsalubri))
 
 		###############################################################################################################################################
 		## adicional noturno e vespertino #############################################################################################################
@@ -187,9 +184,9 @@ class Proposal < ActiveRecord::Base
 			ajusteDivPorZero = rotation.ad_noturno / rotation.ad_noturno # correção de erro de divizão por 0
 			doisTerco = umTerco * 2 # pega apenas 2 terços quando adicional noturno for diferente de 0 e acrecenta para o calculo de horas extras feriados
 		end 
-		update_column(:ajusteDivPorZero,(ajusteDivPorZero))
-		update_column(:umTerco,(umTerco))
-		update_column(:doisTerco,(doisTerco))
+		update_column(:ajuste_div_por_zero,(ajusteDivPorZero))
+		update_column(:um_terco,(umTerco))
+		update_column(:dois_terco,(doisTerco))
 
 		if ((rotation.period_id == 2) || (rotation.period_id == 4) || (rotation.period_id == 6) || (rotation.period_id == 7))
 			
@@ -197,11 +194,11 @@ class Proposal < ActiveRecord::Base
 			update_column(:horas_vespertino,(horas_vespertino))
 			totalHrsAdNoturnoVespertino=((((((baseCalculoSalarioMedio+valorPeriOuIsalubri).round(2)/220))*0.2*
 																				horas_vespertino)*((totalFuncionarios/rotation.qtd_funcionarios)))/efetivoTotal).round(2) #adicional noturno vespertino
-			update_column(:totalHrsAdNoturnoVespertino, (totalHrsAdNoturnoVespertino))
+			update_column(:total_hrs_ad_noturno_vespertino, (totalHrsAdNoturnoVespertino))
 		else
 			horas_vespertino
 			update_column(:horas_vespertino,(horas_vespertino))
-			update_column(:totalHrsAdNoturnoVespertino, (totalHrsAdNoturnoVespertino))
+			update_column(:total_hrs_ad_noturno_vespertino, (totalHrsAdNoturnoVespertino))
 		end
 
 		totalHrsAdNoturno = (((((baseCalculoSalarioMedio + valorPeriOuIsalubri).round(2)/220)) * 0.2 *
@@ -212,7 +209,9 @@ class Proposal < ActiveRecord::Base
 		else
 			totalHrsAdNoturno =totalHrsAdNoturno
 		end
-		update_column(:totalHrsAdNoturno, (totalHrsAdNoturno))
+		update_column(:total_hrs_ad_noturno, (totalHrsAdNoturno))
+		#adVespertidoNoturno = rotation.ad_vespertido_noturno
+		#update_column(:ad_vespertido_noturno, (adVespertidoNoturno))
 
 		
 
@@ -226,7 +225,7 @@ class Proposal < ActiveRecord::Base
 		if (controle_hora_extra == 0)
 			if (h_extra_jornada_all == 0)
 				totalHrExtras = 0
-				update_column(:totalHrExtras, (totalHrExtras))
+				update_column(:total_hr_extras, (totalHrExtras))
 
 			elsif (h_extra_jornada_all == 1)
 				if ((dias_jornada_ex_semana_all < 7) && (h_ex_feriado_jornada_all == 1))# teste dias se menor que 7 para calcular feriado
@@ -555,19 +554,19 @@ class Proposal < ActiveRecord::Base
 		# Condicional criada para testar se a hora de almço é calculada 
 		if ((h_extra_jornada_all+h_extra_jornada_matu+h_extra_jornada_vesp+h_extra_jornada_notur) == 0)  
 			totalHrExtras = 0
-			update_column(:totalHrExtras, (totalHrExtras))
+			update_column(:total_hr_extras, (totalHrExtras))
 		else
 			totalHrExtras = (((((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220)*1.6)*
 												horasExtras)/efetivoTotal).round(2)
 		 #o calculo a cima é para calcular a cobrança de horas em extras de almoço (calculo de horas extras a mais é calculado de forma diferente)
-			update_column(:totalHrExtras, (totalHrExtras))
+			update_column(:total_hr_extras, (totalHrExtras))
 		end
 
 		vFeriadosDeCitiesMV = (city.feriado*0.6108) #Valor de feriado para carga horaia de matutino vespertino
-			update_column(:vFeriadosDeCitiesMV, (vFeriadosDeCitiesMV))
+			update_column(:valor_feriados_de_cities_mv, (vFeriadosDeCitiesMV))
 
 		vFeriadosDeCitiesN = (city.feriado*0.666) #Valor de feriado para carga horaia de matutino vespertino
-			update_column(:vFeriadosDeCitiesN, (vFeriadosDeCitiesN))
+			update_column(:valor_feriados_de_cities_n, (vFeriadosDeCitiesN))
 
 		if (h_feriado == 1)
 			totalHrExtrasFeriado = (((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220)*
@@ -575,29 +574,28 @@ class Proposal < ActiveRecord::Base
 			if totalHrExtrasFeriado == 0
 				totalHrExtrasFeriado = 0
 			end
-			update_column(:totalHrExtrasFeriado, (totalHrExtrasFeriado))
+			update_column(:total_hr_extras_feriado, (totalHrExtrasFeriado))
 		elsif (h_feriado == 0)
 			umTerco = 0.0
 			doisTerco = 0.0
 			totalHrExtrasFeriado = 0.0
-			update_column(:totalHrExtrasFeriado, (totalHrExtrasFeriado))
+			update_column(:total_hr_extras_feriado, (totalHrExtrasFeriado))
 		end
-
-		totalHrsAdNoturnoVespertino = 0.0
-		totalHrsAdNoturno= 0.0
-		totalHrExtras= 0.0
-		totalHrExtrasFeriado= 0.0
 
 		# Calculo para definir o valor de horas extras feriados feito apartir de horas trabalhadas dia pelas quantidade de feriados
 		refexoDSR = ((totalHrsAdNoturnoVespertino + totalHrsAdNoturno + totalHrExtras + totalHrExtrasFeriado)/25.09*5.35).round(2)
-		update_column(:refexoDSR, (refexoDSR))
+		teste1 =totalHrsAdNoturnoVespertino
+		teste2 =totalHrsAdNoturno
+		teste3 =totalHrExtras
+		teste4 =totalHrExtrasFeriado
+		update_column(:refexo_dsr, (refexoDSR))
 		salarioMedioFinal = (baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+ totalHrsAdNoturno+ totalHrExtras+ totalHrExtrasFeriado+refexoDSR).round(2)
 		if salarioMedioFinal == 0
 			salarioMedioFinal = 0
 		end
-		update_column(:salarioMedioFinal, (salarioMedioFinal))
+		update_column(:salario_medio_final, (salarioMedioFinal))
 		massaSalarial = (salarioMedioFinal*efetivoTotal).round(2)
-		update_column(:massaSalarial, (massaSalarial))
+		update_column(:massa_salarial, (massaSalarial))
  
 		###############################################################################################################################################
 		## > Obrigações sociais sobre massa salarial ##################################################################################################
@@ -613,18 +611,18 @@ class Proposal < ActiveRecord::Base
 		obgsalario_educacao = ((select_calculation.salario_educacao/100)*massaSalarial).round(2)
 		obgsesc = ((select_calculation.sesc/100)*massaSalarial).round(2)
 		obgsenac = ((select_calculation.senac/100)*massaSalarial).round(2)
-		update_column(:obgFGTS, (obgFGTS))
-		update_column(:obgINSS, (obgINSS))
+		update_column(:obg_fgts, (obgFGTS))
+		update_column(:obg_inss, (obgINSS))
 		update_column(:seguro_aci_trabalho, (seguro_aci_trabalho))
 		update_column(:obgseguro_aci_trabalho, (obgseguro_aci_trabalho))
-		update_column(:obgsebrae, (obgsebrae))
-		update_column(:obgincra, (obgincra))
-		update_column(:obgsalario_educacao, (obgsalario_educacao))
-		update_column(:obgsesc, (obgsesc))
-		update_column(:obgsenac, (obgsenac))
+		update_column(:obg_sebrae, (obgsebrae))
+		update_column(:obg_incra, (obgincra))
+		update_column(:obg_salario_educacao, (obgsalario_educacao))
+		update_column(:obg_sesc, (obgsesc))
+		update_column(:obg_senac, (obgsenac))
 
 		totalIncargosDiretos = (obgFGTS+obgINSS+obgseguro_aci_trabalho+obgsebrae+obgincra+obgsalario_educacao+obgsesc+obgsenac).round(2)
-		update_column(:totalIncargosDiretos, (totalIncargosDiretos))
+		update_column(:total_incargos_diretos, (totalIncargosDiretos))
 
 		###############################################################################################################################################
 		## >  Provisões sobre massa salarial ##########################################################################################################
@@ -643,21 +641,21 @@ class Proposal < ActiveRecord::Base
 		totalProvisaoMassaSalarial = (totalferiasUmDozeAvos+totalumTercoConstiUmDozeAvos+totaldecimoTerceiroUmDozeAvos+
 																		totalInssSobFeriasUnTercoDecimo+totalFgtsSobFeriasUnTercoDecimo+totalAvisoPrevio+totalIndenizacaoSobreFGTS ).round(2)
 
-		update_column(:totalferiasUmDozeAvos, (totalferiasUmDozeAvos))
-		update_column(:totalumTercoConstiUmDozeAvos, (totalumTercoConstiUmDozeAvos))
-		update_column(:totaldecimoTerceiroUmDozeAvos, (totaldecimoTerceiroUmDozeAvos))
-		update_column(:totalInssSobFeriasUnTercoDecimo, (totalInssSobFeriasUnTercoDecimo))
-		update_column(:totalFgtsSobFeriasUnTercoDecimo, (totalFgtsSobFeriasUnTercoDecimo))
-		update_column(:totalAvisoPrevio, (totalAvisoPrevio))
-		update_column(:totalIndenizacaoSobreFGTS, (totalIndenizacaoSobreFGTS))
-		update_column(:totalProvisaoMassaSalarial, (totalProvisaoMassaSalarial))  
+		update_column(:total_ferias_um_doze_avos, (totalferiasUmDozeAvos))
+		update_column(:total_um_terco_consti_um_doze_avos, (totalumTercoConstiUmDozeAvos))
+		update_column(:total_decimo_terceiro_um_doze_avos, (totaldecimoTerceiroUmDozeAvos))
+		update_column(:total_inss_sob_ferias_um_terco_decimo, (totalInssSobFeriasUnTercoDecimo))
+		update_column(:total_fgts_sob_ferias_Um_terco_decimo, (totalFgtsSobFeriasUnTercoDecimo))
+		update_column(:total_aviso_previo, (totalAvisoPrevio))
+		update_column(:total_indenizacao_sobre_fgts, (totalIndenizacaoSobreFGTS))
+		update_column(:total_provisao_massa_salarial, (totalProvisaoMassaSalarial))  
 
 
 		###############################################################################################################################################
 		## > Benefícios por Funcionário  ##############################################################################################################
 		###############################################################################################################################################
 
-		totCesta = (v_cesta*efetivoTotal).round(2)
+		totCesta = (valorCesta*efetivoTotal).round(2)
 ######################colar aqui
 		controleDePostosParaCalculoVt = 0
 		if umTerco == 0
@@ -683,16 +681,13 @@ class Proposal < ActiveRecord::Base
 
 					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
 					if (rotation.id == 1) # if usado para tratar quando e Matutino/Vespertino/Noturno
-								qtdVrPagas = ((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)+
-															((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)+
-																((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)
+								qtdVrPagas = (((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos))*3
 
 					elsif ((rotation.id == 2)||(rotation.id == 3)||(rotation.id == 4))# if usado para tratar quando e Matutino ou Vespertino ou Noturno
 								qtdVrPagas = ((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)
 
 					elsif ((rotation.id == 5)||(rotation.id == 6)||(rotation.id == 7)) # if usado para tratar quando e Matutino/Vespertino ou Matutino/Noturno ou Vespertino/Vespertino
-								qtdVrPagas = ((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)+
-															((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos)
+								qtdVrPagas = (((30.44/7 *ajustePgVrAll)+feriadoParcial)*(qtdPostos))*2
 					end
 
 				elsif (rotation.dias_trabalhados == 21.75)  #if que trata escala 5 por 2
@@ -921,25 +916,25 @@ class Proposal < ActiveRecord::Base
 
 		update_column(:qtd_vr_pagas, (qtdVrPagas))
 
-		if (desconto_vr == 0.13)
+		if (descontoVr == 0.13)
 			multiplicador = 0.0
 			multiplicador = (((qtdVrPagas).round(2))+(efetivoTotal*(0.08333))).round(2) 
-			totVR = ( multiplicador * (vUniVR-desconto_vr)).round(2)
+			totVR = ( multiplicador * (vUniVR-descontoVr)).round(2)
 
-			totSocialFamiliar = (efetivoTotal*v_Soc_Familiar).round(2) 
-			totBenNatalidade = (efetivoTotal*v_ben_Natalidade).round(2) 
+			totSocialFamiliar = (efetivoTotal*valorSocFamiliar).round(2) 
+			totBenNatalidade = (efetivoTotal*valorBenNatalidade).round(2) 
 
 
 			update_column(:multiplicador, (multiplicador))
-			update_column(:totSocialFamiliar, (totSocialFamiliar))
-			update_column(:totBenNatalidade, (totBenNatalidade))
+			update_column(:tot_social_familiar, (totSocialFamiliar))
+			update_column(:tot_ben_natalidade, (totBenNatalidade))
 
 		else
 			multiplicador = (qtdVrPagas).round(2)
-			totVR = (multiplicador * (vUniVR*desconto_vr)).round(1)
+			totVR = (multiplicador * (vUniVR*descontoVr)).round(1)
 			update_column(:multiplicador, (multiplicador).round(1))
-			update_column(:totSocialFamiliar, (totSocialFamiliar))
-			update_column(:totBenNatalidade, (totBenNatalidade))
+			update_column(:tot_social_familiar, (totSocialFamiliar))
+			update_column(:tot_ben_natalidade, (totBenNatalidade))
 		end
 		if (vUniAssistMedica == 0)
 			totAssiteciaMedica = 0
@@ -1254,9 +1249,6 @@ class Proposal < ActiveRecord::Base
 
 		update_column(:valor_passagem, (valorPassagem))
 
-		teste1 = city.valeTransporte
-		teste2 = valorPassagem
-
 		totSeguroVida = (vUniSegVida*efetivoTotal).round(2)
 		totVT = ((valorPassagem*((qtdVtPagas)*2))-((salario*(controleDePostosParaCalculoVt*efetivoIndivitual).round(2))*0.06)).round(2)
 		
@@ -1278,15 +1270,15 @@ class Proposal < ActiveRecord::Base
 
 		totBeneficios =(totCesta+totVR+totAssiteciaMedica+totSeguroVida+totVT+totReciclagem+totUniforme+totPpr+totSocialFamiliar+totBenNatalidade).round(2)
 
-		update_column(:totCesta, (totCesta))
-		update_column(:totVR, (totVR))
-		update_column(:totAssiteciaMedica, (totAssiteciaMedica))
-		update_column(:totSeguroVida, (totSeguroVida))
-		update_column(:totVT, (totVT))
-		update_column(:totReciclagem, (totReciclagem))
-		update_column(:totPpr, (totPpr))
-		update_column(:totUniforme, (totUniforme))
-		update_column(:totBeneficios, (totBeneficios))
+		update_column(:total_cesta, (totCesta))
+		update_column(:total_vr, (totVR))
+		update_column(:total_assitecia_medica, (totAssiteciaMedica))
+		update_column(:total_seguro_vida, (totSeguroVida))
+		update_column(:total_vt, (totVT))
+		update_column(:total_reciclagem, (totReciclagem))
+		update_column(:total_ppr, (totPpr))
+		update_column(:total_uniforme, (totUniforme))
+		update_column(:total_beneficios, (totBeneficios))
 
 
 
@@ -1299,9 +1291,8 @@ class Proposal < ActiveRecord::Base
 		reservaTecnicaOld = (totMaoDeObraParcial/(1-(company.pct_reserva_tecnica)/100)-totMaoDeObraParcial).round(2)
 		reservaTecnicaOld = 0 # mudar para opções de old caso use o normal
 		update_column(:reserva_tecnica_old,(reservaTecnicaOld))
-		teste1 = (totMaoDeObraParcial/(1-(company.pct_reserva_tecnica)/100)-totMaoDeObraParcial)
 		totMaoDeObra = totMaoDeObraParcial+reservaTecnicaOld
-		update_column(:totMaoDeObra,(totMaoDeObra))
+		update_column(:total_mao_de_obra,(totMaoDeObra))
 		
 
 		###############################################################################################################################################
@@ -1312,58 +1303,58 @@ class Proposal < ActiveRecord::Base
 		###############################################################################################################################################
 
 		totParcialProposta = totMaoDeObra + totalEquipamento
-		update_column(:totParcialProposta,(totParcialProposta))
+		update_column(:tot_parcial_proposta,(totParcialProposta))
 
 
 
 		###############################################################################################################################################
 		## > calculo total mais lucro #################################################################################################################
 		pctTotal = (company.pis*(1-(city.issqn/100)))+company.cofins*(1-(city.issqn/100))+company.csll+company.irrf+city.issqn+select_calculation.indiceAdministrativo+select_calculation.indiceOperacional+company.pct_reserva_tecnica
-		update_column(:pctTotal,(pctTotal))
+		update_column(:pct_total,(pctTotal))
 
 		pctTotalAlicota = totParcialProposta/(1-((pctTotal)/100))-totParcialProposta
-		update_column(:pctTotalAlicota,(pctTotalAlicota))
+		update_column(:pct_total_alicota,(pctTotalAlicota))
 
 		vDeCalculoTotal = pctTotalAlicota+totParcialProposta  #####-> valor total de mão de obra <-#####
-		update_column(:vDeCalculoTotal,(vDeCalculoTotal))
+		update_column(:valor_de_calculo_total,(vDeCalculoTotal))
 		
 		
 		valorIndiceOperacional = pctTotalAlicota*select_calculation.indiceOperacional/pctTotal
-		update_column(:valorIndiceOperacional,(valorIndiceOperacional))
+		update_column(:valor_indice_operacional,(valorIndiceOperacional))
 
 		###############################################################################################################################################
 		## > lucro ####################################################################################################################################
 
 		valorIndiceAdministrativo = pctTotalAlicota*select_calculation.indiceAdministrativo/pctTotal
-		update_column(:valorIndiceAdministrativo,(valorIndiceAdministrativo))
+		update_column(:valor_indice_administrativo,(valorIndiceAdministrativo))
 		reservaTecnica = 0
 		reservaTecnica = pctTotalAlicota*company.pct_reserva_tecnica/pctTotal
-		update_column(:reservaTecnica,(reservaTecnica))	
+		update_column(:reserva_tecnica,(reservaTecnica))	
 		
 		###############################################################################################################################################
 		## > Impotos  #################################################################################################################################
 		###############################################################################################################################################
 		valorIssqn = pctTotalAlicota*city.issqn/pctTotal
-		update_column(:valorIssqn,(valorIssqn))
+		update_column(:valor_issqn,(valorIssqn))
 
 		valorPis = pctTotalAlicota*company.pis*(1-(city.issqn/100))/pctTotal
 		valorCofins = pctTotalAlicota*company.cofins*(1-(city.issqn/100))/pctTotal
 		valorCsll = pctTotalAlicota*company.csll/pctTotal
 		valorIrrf = pctTotalAlicota*company.irrf/pctTotal
-		update_column(:valorPis,(valorPis))
-		update_column(:valorCofins,(valorCofins))
-		update_column(:valorCsll,(valorCsll))
-		update_column(:valorIrrf,(valorIrrf))
+		update_column(:valor_pis,(valorPis))
+		update_column(:valor_cofins,(valorCofins))
+		update_column(:valor_csll,(valorCsll))
+		update_column(:valor_irrf,(valorIrrf))
 		
 		## Total impostos sobre serviços ###
 
 		totImpostoSobServico = valorIndiceOperacional+valorIndiceAdministrativo+valorPis+valorCofins+valorCsll+valorIrrf+valorIssqn+totalEquipamento+reservaTecnica
-		update_column(:totImpostoSobServico,(totImpostoSobServico))
+		update_column(:total_imposto_sob_servico,(totImpostoSobServico))
 
 		update_column(:teste1, (teste1))
 		update_column(:teste2, (teste2))
 		update_column(:teste3, (teste3))
 		update_column(:teste4, (teste4))
-		#update_column(:teste5, (teste5))
+		update_column(:teste5, (teste5))
 	end  
 end

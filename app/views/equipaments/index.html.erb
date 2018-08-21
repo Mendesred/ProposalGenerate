@@ -1,11 +1,15 @@
-<h1 class="page-header topHeader">Lista de Equipamentos e Acessorios</h1>
+<h1 class="page-header topHeader">Lista de Equipamentos e Acessorios
 
+    <%= link_to type_equipaments_path,class:"btn btn-default dropdown-toggle pull-right", type:"button" do %>
+    Novo Tipo Equipameto ou Acessorios  
+    <% end %>
+</h1>
 <div class="panel panel-default">
   <div class="panel-heading">
     <strong>Equipamentos e Acessorios</strong>
     <%= link_to new_equipament_path,class:"btn btn-success dropdown-toggle pull-right", type:"button" do %>
     Novo Equipameto ou Acessorios  
-    <% end %>
+    <% end %>    
   </div>
   <div class="panel-body">
     <div class="table-responsive">

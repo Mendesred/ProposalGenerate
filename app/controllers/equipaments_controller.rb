@@ -15,10 +15,12 @@ class EquipamentsController < ApplicationMainController
   # GET /equipaments/new
   def new
     @equipament = Equipament.new
+    select_type
   end
 
   # GET /equipaments/1/edit
   def edit
+    select_type
   end
 
   # POST /equipaments
@@ -63,12 +65,16 @@ class EquipamentsController < ApplicationMainController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def select_type
+      @select_all_type = TypeEquipament.all
+    end
+
     def set_equipament
       @equipament = Equipament.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def equipament_params
-      params.require(:equipament).permit(:name_equipament, :valor, :depreciacao, :proposal_id)
+      params.require(:equipament).permit(:name_equipament, :valor, :depreciacao, :proposal_id,:typeEquipament_id)
     end
 end

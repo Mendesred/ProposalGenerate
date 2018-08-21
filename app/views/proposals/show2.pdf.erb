@@ -1,0 +1,35 @@
+<!--<%# @select_all_calculation.salario_minimo  show.pdf.erb %>-->
+<!--<%# @select_all_calculation.salario_minimo %>-->
+<div class="showFonteSize">
+
+  <div class="panel panel-default">
+    <div class="panel-heading" style="padding-bottom: 0;padding-top: 0;">
+      <div class="col-lg-12">
+        <div class="row">
+          <div class="inline"> 
+            <div class="col-xs-6">
+              <!--strong><#%= t("activerecord.models.proposals.dias_jornada_ex_semana_all") %></strong-->
+              <h3 style="margin-top: 10px;">Cliente:</b><%= @proposal.cliente %></h3>
+            </div>
+            <div class="col-xs-6"> 
+              <h3 class="pull-right" style="margin-top: 10px;color: #4946e6;">Proposta: <%= @proposal.codigo_cliente %></h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <strong>Total Propostas Selecionadas:</strong>
+                <%= @proposals.count %>
+
+      <% @proposals.each do |proposal| %>
+              </p>
+              <strong>id:</strong>
+                <%= proposal.id %>
+              </p>
+              <strong>cod cliente:</strong>
+                <%= proposal.codigo_cliente %>
+              </p>
+              <% end %>
+    </div>
+  </div>

@@ -24,9 +24,12 @@ class ProposalsController < ApplicationMainController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: "Proposta_#{@proposal.codigo_cliente}",
-        layout:'pdf'   # Excluding ".pdf" extension.
-        
+        if(params[:ids]!=nil)
+          @proposals = Proposal.where(id: params[:ids].split(','))
+          render pdf: "Proposta_"+params[:ids],template:"proposals/show2"
+        else
+         render pdf: "Proposta_#{@proposal.codigo_cliente}"
+        end
       end
     end
   end
