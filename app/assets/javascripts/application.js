@@ -50,3 +50,22 @@ $.rails.allowAction = function(element) {
 }
 
 // Js Original com funções do collapse na pasta Bug_somente_consulta 
+
+//função para exibir check_box
+
+
+function functionSelect() {
+    var values1 = $('table tr td :checkbox:checked').map(function () {
+                 var $this = $(this);
+                 var linha =$this.closest('tr').find('td');
+                 return linha[0].getElementsByTagName("input")[0].value;
+              }).get();
+
+    console.log(values1);
+    openInNewTab(window.location.href+'/2.pdf?ids='+values1.toString());
+}
+function openInNewTab(url) {
+  var win = window.open(url, '_blank');
+
+  win.focus();
+}

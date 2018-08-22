@@ -8,32 +8,37 @@
 		</button>
 		<ul class="dropdown-menu proposta pull-right">
 			<% @select_all_service.each do |service| %>
-			<li>
-				<div class="">
-					<%if service.id >3 %> 
-						<div style="display: none">
-					<% end %>
-					<%= link_to "/services/#{service.id}/proposals/new",class:"btn btn-success TamanhaBotoes", type:"button" do %>
-						Proposta <%=service.tipo_servico%>
-					<% end %>
-						</div>  
+				<li>
+					<div class="">
+						<%if service.id >3 %> 
+							<div style="display: none">
+						<% end %>
+						<%= link_to "/services/#{service.id}/proposals/new",class:"btn btn-success TamanhaBotoes", type:"button" do %>
+							Proposta <%=service.tipo_servico%>
+						<% end %>
+					</div>  
 				</li>
-					<% end %>
-			</ul>
-	</div>
+			<% end %>
+		</ul>
+
+		</div>
 			<!--/.panel-heading-->
 			<div class="panel-body" style="">
 
 				<table id="proposalTab" class="table table-striped table-bordered table-hover">
 					<thead>
 						<tr>
-							<th class="idProposta" style="width: 30px;padding-left: 7px;padding-right: 7px;">
+							<th id='' class="check_box_Print" style="display: none;width: 10px;">
+								
+							</th> 
+
+							<th class="idProposta" colspan="1" style="width: 30px;padding-left: 7px;padding-right: 7px;">
 								ID:
-							</th>
+							</th>							
 							<th>
 								Cliente
 							</th>
-							<th class="idProposta" style="width:12%;">
+							<th class="idProposta" style="width:13%;">
 								Codigo cliente
 							</th>
 							<th>
@@ -46,7 +51,7 @@
 							<th class="idProposta" style="width:12%;">
 								Criado por:
 							</th>
-							<th class="idProposta" style="width:13%;">
+							<th class="idProposta" style="width:13%;padding: 7px;">
 								Atualizado por:
 							</th>
 							<th class="idProposta" style="width:14%;">
@@ -60,7 +65,8 @@
 
 					<tbody>
 					<% @proposals.each do |proposal| %>
-						<tr> 
+						<tr>
+							<td id='' class="reductionVertical alinhaTopProposal check_box_Print" style="display: none"><%= check_box_tag "product_ids[]", proposal.id %></td> 
 							<td class="reductionVertical idProposta alinhaTopProposal "><%= proposal.id %></td>
 							<td class="reductionVertical alinhaTopProposal" ><%= proposal.cliente %></td>
 							<td class="reductionVertical alinhaTopProposal" ><%= proposal.codigo_cliente %></td>
@@ -87,7 +93,18 @@
 						<% end %>
 					</tbody>
 				</table>
+				<button id="toggleCheckBox" class="btn btn-default pull-left" style="position: relative;bottom: 0px;right: 2px">Selecionar conjuto de proposta</button>
+				<button class="btn btn-default pull-left check_box_Print" style="position: relative;bottom: 0px;display: none" onclick="functionSelect()"><i class="fa fa-print"></i> Imprimir intens selecionados</button>
 			</div>
-		 <!-- /.panel-body -->
+		 	<!-- /.panel-body -->
+		</div>
+	</div>
 </div>
 <br>
+<script>
+	  $(document).ready(function(){
+    $("#toggleCheckBox").click(function(){
+        $(".check_box_Print").toggle(500);
+    });
+  });
+</script>

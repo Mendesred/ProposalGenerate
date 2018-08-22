@@ -98,10 +98,10 @@ $(document).on 'change', '#proposal_vt_notur', ->
 	return
 
 check_radio = (obj_select_radio1, obj_select_radio2, obj_collapse1, obj_collapse2) ->
-  if document.getElementById(obj_select_radio1.attr('id')).checked
+  if document.getElementById(obj_select_radio1.attr('id'))?.checked
     obj_collapse1.collapse 'show'
     obj_collapse2.collapse 'hide'
-  if document.getElementById(obj_select_radio2.attr('id')).checked
+  if document.getElementById(obj_select_radio2.attr('id'))?.checked
     obj_collapse1.collapse 'hide'
     obj_collapse2.collapse 'show'
   return
