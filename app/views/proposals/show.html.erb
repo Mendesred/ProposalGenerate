@@ -9,7 +9,7 @@
 				<%= link_to "/services/#{@proposal.proposal_roles[0].role.service_id}/proposals",class:"btn btn-outline btn-success pull-right topHeader", type:"button" do %>
 				<i class="fa fa-arrow-left"></i> Voltar
 				<% end %>
-				<%= link_to "/services/#{@proposal.proposal_roles[0].role.service_id}/proposals/#{@proposal.id}.pdf",class:"btn btn-outline btn btn-info btn-circle pull-right topHeader",style:'right: 4px;position: relative;', type:"button" do %>
+				<%= link_to "/services/#{@proposal.proposal_roles[0].role.service_id}/proposals/#{@proposal.id}.pdf",class:"btn btn btn-danger btn-circle pull-right topHeader",style:'right: 4px;position: relative;', type:"button" do %>
 					<i class="fa fa-file-pdf-o"></i>
 				<% end %>
 			</div>
@@ -455,10 +455,10 @@
 						</div>
 					</div>
 
-					<h4><strong>Total mão de obra:</strong><%= number_to_currency((@proposal.total_mao_de_obra).round(2))%></h4>
+					<h5><strong>Total ( I ):</strong><%= number_to_currency((@proposal.total_mao_de_obra).round(2))%></h5>
 					<hr/>
 
-					<h3 class="page-header topHeader">Taxas, Serviços e Impostos sobre Vendas</h3>
+					<h4 class="page-header topHeader">Operação, Administração, Materiais e Equipamentos</h4>
 
 					<strong>Índice Operacional </strong><%=number_to_currency((@proposal.valor_indice_operacional).round(2))%><br>
 					<strong>Índice Administrativo </strong><%=number_to_currency((@proposal.valor_indice_administrativo).round(2))%><br>
@@ -487,10 +487,11 @@
 									<tbody>
 										<% @proposal.proposal_equipaments.each do |proposal_equipament| %>
 										<tr> 
-											<% unless proposal_equipament.equipament.name_equipament.blank? %>
-											<td class="showFonteSize"><%= proposal_equipament.equipament.name_equipament %></td>
+											<% if proposal_equipament.name_equipament.nil? %>
+											<td class="showFonteSize"><%= proposal_equipament.name_equipament %></td>
 											<td class="showFonteSize"><%= proposal_equipament.quantidade %></td>
-											<td class="showFonteSize"><%= number_to_currency((proposal_equipament.equipament.valor / proposal_equipament.equipament.depreciacao)*proposal_equipament.quantidade)%></td>
+											<!-- corrigi -->
+											<td class="showFonteSize"><%= number_to_currency((proposal_equipament.valor_equipament.to_f / proposal_equipament.depreciacao_aux.to_f)*proposal_equipament.quantidade.to_f)%></td>
 											<% else %>
 											<td class="showFonteSize"></td>
 											<td class="showFonteSize"></td>
@@ -505,6 +506,8 @@
 						</div>
 					</div>
 					<% end %>
+					<h5><strong>Total (II):</strong><%= number_to_currency((@proposal.valor_indice_operacional+@proposal.valor_indice_administrativo+@proposal.total_equipamento).round(2))%></h5>
+					<h5><strong>Total (II)+(II):</strong><%= number_to_currency((@proposal.total_mao_de_obra+@proposal.valor_indice_operacional+@proposal.valor_indice_administrativo+@proposal.total_equipamento).round(2))%></h5>
 
 					<div class="panel panel-default">
 						<div class="panel-heading">
@@ -554,15 +557,29 @@
 							</div>
 						</div>
 					</div>
+					<h5>
+							<strong>Total (III) </strong><%=number_to_currency((@proposal.total_imposto_sob_servico).round(2))%>
+					</h5>					
+					<h5>
+							<strong>DEMONSTRATIVO  DO  CUSTO  FINAL</strong>
+							<ul class="proposal-roda-pe">
+								<li>Valor dos Serviços: <%= number_to_currency((@proposal.total_mao_de_obra+@proposal.valor_indice_operacional+@proposal.valor_indice_administrativo+@proposal.total_equipamento).round(2))%></li>
+								<li>Valor de Impostos: <%=number_to_currency((@proposal.total_imposto_sob_servico).round(2))%></li>
+							</ul>
+					</h5>
 
 					<h4 class="page-header topHeader"><strong>VALOR TOTAL MENSAL:</strong><%=number_to_currency((@proposal.valor_de_calculo_total ).round(2))%></h4>
-					<strong>Média de dias / mês: </strong><%=@proposal.rotation.fator_escala%></br>
-					<% @proposal.proposal_roles.each do |proposal_role| %>
-					<strong>Numero de Funcionarios: </strong><%=@proposal.rotation.qtd_funcionarios*proposal_role.qtd_postos%></br>
-					<%end%>
-					<strong>N.º horas / mês: </strong> <%=(253.67*@proposal.acumulador_funcionarios).round(2)%></br>
-					<strong>Valore Hora: </strong><%=number_to_currency(@proposal.valor_de_calculo_total/(253.67*@proposal.acumulador_funcionarios))%></br>
-					<strong>Valor Dia: </strong><%=number_to_currency(@proposal.valor_de_calculo_total/@proposal.rotation.fator_escala)%></br>
+					<ul class="proposal-roda-pe">
+						<li><strong>Média de dias / mês: </strong><%=@proposal.rotation.fator_escala%></li>
+						<li><% @proposal.proposal_roles.each do |proposal_role| %>
+									<strong>Numero de Funcionarios: </strong><%=@proposal.rotation.qtd_funcionarios*proposal_role.qtd_postos%>
+								<%end%>
+						</li>
+						<li><strong>N.º horas / mês: </strong> <%=(253.67*@proposal.acumulador_funcionarios).round(2)%></li>
+						<li><strong>Valore Hora: </strong><%=number_to_currency(@proposal.valor_de_calculo_total/(253.67*@proposal.acumulador_funcionarios))%></li>
+						<li><strong>Valor Dia: </strong><%=number_to_currency(@proposal.valor_de_calculo_total/@proposal.rotation.fator_escala)%></li>
+					</ul>
+
 				</div>
 				<!-- /.col-lg-12 -->
 			</div>

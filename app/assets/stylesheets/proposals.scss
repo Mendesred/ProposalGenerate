@@ -84,3 +84,8 @@ th.espaco-th-Ececao{
 }
 .padding-zero{
 }
+.page-break { 
+  display:block; 
+  clear:both; 
+  page-break-after:always; 
+}

@@ -37,7 +37,8 @@ class ProposalsController < ApplicationMainController
   # GET /proposals/new
   def new
     @proposal = Proposal.new
-
+    new_type
+    select_all_equip_type
     selected_service
     selected_role
     select_period
@@ -61,7 +62,7 @@ class ProposalsController < ApplicationMainController
       flash[:alert] = "Você não esta autorizado a executar essa ação."
       redirect_to(request.referrer || root_path)
     end
-
+    select_all_equip_type
     selected_service
     selected_role
     select_period
@@ -90,6 +91,8 @@ class ProposalsController < ApplicationMainController
     select_role
     select_calculation
     select_company
+    select_all_equip_type
+
 
     respond_to do |format|
       if @proposal.save
@@ -117,6 +120,7 @@ class ProposalsController < ApplicationMainController
     select_equipament
     select_role
     select_calculation
+    select_all_equip_type
     select_company
     @proposal.admin = current_admin #Deve fazer campo visivel para administrador direcionar proposta a outro ususario
     @proposal.user_updated=current_admin.nome
@@ -152,6 +156,11 @@ class ProposalsController < ApplicationMainController
     def select_rotation
       @select_all_rotarion = Rotation.all
     end
+
+    def select_all_equip_type
+      @select_all_equip_type = TypeEquipament.all
+    end
+
     def select_calculation
       @select_all_calculation = Calculation.first
     end
@@ -191,6 +200,10 @@ class ProposalsController < ApplicationMainController
       @proposal = Proposal.find(params[:id])
     end
 
+    def new_type
+      @selected_type =0
+    end
+
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def proposal_params
@@ -204,7 +217,7 @@ class ProposalsController < ApplicationMainController
         :dias_pg_vr_feriado_all, :vr_matu, :dias_pg_vr_semana_matu, :dias_pg_vr_feriado_matu, :vr_vesp, :dias_pg_vr_semana_vesp, 
         :dias_pg_vr_feriado_vesp, :vr_notur, :dias_pg_vr_semana_notur, :dias_pg_vr_feriado_notur, :controle_vt, :vt_all, :dias_pg_vt_semana_all, 
         :dias_pg_vt_feriado_all, :vt_matu, :dias_pg_vt_semana_matu, :dias_pg_vt_feriado_matu, :vt_vesp, :dias_pg_vt_semana_vesp, 
-        :dias_pg_vt_feriado_vesp, :vt_notur, :dias_pg_vt_semana_notur, :dias_pg_vt_feriado_notur,
+        :dias_pg_vt_feriado_vesp, :vt_notur, :dias_pg_vt_semana_notur, :dias_pg_vt_feriado_notur,:total_equipamento,
         proposal_equipaments_attributes: ProposalEquipament.attribute_names.map(&:to_sym).push(:_destroy),
         proposal_roles_attributes: ProposalRole.attribute_names.map(&:to_sym).push(:_destroy)).delocalize(delocalize_config)
     end

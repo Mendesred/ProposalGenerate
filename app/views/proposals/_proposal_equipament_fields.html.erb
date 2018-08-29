@@ -1,11 +1,38 @@
-<div class="nested-fields">
-  <%= f.label "Equipamento e Acessório" %><br>
-  <%= f.collection_select(:equipament_id, @select_all_equip, :id, :name_select,{},class:'form-control',style:'width: 88%;' ) %>
-	<div class="tooltip-demo">
-  <%= link_to_remove_association '', f, class: 'btn btn-danger btn-circle pull-right fa fa-trash-o', style:'margin-top: -10%;', 'data-toggle'=>'tooltip', "data-placement"=>'right', title:'Remover equipamento adicionado'%>
+<div class="nested-fields" id="group_equipament">
+  <div class="col-md-4" style="padding-left: 0;margin-top: 5px;margin-bottom: 5px;">
+  	<%= f.label "Tipo do equipamento" %><br>
   </div>
-    <div class="field">
-			<%= f.label "quantidade" %><br>
-			<%= f.text_field :quantidade, step: 0.01,class:'form-control'%>
+  <div class="col-md-4 col-md-offset-4">
+		<div class="tooltip-demo">
+  	<%= link_to_remove_association '', f, class: 'btn btn-danger btn-circle pull-right fa fa-trash-o', style:'', 'data-toggle'=>'tooltip', "data-placement"=>'left', title:'Remover equipamento adicionado'%>
+  	</div>
+	</div>
+	<!--
+	<#%= select_tag("selected_type", options_from_collection_for_select(@select_all_equip_type, :id, :name_type),include_blank: true,class:'form-control',style:'width: 88%;',id:'type',) %>
+  <#%= f.collection_select :country_id, Country.order(:name), :id, :name, include_blank: true %>
+	-->
+  <%= f.collection_select :type_equipament_id, @select_all_equip_type, :id, :name_type,{ include_blank: true},{:required =>true,id:'type',class:'form-control',style:"width: 100%;"} %>
+  	
+  <div id="painelCollapse" class="collapse">
+  	<%= f.label "Equipamento"%><br>
+
+		<%= f.grouped_collection_select :equipament_id, @select_all_equip_type.order(:name_type){|p| [p.id]}, :equipaments, :name_type, :id, :name_select ,{ include_blank: true},class: 'form-control', id:'equipaments' %>
+		
+		<div class="col-md-6" style="padding-left: 0">
+    	<div id='quantidadeEquipament'class="field">
+				<%= f.label "Quantidade" %><br>
+				<%= f.text_field :quantidade, step: 0.01,class:'form-control'%>
+			</div>
 		</div>
+		<div class="col-md-6">
+			<div id='depreciacaoAux'class="field">
+				<%= f.label "Depreciação alternativa" %><br>
+				<%= f.text_field :depreciacao_aux, step: 0.01,class:'form-control'%>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-12" style="height: 22px;position: relative;bottom: 10px;"> 
+		<hr style="margin-top: 10px;margin-bottom: 10px;">
+	</div>
 </div>

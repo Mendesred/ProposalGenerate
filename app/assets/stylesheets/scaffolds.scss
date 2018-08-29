@@ -109,9 +109,18 @@ div {
 .sidebar.ajusteWidthADireita{
   width: 217px;
 }
-#page-wrapper.ajusteAreaToral{
+#page-wrapper.ajusteAreaTotal{
   margin: 0 0 0 217px;
 }
 .ajusteButton{
   margin-top: -4px;
+}
+.nav>li>a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+a {
+    color: #337ab7;
+    text-decoration: none;
 }

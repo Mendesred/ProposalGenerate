@@ -69,6 +69,6 @@ class TypeEquipamentsController < ApplicationMainController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def type_equipament_params
-      params.require(:type_equipament).permit(:typeEquipament)
+      params.require(:type_equipament).permit(:name_type)
     end
 end

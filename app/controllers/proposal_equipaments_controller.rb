@@ -69,6 +69,6 @@ class ProposalEquipamentsController < ApplicationMainController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def proposal_equipament_params
-      params.require(:proposal_equipament).permit(:equipament_id, :proposal_id, :quantidade)
+      params.require(:proposal_equipament).permit(:equipament_id, :proposal_id, :quantidade,:depreciacao_aux,:name_equipament)
     end
 end

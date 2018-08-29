@@ -1,10 +1,10 @@
 class Equipament < ActiveRecord::Base
-	belongs_to :typeEquipament
-  #has_many :proposal_equipaments
+	belongs_to :type_equipament
+	has_many :proposal_equipaments
   #has_many :proposals, :through => :proposal_equipaments
 
   def name_select
-    "#{id} #{name_equipament}"
+    "N#{id}-#{name_equipament}-#{depreciacao}-#{valor}"
   end
 
 end

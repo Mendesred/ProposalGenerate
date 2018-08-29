@@ -350,18 +350,29 @@ Role.find_or_create_by!(
 
 puts  "Cargo criado"
 
+TypeEquipament.find_or_create_by( 
+		name_type:"Teste")
+
+TypeEquipament.find_or_create_by( 
+		name_type:"Teste2")
+
+puts  "Tipo Equipamento criado"
+
 Equipament.find_or_create_by( 
 		valor:0,
+		type_equipament:TypeEquipament.find(1),
 		depreciacao:0)
 
 Equipament.find_or_create_by( 
 		name_equipament:"Guarda Chuva",
 		valor:60,
+		type_equipament:TypeEquipament.find(2),
 		depreciacao:1)
 
 Equipament.find_or_create_by( 
 		name_equipament:"Colete aprova de balas",
 		valor:660,
+		type_equipament:TypeEquipament.find(2),
 		depreciacao:3)
 
 puts  "Equipamento criado"

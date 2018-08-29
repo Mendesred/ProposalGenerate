@@ -85,13 +85,13 @@ ActiveRecord::Schema.define(version: 20180821190343) do
     t.float    "valor"
     t.float    "depreciacao"
     t.integer  "proposal_id"
-    t.integer  "typeEquipament_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.integer  "type_equipament_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
   end
 
   add_index "equipaments", ["proposal_id"], name: "index_equipaments_on_proposal_id"
-  add_index "equipaments", ["typeEquipament_id"], name: "index_equipaments_on_typeEquipament_id"
+  add_index "equipaments", ["type_equipament_id"], name: "index_equipaments_on_type_equipament_id"
 
   create_table "meals", force: :cascade do |t|
     t.string   "type"
@@ -107,18 +107,21 @@ ActiveRecord::Schema.define(version: 20180821190343) do
   end
 
   create_table "proposal_equipaments", force: :cascade do |t|
+    t.integer  "type_equipament_id"
     t.integer  "equipament_id"
     t.integer  "proposal_id"
-    t.float    "name_equipament"
+    t.string   "name_equipament"
     t.float    "quantidade"
+    t.float    "depreciacao_aux"
     t.float    "valor_equipament"
     t.float    "valor_depreciado"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
   end
 
   add_index "proposal_equipaments", ["equipament_id"], name: "index_proposal_equipaments_on_equipament_id"
   add_index "proposal_equipaments", ["proposal_id"], name: "index_proposal_equipaments_on_proposal_id"
+  add_index "proposal_equipaments", ["type_equipament_id"], name: "index_proposal_equipaments_on_type_equipament_id"
 
   create_table "proposal_roles", force: :cascade do |t|
     t.float    "qtd_postos"
@@ -346,9 +349,9 @@ ActiveRecord::Schema.define(version: 20180821190343) do
   add_index "services", ["company_id"], name: "index_services_on_company_id"
 
   create_table "type_equipaments", force: :cascade do |t|
-    t.string   "typeEquipament"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.string   "name_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

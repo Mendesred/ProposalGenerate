@@ -24,13 +24,15 @@ class Proposal < ActiveRecord::Base
 
 	after_save :execult_saving_routine
 	after_save :prenche_vasio
+	#after_save :valida_tipo_select
 
-	#validates :cliente, presence: true
-	#validate :valida_dias_semana
-	#def valida_dias_semana
-	#	if (dias_jornada_ex_semana_all.to_f + dias_refeicao_ex_semana_all.to_f )>7 && ((h_extra_jornada_all==1) && (h_extra_refeicao_all==1))
-	#		
-	#		errors.add(:dias_jornada_ex_semana_all ,"A soma da quantidade de dias da semana entre jornada e refeição não pode ser superior a 7 por favor corrigir.")
+	#validates_associated :proposal_equipaments
+	#validates :proposal_equipaments, presence: true
+	validates :cliente, presence: true
+	#validate :proposal_equipaments,:type_equipament_id
+	#def valida_tipo_select
+	#	unless (:type_equipament_id =="")
+	#		errors.add(:type_equipament_id ,"Profavor seleciora um tipo ou remova o o tipo de equipamento")
 	#	end
 	#end
 
@@ -44,8 +46,8 @@ class Proposal < ActiveRecord::Base
 		def prenche_vasio
 
 			if (cliente.blank?)
-				cliente = Faker::DragonBall.character
-				update_column(:cliente,(cliente))
+				#cliente = Faker::DragonBall.character
+				#update_column(:cliente,(cliente))
 			end
 
 			if (codigo_cliente.blank?)
@@ -70,12 +72,35 @@ class Proposal < ActiveRecord::Base
 		vUniUniforme = 0,vUniVR = 0,vUniSegVida = 0, horas_vespertino = 0,vUniPpr = 0,descontoVr = 0,tipoServico = 0, valorCesta  = 0,
 		valorSocFamiliar = 0,valorBenNatalidade = 0, multiplicador = 0,totSocialFamiliar = 0,totBenNatalidade = 0,horas_trabalhadas = 0,
 		h_refeicao = 0, qtdPostos = 0,teste1 = 0,	teste2 = 0,	teste3 = 0,	teste4 = 0,#teste5 = 'to no inicio'
+		depreciacaoValida =0.0
 
 		self.proposal_equipaments.each do |proposal_equipament| # for usado para pegar todos os equipamentos adcionados na proposta.
-			unless (proposal_equipament.quantidade.blank? || proposal_equipament.equipament.depreciacao.nil?)
-				totalEquipamento += (proposal_equipament.quantidade*
-															(proposal_equipament.equipament.valor.to_f / 
-																proposal_equipament.equipament.depreciacao.to_f ))# total do valor de equipamento (usar na soma de totais).
+
+			puts "depreciacao"
+				puts proposal_equipament.depreciacao_aux
+				puts proposal_equipament.equipament.depreciacao.to_f
+
+			if (proposal_equipament.depreciacao_aux != 0)
+				depreciacaoValida = proposal_equipament.depreciacao_aux
+			else
+				depreciacaoValida = proposal_equipament.equipament.depreciacao.to_f
+			end
+
+
+			teste1 = proposal_equipament.quantidade
+			teste2 = proposal_equipament.equipament.valor.to_f
+			teste3 = depreciacaoValida.to_f
+
+			unless (proposal_equipament.quantidade.blank? || proposal_equipament.equipament.nil? || proposal_equipament.equipament.depreciacao.nil?)
+
+				puts "inicio calc"
+				puts proposal_equipament.quantidade
+				puts proposal_equipament.equipament.valor.to_f
+				puts depreciacaoValida.to_f
+
+
+				totalEquipamento += (proposal_equipament.quantidade*(proposal_equipament.equipament.valor.to_f / 
+																(depreciacaoValida.to_f == 0.0 ? 1 : depreciacaoValida.to_f))).round(2)# total do valor de equipamento (usar na soma de totais).
 			end
 		end
 
@@ -584,10 +609,10 @@ class Proposal < ActiveRecord::Base
 
 		# Calculo para definir o valor de horas extras feriados feito apartir de horas trabalhadas dia pelas quantidade de feriados
 		refexoDSR = ((totalHrsAdNoturnoVespertino + totalHrsAdNoturno + totalHrExtras + totalHrExtrasFeriado)/25.09*5.35).round(2)
-		teste1 =totalHrsAdNoturnoVespertino
-		teste2 =totalHrsAdNoturno
-		teste3 =totalHrExtras
-		teste4 =totalHrExtrasFeriado
+		#teste1 =totalHrsAdNoturnoVespertino
+		#teste2 =totalHrsAdNoturno
+		#teste3 =totalHrExtras
+		#teste4 =totalHrExtrasFeriado
 		update_column(:refexo_dsr, (refexoDSR))
 		salarioMedioFinal = (baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+ totalHrsAdNoturno+ totalHrExtras+ totalHrExtrasFeriado+refexoDSR).round(2)
 		if salarioMedioFinal == 0
@@ -975,7 +1000,7 @@ class Proposal < ActiveRecord::Base
 				elsif (rotation.dias_trabalhados == 21.75)  #if que trata escala 5 por 2
 					if (dias_pg_vt_semana_all > 5)
 						ajustePgVtAll = 5
-					else
+					else 
 						ajustePgVtAll = dias_pg_vt_semana_all.to_f
 					end
 
@@ -1294,10 +1319,6 @@ class Proposal < ActiveRecord::Base
 		totMaoDeObra = totMaoDeObraParcial+reservaTecnicaOld
 		update_column(:total_mao_de_obra,(totMaoDeObra))
 		
-
-		###############################################################################################################################################
-		## > Administração e Operação #################################################################################################################
-		###############################################################################################################################################
 		###############################################################################################################################################
 		## > total de tudo sem o que tem porcentagem referencia circular na tabela  ###################################################################
 		###############################################################################################################################################
@@ -1309,7 +1330,7 @@ class Proposal < ActiveRecord::Base
 
 		###############################################################################################################################################
 		## > calculo total mais lucro #################################################################################################################
-		pctTotal = (company.pis*(1-(city.issqn/100)))+company.cofins*(1-(city.issqn/100))+company.csll+company.irrf+city.issqn+select_calculation.indiceAdministrativo+select_calculation.indiceOperacional+company.pct_reserva_tecnica
+		pctTotal = select_calculation.indiceAdministrativo+select_calculation.indiceOperacional+company.pct_reserva_tecnica
 		update_column(:pct_total,(pctTotal))
 
 		pctTotalAlicota = totParcialProposta/(1-((pctTotal)/100))-totParcialProposta
