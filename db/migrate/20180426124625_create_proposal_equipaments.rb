@@ -2,6 +2,7 @@ class CreateProposalEquipaments < ActiveRecord::Migration
   def change
     create_table :proposal_equipaments do |t|
       t.references :type_equipament, index: true, foreign_key: true
+      t.references :sub_type, index: true, foreign_key: true
       t.references :equipament, index: true, foreign_key: true
       t.references :proposal, index: true, foreign_key: true
       t.string :name_equipament

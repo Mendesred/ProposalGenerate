@@ -350,32 +350,35 @@ Role.find_or_create_by!(
 
 puts  "Cargo criado"
 
-TypeEquipament.find_or_create_by( 
-		name_type:"Teste")
+category = ["Acabamentos",
+						"Descartáveis",
+						"Especiais",
+						"Jardim",
+						"Limpeza",
+						"Seg/Port"]
 
-TypeEquipament.find_or_create_by( 
-		name_type:"Teste2")
+category.each do |cate|
+	TypeEquipament.find_or_create_by(name_type: cate)
+end
 
-puts  "Tipo Equipamento criado"
+puts  "Categoria Equipamento criado"
 
-Equipament.find_or_create_by( 
-		valor:0,
-		type_equipament:TypeEquipament.find(1),
-		depreciacao:0)
+subCategory = [	"Acabamento",
+								"Container",
+								"Descartável",
+								"EPI",
+								"Equipamento",
+								"Ferramenta",
+								"Jardim",
+								"Lavadora",
+								"Produto",
+								"Seg/Port",
+								"Utensílio"]
 
-Equipament.find_or_create_by( 
-		name_equipament:"Guarda Chuva",
-		valor:60,
-		type_equipament:TypeEquipament.find(2),
-		depreciacao:1)
-
-Equipament.find_or_create_by( 
-		name_equipament:"Colete aprova de balas",
-		valor:660,
-		type_equipament:TypeEquipament.find(2),
-		depreciacao:3)
-
-puts  "Equipamento criado"
+subCategory.each do |subCate|
+	SubType.find_or_create_by(name_sub_type: subCate)
+end
+puts  "Sub-Categoria Equipamento criado"
 
 Calculation.find_or_create_by( 
 		salario_minimo:954.00,

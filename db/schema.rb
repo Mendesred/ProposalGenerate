@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180821190343) do
+ActiveRecord::Schema.define(version: 20180829195717) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -81,16 +81,23 @@ ActiveRecord::Schema.define(version: 20180821190343) do
   end
 
   create_table "equipaments", force: :cascade do |t|
+    t.string   "fornecedor"
+    t.integer  "type_equipament_id"
+    t.integer  "sub_type_id"
     t.string   "name_equipament"
+    t.string   "maca_mod"
+    t.integer  "rec_manutencao"
     t.float    "valor"
     t.float    "depreciacao"
+    t.text     "obs_equipament"
     t.integer  "proposal_id"
-    t.integer  "type_equipament_id"
+    t.datetime "updated_date_valor"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
   end
 
   add_index "equipaments", ["proposal_id"], name: "index_equipaments_on_proposal_id"
+  add_index "equipaments", ["sub_type_id"], name: "index_equipaments_on_sub_type_id"
   add_index "equipaments", ["type_equipament_id"], name: "index_equipaments_on_type_equipament_id"
 
   create_table "meals", force: :cascade do |t|
@@ -108,6 +115,7 @@ ActiveRecord::Schema.define(version: 20180821190343) do
 
   create_table "proposal_equipaments", force: :cascade do |t|
     t.integer  "type_equipament_id"
+    t.integer  "sub_type_id"
     t.integer  "equipament_id"
     t.integer  "proposal_id"
     t.string   "name_equipament"
@@ -121,6 +129,7 @@ ActiveRecord::Schema.define(version: 20180821190343) do
 
   add_index "proposal_equipaments", ["equipament_id"], name: "index_proposal_equipaments_on_equipament_id"
   add_index "proposal_equipaments", ["proposal_id"], name: "index_proposal_equipaments_on_proposal_id"
+  add_index "proposal_equipaments", ["sub_type_id"], name: "index_proposal_equipaments_on_sub_type_id"
   add_index "proposal_equipaments", ["type_equipament_id"], name: "index_proposal_equipaments_on_type_equipament_id"
 
   create_table "proposal_roles", force: :cascade do |t|
@@ -347,6 +356,12 @@ ActiveRecord::Schema.define(version: 20180821190343) do
   end
 
   add_index "services", ["company_id"], name: "index_services_on_company_id"
+
+  create_table "sub_types", force: :cascade do |t|
+    t.string   "name_sub_type"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
 
   create_table "type_equipaments", force: :cascade do |t|
     t.string   "name_type"

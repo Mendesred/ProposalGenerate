@@ -8,7 +8,7 @@
   <div class="panel-heading">
     <strong>Tipos</strong>
         <%= link_to new_type_equipament_path,class:"btn btn-success dropdown-toggle pull-right", type:"button" do %>
-        Novo tipo  
+        Nova categoria  
     <% end %>
   </div>
 
@@ -18,14 +18,14 @@
         <thead>
           <tr>
             <th>Nome do tipo</th>
-            <th colspan="1"></th>
+            <th colspan="1" style="width: 9%"></th>
           </tr>
         </thead>
 
         <tbody>
           <% @type_equipaments.each do |type_equipament| %>
           <tr>
-            <td><%= type_equipament.typeEquipament %></td>
+            <td><%= type_equipament.name_type %></td>
             <td>
               <%= link_to type_equipament,class:"btn btn-default btn-sm ", type:"button",title:"Exibir" do %>
               <i class="fa fa-search"></i>

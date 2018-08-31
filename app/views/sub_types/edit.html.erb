@@ -1,0 +1,10 @@
+
+<%= link_to sub_types_path,class:"btn btn-outline btn-success pull-right topHeader", type:"button" do %>
+  <i class="fa fa-clipboard fa-fw"></i> Voltar
+<% end %>   
+<%= link_to @sub_type,class:"btn btn-outline btn-success pull-right topHeader", type:"button" do %>
+  <i class="fa fa-clipboard fa-fw"></i> Exibir
+<% end %>
+<h1  class="page-header topHeader">Editando Sub Cateoria</h1>
+
+<%= render 'form' %>

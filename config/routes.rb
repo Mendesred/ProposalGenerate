@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :sub_types
   resources :type_equipaments
   resources :meals
   namespace :dashboard do
