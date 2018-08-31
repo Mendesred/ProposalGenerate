@@ -15,16 +15,18 @@
 	</div>
 	<div class="panel-body">
 		<div class="table-responsive">
-			<table id="equipamentTab" class="table table-striped table-bordered table-hover">
+			<table id="equipamentTab" class="table table-striped table-bordered table-hover" style="overflow: scroll;width: 1800px;">
 				<thead>
 					<tr>
-						<th>#</th>
-						<th>Name equipament</th>
+						<th style="width:8px;textt-align:center; ">#</th>
+						<th >Equipamento</th>
+						<th style="width: 126px;padding-left: 5px;padding-right: 5px;">Categora Principal</th>
+						<th style="width: 126px;padding-left: 5px;padding-right: 5px;">Sub-categoria</th>
 						<th>Valor</th>
-						<th>Depreciacao</th>
-						<th style="width: 137px; text-align: center;">Atualizado</th>
-
-						<th colspan="1" class="espaco3E" style="width: 12%"></th>
+						<th>Dpr</th>
+						<th style="width: 137px; text-align: center;">valor atualizado</th>
+						<th style="width: 600px;">Observações</th>
+						<th colspan="1" class="espaco3E" style="width: 88px"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -35,9 +37,12 @@
 
 						<td><%= equipament.id %></td>
 						<td><%= equipament.name_equipament %></td>
+						<td><%= equipament.type_equipament.name_type %></td>
+						<td><%= equipament.sub_type.name_sub_type %></td>
 						<td><%= number_to_currency(equipament.valor) %></td>
-						<td><%= equipament.depreciacao %></td>
-						<td style="padding-right: 0px;padding-left: 2px;text-align: center;"><%= update_date(equipament.updated_at) %></td>
+						<td><%= (equipament.depreciacao).round(0) %></td>
+						<td style="padding-right: 0px;padding-left: 2px;text-align: center;"><%= update_date(equipament.updated_date_valor) %></td>
+						<td><%= equipament.obs_equipament %></td>
 						<td>
 							<%= link_to equipament,class:"btn btn-default btn-sm ", type:"button",title:"Exibir" do %>
 								<i class="fa fa-search"></i>

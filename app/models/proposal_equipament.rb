@@ -2,11 +2,9 @@ class ProposalEquipament < ActiveRecord::Base
   belongs_to :equipament
   belongs_to :proposal
   belongs_to :type_equipament
+  belongs_to :sub_type
 
   accepts_nested_attributes_for :equipament, reject_if: :all_blank, allow_destroy:true
-
-  
-	
 
 	#after_save :preeche_capos_vazios
 

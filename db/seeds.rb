@@ -363,20 +363,22 @@ end
 
 puts  "Categoria Equipamento criado"
 
-subCategory = [	"Acabamento",
-								"Container",
-								"Descartável",
-								"EPI",
-								"Equipamento",
-								"Ferramenta",
-								"Jardim",
-								"Lavadora",
-								"Produto",
-								"Seg/Port",
-								"Utensílio"]
+subCategory = [	["Acabamento","Acabamentos"],
+								["Container","Especiais"],
+								["Descartável","Descartáveis"],
+								["EPI","Jardim"],
+								["EPI","Limpeza"],
+								["Equipamento","Jardim"],
+								["Equipamento","Limpeza"],
+								["Ferramenta","Jardim"],
+								["Jardim","Especiais"],
+								["Lavadora","Especiais"],
+								["Produto","Limpeza"],
+								["Seg/Port","Seg/Port"],
+								["Utensílio","Limpeza"]]
 
-subCategory.each do |subCate|
-	SubType.find_or_create_by(name_sub_type: subCate)
+subCategory.each do |row|
+	SubType.find_or_create_by(name_sub_type: row[0],type_equipament_id: TypeEquipament.find_by(name_type: row[1]).id)
 end
 puts  "Sub-Categoria Equipamento criado"
 

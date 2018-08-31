@@ -5,7 +5,7 @@ class CreateEquipaments < ActiveRecord::Migration
       t.references :type_equipament, index: true, foreign_key: true
       t.references :sub_type, index: true, foreign_key: true
       t.string :name_equipament
-      t.string :maca_mod
+      t.string :marca_mod
       t.integer :rec_manutencao
       t.float :valor
       t.float :depreciacao

@@ -82,7 +82,7 @@ class EquipamentsController < ApplicationMainController
 
 		# Never trust parameters from the scary internet, only allow the white list through.
 		def equipament_params
-			params.require(:equipament).permit( :name_equipament,:fornecedor ,:maca_mod ,:rec_manutencao ,:obs_equipament ,
+			params.require(:equipament).permit( :name_equipament,:fornecedor ,:marca_mod ,:rec_manutencao ,:obs_equipament ,
 																					:valor, :depreciacao, :proposal_id, :type_equipament_id, :sub_type_id)
 		end
 end

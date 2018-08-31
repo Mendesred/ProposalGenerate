@@ -5,6 +5,7 @@
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 
 lista_html_equip = null
+lista_html_sub_type = null
 
 jQuery ->
 	$('#proposalTab').DataTable({
@@ -17,7 +18,37 @@ jQuery ->
 	i = 0
 	while i < elemTypes.length
 		if(i==0)
-			equipaments = $(elemTypes[i]).parent().parent().find('#equipaments')
+			subType = $(elemTypes[i]).parent().parent().find('#subType')
+
+			if(lista_html_sub_type == null)
+				lista_html_sub_type = subType.html()
+
+		console.log(i)
+		console.log(elemTypes)
+		if(elemTypes[i].text=="")
+			#$(elemTypes[i]).parent().parent().find('#subType').hide()
+			#$(elemTypes[i]).parent().parent().find('#textEquipament').hide()
+			$(elemTypes[i]).parent().parent().find('#painelCollapse').collapse 'hide'
+			console.log("hide")
+		else
+			subType2 = $(elemTypes[i]).parent().parent().find('#subType')
+			type =  $(elemTypes[i]).parent().find('option:selected').text();
+			escaped_type = type.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g, '\\$1')
+			console.log(escaped_type)
+			#options = $(subType2.html()).filter("optgroup[label='#{escaped_type}']").html()
+			subType2.html( $(subType2.html()).filter("optgroup[label='#{escaped_type}']").html())
+			subType2.show()
+			#$(elemTypes[i]).parent().parent().find('#textEquipament').show()
+			$(elemTypes[i]).parent().parent().find('#painelCollapse').collapse 'show'
+			console.log(subType2)
+		i++
+
+	elemTypes = $('[id=subType]').find('option:selected')
+	console.log(elemTypes.length)
+	i = 0
+	while i < elemTypes.length
+		if(i==0)
+			equipaments = $(elemTypes[i]).parent().parent().find('#equipament')
 
 			if(lista_html_equip == null)
 				lista_html_equip = equipaments.html()
@@ -27,12 +58,12 @@ jQuery ->
 		if(elemTypes[i].text=="")
 			#$(elemTypes[i]).parent().parent().find('#equipaments').hide()
 			#$(elemTypes[i]).parent().parent().find('#textEquipament').hide()
-			$(elemTypes[i]).parent().parent().find('#painelCollapse').collapse 'hide'
+			#$(elemTypes[i]).parent().parent().find('#painelCollapse').collapse 'hide'
 			console.log("hide")
 		else
-			equipaments2 = $(elemTypes[i]).parent().parent().find('#equipaments')
-			type =  $(elemTypes[i]).parent().find('option:selected').text();
-			escaped_type = type.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g, '\\$1')
+			equipaments2 = $(elemTypes[i]).parent().parent().find('#equipament')
+			subType =  $(elemTypes[i]).parent().find('option:selected').text();
+			escaped_type = subType.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g, '\\$1')
 			console.log(escaped_type)
 			#options = $(equipaments2.html()).filter("optgroup[label='#{escaped_type}']").html()
 			equipaments2.html( $(equipaments2.html()).filter("optgroup[label='#{escaped_type}']").html())
@@ -41,6 +72,7 @@ jQuery ->
 			$(elemTypes[i]).parent().parent().find('#painelCollapse').collapse 'show'
 			console.log(equipaments2)
 		i++
+
 
 
 check_value = (obj_select, obj_collapse) ->
@@ -162,29 +194,59 @@ check_radio = (obj_select_radio1, obj_select_radio2, obj_collapse1, obj_collapse
 		obj_collapse1.collapse 'hide'
 		obj_collapse2.collapse 'show'
 	return
+################################################################################
 
 $(document).on 'change', '#type', ->
-	equipaments = $(this).parent().find('#equipaments')
+	subType = $(this).parent().find('#subType')
+	console.log("value changed type")
+
+	#if(lista_html_equip == null)
+		#lista_html_equip = equipaments.html()
+
+	subType.html(lista_html_sub_type)
+	type =  $(this).find('option:selected').text();
+	escaped_type = type.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g, '\\$1')
+	console.log(escaped_type)
+	options = $(subType.html()).filter("optgroup[label='#{escaped_type}']").html()
+	if options
+		subType.html(options)
+		
+		subType.show()
+		subType.trigger('change')
+		$(this).parent().find('#painelCollapse').collapse 'show'
+	else
+		subType.empty()
+		#subType.hide()
+		$(this).parent().find('#painelCollapse').collapse 'hide'
+	return
+
+
+$(document).on 'change', '#subType', ->
+
+	console.log("value changed")
+
+	equipaments = $(this).parent().find('#equipament')
 	
 
 	#if(lista_html_equip == null)
 		#lista_html_equip = equipaments.html()
 
 	equipaments.html(lista_html_equip)
-	type =  $(this).find('option:selected').text();
-	escaped_type = type.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g, '\\$1')
+	subType =  $(this).find('option:selected').text();
+	escaped_type = subType.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g, '\\$1')
 	console.log(escaped_type)
 	options = $(equipaments.html()).filter("optgroup[label='#{escaped_type}']").html()
 	if options
 		equipaments.html(options)
+
 		equipaments.show()
 		$(this).parent().find('#painelCollapse').collapse 'show'
 	else
 		equipaments.empty()
 		#equipaments.hide()
-		$(this).parent().find('#painelCollapse').collapse 'hide'
+		##$(this).parent().find('#painelCollapse').collapse 'hide'
 	return
-
+################################################################################
 $(document).ready ->
   $('#type').change ->
     val = $('#exampleFruit').val()

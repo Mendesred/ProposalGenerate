@@ -13,10 +13,11 @@
 	-->
   <%= f.collection_select :type_equipament_id, @select_all_equip_type, :id, :name_type,{ include_blank: true},{:required =>true,id:'type',class:'form-control',style:"width: 100%;"} %>
   	
-  <div id="painelCollapse" class="collapse">
-  	<%= f.label "Equipamento"%><br>
+  <div id="painelCollapse" class="collapse ">
+  	  <%= f.grouped_collection_select :sub_type_id, @select_all_equip_type.order(:name_type){|p| [p.id]}, :sub_types, :name_type, :id, :name_select ,{ include_blank: true},class: 'form-control', id:'subType' %>
 
-		<%= f.grouped_collection_select :equipament_id, @select_all_equip_type.order(:name_type){|p| [p.id]}, :equipaments, :name_type, :id, :name_select ,{ include_blank: true},class: 'form-control', id:'equipaments' %>
+  	<%= f.label "Equipamento"%><br>
+		<%= f.grouped_collection_select :equipament_id, @select_all_sub_type.order(:name_sub_type){|p| [p.id]}, :equipaments, :name_select, :id, :name_select ,{ include_blank: true},class: 'form-control', id:'equipament' %>
 		
 		<div class="col-md-6" style="padding-left: 0">
     	<div id='quantidadeEquipament'class="field">

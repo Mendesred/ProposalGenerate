@@ -85,7 +85,7 @@ ActiveRecord::Schema.define(version: 20180829195717) do
     t.integer  "type_equipament_id"
     t.integer  "sub_type_id"
     t.string   "name_equipament"
-    t.string   "maca_mod"
+    t.string   "marca_mod"
     t.integer  "rec_manutencao"
     t.float    "valor"
     t.float    "depreciacao"
@@ -359,9 +359,12 @@ ActiveRecord::Schema.define(version: 20180829195717) do
 
   create_table "sub_types", force: :cascade do |t|
     t.string   "name_sub_type"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.integer  "type_equipament_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
   end
+
+  add_index "sub_types", ["type_equipament_id"], name: "index_sub_types_on_type_equipament_id"
 
   create_table "type_equipaments", force: :cascade do |t|
     t.string   "name_type"

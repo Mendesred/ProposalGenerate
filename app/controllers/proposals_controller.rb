@@ -38,6 +38,7 @@ class ProposalsController < ApplicationMainController
   def new
     @proposal = Proposal.new
     new_type
+    select_all_sub_type
     select_all_equip_type
     selected_service
     selected_role
@@ -62,6 +63,7 @@ class ProposalsController < ApplicationMainController
       flash[:alert] = "Você não esta autorizado a executar essa ação."
       redirect_to(request.referrer || root_path)
     end
+    select_all_sub_type
     select_all_equip_type
     selected_service
     selected_role
@@ -92,7 +94,7 @@ class ProposalsController < ApplicationMainController
     select_calculation
     select_company
     select_all_equip_type
-
+    select_all_sub_type
 
     respond_to do |format|
       if @proposal.save
@@ -160,7 +162,9 @@ class ProposalsController < ApplicationMainController
     def select_all_equip_type
       @select_all_equip_type = TypeEquipament.all
     end
-
+    def select_all_sub_type
+      @select_all_sub_type = SubType.all
+    end
     def select_calculation
       @select_all_calculation = Calculation.first
     end
