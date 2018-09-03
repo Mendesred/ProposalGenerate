@@ -8,11 +8,11 @@ class ProposalRole < ActiveRecord::Base
 	private
 	def routine_save
 
-		cargo = role.cargo 
+		cargo = self.role.cargo 
 		update_column(:cargo, (cargo))
-		salario = role.salario
+		salario = self.role.salario
 		update_column(:salario, (salario))
-		gratificacao = role.gratificacao
+		gratificacao = self.role.gratificacao
 		update_column(:gratificacao, (gratificacao))    
 		
 	end

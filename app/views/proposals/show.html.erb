@@ -391,7 +391,7 @@
 										<tr>
 											<td class="showFonteSize">PPR</td>
 											<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.vUniPpr)%></td>
+											<td class="showFonteSize"><%=number_to_currency(@proposal.valor_unitario_ppr)%></td>
 											<td class="showFonteSize"><%=number_to_currency(@proposal.total_ppr)%></td>
 										</tr>
 										<%end%>
@@ -405,13 +405,13 @@
 										<tr>
 											<td class="showFonteSize"> Assistência Social Familiar</td>
 											<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.v_Soc_Familiar)%></td>
+											<td class="showFonteSize"><%=number_to_currency(@proposal.valor_soc_familiar)%></td>
 											<td class="showFonteSize"><%=number_to_currency(@proposal.tot_social_familiar)%></td>
 										</tr>
 										<tr>
 											<td class="showFonteSize"> Benefício Natalidade</td>
 											<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.v_ben_Natalidade)%></td>
+											<td class="showFonteSize"><%=number_to_currency(@proposal.valor_ben_natalidade)%></td>
 											<td class="showFonteSize"><%=number_to_currency(@proposal.tot_ben_natalidade)%></td>
 										</tr>
 										<%end%>
@@ -487,16 +487,14 @@
 									<tbody>
 										<% @proposal.proposal_equipaments.each do |proposal_equipament| %>
 										<tr> 
-											<% if proposal_equipament.name_equipament.nil? %>
+											<!--<#% if proposal_equipament.name_equipament.nil? %>-->
 											<td class="showFonteSize"><%= proposal_equipament.name_equipament %></td>
 											<td class="showFonteSize"><%= proposal_equipament.quantidade %></td>
 											<!-- corrigi -->
-											<td class="showFonteSize"><%= number_to_currency((proposal_equipament.valor_equipament.to_f / proposal_equipament.depreciacao_aux.to_f)*proposal_equipament.quantidade.to_f)%></td>
-											<% else %>
-											<td class="showFonteSize"></td>
-											<td class="showFonteSize"></td>
-											<td class="showFonteSize"></td>
-											<% end %>  
+											<td class="showFonteSize"><%= number_to_currency(proposal_equipament.valor_depreciado)%></td>
+											<!--<#% else %>-->
+
+											<!--<#% end %>--> 
 										</tr>
 										<% end %>
 									</tbody>

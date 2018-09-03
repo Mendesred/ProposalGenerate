@@ -29,6 +29,7 @@ jQuery ->
 			#$(elemTypes[i]).parent().parent().find('#subType').hide()
 			#$(elemTypes[i]).parent().parent().find('#textEquipament').hide()
 			$(elemTypes[i]).parent().parent().find('#painelCollapse').collapse 'hide'
+			#$(elemTypes[i]).parent().parent().find('#painelCollapse2').collapse 'hide'
 			console.log("hide")
 		else
 			subType2 = $(elemTypes[i]).parent().parent().find('#subType')
@@ -40,6 +41,7 @@ jQuery ->
 			subType2.show()
 			#$(elemTypes[i]).parent().parent().find('#textEquipament').show()
 			$(elemTypes[i]).parent().parent().find('#painelCollapse').collapse 'show'
+			#$(elemTypes[i]).parent().parent().find('#painelCollaps2').collapse 'show'
 			console.log(subType2)
 		i++
 
@@ -214,10 +216,12 @@ $(document).on 'change', '#type', ->
 		subType.show()
 		subType.trigger('change')
 		$(this).parent().find('#painelCollapse').collapse 'show'
+		#$(this).parent().find('#painelCollapse2').collapse 'show'
 	else
 		subType.empty()
 		#subType.hide()
 		$(this).parent().find('#painelCollapse').collapse 'hide'
+		#$(this).parent().find('#painelCollapse2').collapse 'hide'
 	return
 
 

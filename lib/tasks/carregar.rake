@@ -18,7 +18,7 @@ namespace :carregar do
   
     CSV.foreach(File.join(Rails.root,"db/equipamentos.csv" ), :headers => true,encoding:'iso-8859-1:utf-8') do |row|
       type = TypeEquipament.find_by(name_type: row[1])
-      sub_type = SubType.find_by(name_sub_type: row[2])
+      sub_type = SubType.find_by(name_sub_type: row[2],type_equipament_id: type.id)
       criaEquipment(row[0],type.id,sub_type.id,row[3],row[4],row[5],row[6],row[7],row[8])
     end
 		puts"equipamento criado"
