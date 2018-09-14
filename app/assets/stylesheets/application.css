@@ -26,13 +26,13 @@
 	font-size: 12px;
 }
 .panel-body .paddin-botton-0{
-  padding: 15px;
-  padding-bottom: 8px;
-  padding-top: 8px;
+	padding: 15px;
+	padding-bottom: 8px;
+	padding-top: 8px;
 }
 .panel-body.paddin-left-right{
 	padding-left: 2px;
-  padding-right: 2px;
+	padding-right: 2px;
 }
 td.showFonteSize.padding-personalit{
 	padding: 6px;
@@ -48,28 +48,54 @@ div.panel.panel-default.margin-5{
 }
 a{
 	color: #337ab7;
-  text-decoration: none;
+	text-decoration: none;
 }
 a:visited{
 		color: #337ab7;
-  text-decoration: none;
+	text-decoration: none;
 }
 .nav>li>a {
-    position: relative;
-    display: block;
-    padding: 10px 15px;
+	position: relative;
+	display: block;
+	padding: 10px 15px;
 }
 ul.proposal-roda-pe{
 	font-size: 11px;
-  font-family: arial;
-  margin-top: 4px;
+	font-family: arial;
+	margin-top: 4px;
+}
+div#page-wrapper.ajusteAreaTotal {
+	padding-left: 5px;
+		
+}
+div.cal-lg-12 .peddingsIndex{
+	padding-left: 10px;
+	padding-left: 10px;
 }
 @media screen and (max-width: 768px) {
- 	div#page-wrapper.ajusteAreaTotal {
-    margin: 0 0 0 0px;
-  }
+	div#page-wrapper.ajusteAreaTotal {
+		margin: 0 0 0 0px;
+	}
 	.sidebar.ajusteWidthADireita {
-    width: 100%;
+		width: 100%;
 	}
 }
-
+.col-lg-12.zeroPaddingLR{
+	padding-left: 0;
+	padding-right: 0;
+}
+.modal-content{
+	width: 880px;
+}
+.modal-dialog{
+	margin-left: 273.5px;
+}
+@media (min-width: 768px){
+	.modal-dialog {
+	  margin-left: 271px;
+	}
+}
+.paddingBottonProposalEquipament{
+	padding-bottom: 3px;
+  padding-top: 2px;
+}

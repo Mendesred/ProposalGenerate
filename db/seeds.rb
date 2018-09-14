@@ -14,7 +14,7 @@ Company.find_or_create_by(
 		pis:0.65,
 		cofins:3.0,
 		seguro_aci_trabalho:2.9631,
-		pct_reserva_tecnica:2.2)
+		pct_reserva_tecnica:3.73)
 Company.find_or_create_by(
 		name_company: "Vetor",
 		irrf:1.0,
@@ -22,7 +22,7 @@ Company.find_or_create_by(
 		pis:1.65,
 		cofins:7.6,
 		seguro_aci_trabalho:2.4648,
-		pct_reserva_tecnica:2.66)
+		pct_reserva_tecnica:3.73)
 
 puts "Empresas criadas"
 Service.find_or_create_by!(
@@ -348,6 +348,110 @@ Role.find_or_create_by!(
 		ppr:258.57,
 		service: Service.find(3))
 
+#*novos Cargos*#
+Role.find_or_create_by!(
+		cargo:'Jardineiro',
+		salario:1279.88,
+		gratificacao:0.0,
+		vale_refeicao:14.73,
+		assist_medica:0.0,
+		seg_vida:1.84,
+		uniformes:16.83,
+		assist_Soc_Familiar:9.33,
+		beneficio_Natalidade:3.76,
+		ppr:258.57,
+		service: Service.find(5))
+
+Role.find_or_create_by!(
+		cargo:'Auxiliar de Manutenção',
+		salario:1179.11,
+		gratificacao:0.0,
+		vale_refeicao:14.73,
+		assist_medica:0.0,
+		seg_vida:1.84,
+		uniformes:16.83,
+		assist_Soc_Familiar:9.33,
+		beneficio_Natalidade:3.76,
+		ppr:258.57,
+		service: Service.find(4))
+
+Role.find_or_create_by!(
+		cargo:'Líder de Limpeza',
+		salario:1500.00,
+		gratificacao:0.0,
+		vale_refeicao:14.73,
+		assist_medica:0.0,
+		seg_vida:1.84,
+		uniformes:16.83,
+		assist_Soc_Familiar:9.33,
+		beneficio_Natalidade:3.76,
+		ppr:258.57,
+		service: Service.find(3))
+
+Role.find_or_create_by!(
+		cargo:'Vigilante/Condutor de Veículos Motorizados',
+		salario:1486.9,
+		gratificacao:10,
+		vale_refeicao:22.62,
+		assist_medica:231.92,
+		seg_vida:5.49,
+		uniformes:24.81,
+		assist_Soc_Familiar:0,
+		beneficio_Natalidade:0,
+		ppr:0,
+		service: Service.first)
+
+Role.find_or_create_by!(
+		cargo:'Vigilante/Segurança Pessoal',
+		salario:1486.9,
+		gratificacao:10,
+		vale_refeicao:22.62,
+		assist_medica:231.92,
+		seg_vida:5.49,
+		uniformes:24.81,
+		assist_Soc_Familiar:0,
+		beneficio_Natalidade:0,
+		ppr:0,
+		service: Service.first)
+
+Role.find_or_create_by!(
+		cargo:'Vigilante Balanceiro',
+		salario:1486.9,
+		gratificacao:10,
+		vale_refeicao:22.62,
+		assist_medica:231.92,
+		seg_vida:5.49,
+		uniformes:24.81,
+		assist_Soc_Familiar:0,
+		beneficio_Natalidade:0,
+		ppr:0,
+		service: Service.first)
+
+Role.find_or_create_by!(
+		cargo:'Vigilante/Brigadista',
+		salario:1486.9,
+		gratificacao:10,
+		vale_refeicao:22.62,
+		assist_medica:231.92,
+		seg_vida:5.49,
+		uniformes:24.81,
+		assist_Soc_Familiar:0,
+		beneficio_Natalidade:0,
+		ppr:0,
+		service: Service.first)
+
+Role.find_or_create_by!(
+		cargo:'Vigilante em Regime de Tempo Parcial',
+		salario:878.65,
+		gratificacao:10,
+		vale_refeicao:22.62,
+		assist_medica:231.92,
+		seg_vida:5.49,
+		uniformes:24.81,
+		assist_Soc_Familiar:0,
+		beneficio_Natalidade:0,
+		ppr:0,
+		service: Service.first)
 puts  "Cargo criado"
 
 category = ["Acabamentos",
@@ -398,8 +502,8 @@ Calculation.find_or_create_by(
 		pct_fgts_sob_soma_decimo_um_terco_ferias: 8,
 		aviso_previo:0.18 ,
 		indenizacao_fgts: 50.0,
-		indiceAdministrativo: 5.0,
-		indiceOperacional: 8.0,
+		indiceAdministrativo: 5.6,
+		indiceOperacional: 9.85,
 		horasDeCalculoAdNoturno:52.5)
 
 puts  "Campos de calculos criados"

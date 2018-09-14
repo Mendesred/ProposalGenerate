@@ -14,15 +14,15 @@
         <thead>
           <tr style="font-size: 11px;">
             <th  style="vertical-align: middle;">Cargo</th>
-            <th  style="width: 5%;vertical-align: middle;">Salario</th>
+            <th  style="width: 7%;vertical-align: middle;">Salario</th>
             <th  style="padding-left: 1px;padding-right:1px;vertical-align: middle;">Gratificacao</th>
-            <th  style="vertical-align: middle;">Vale refeicao</th>
+            <th  style="vertical-align: middle;padding-left: 9px; padding-right: 15px;">Vale refeicao</th>
             <th  style="vertical-align: middle;">Assist medica</th>
-            <th  style="vertical-align: middle;">Seguro de vida</th> 
+            <th  style="vertical-align: middle;padding-left: 8px; padding-right: 15px;">Seguro de vida</th> 
             <th  style="padding-left: 1px;padding-right:1px;vertical-align: middle;">Uniformes</th>
             <th  style="vertical-align: middle;">Assist Social Familiar</th>
-            <th  style="vertical-align: middle;">Benefício Natalidade</th>
-            <th  style="width: 4%;vertical-align: middle;">Ppr</th>
+            <th  style="vertical-align: middle;padding-left: 3px; padding-right: 3px;">Benefício Natalidade</th>
+            <th  style="width: 6%;vertical-align: middle;padding-left: 15px; padding-right: 15px;">Ppr</th>
             <th  style="vertical-align: middle;">Serviço</th>
             <th  style="width: 8%;vertical-align: middle;">Atualizado</th>
             <th colspan="1" class="espaco3E" style="width: 12%"></th>
@@ -33,15 +33,15 @@
           <% @roles.each do |role| %>
             <tr>
               <td style="font-size: 11px;"><%= role.cargo %></td>
-              <td style="font-size: 11px;"><%= number_to_currency(role.salario) %></td>
+              <td style="font-size: 11px;padding-left: 3px; padding-right: 3px;"><%= number_to_currency(role.salario) %></td>
               <td style="font-size: 11px;"><%= role.gratificacao %> %</td>
               <td style="font-size: 11px;"><%= number_to_currency(role.vale_refeicao) %></td>
               <td style="font-size: 11px;"><%= number_to_currency(role.assist_medica) %></td>
               <td style="font-size: 11px;"><%= number_to_currency(role.seg_vida) %></td>
-              <td style="font-size: 11px;"><%= number_to_currency(role.uniformes) %></td>
+              <td style="font-size: 11px;padding-left: 3px; padding-right: 3px;"><%= number_to_currency(role.uniformes) %></td>
               <td style="font-size: 11px;"><%= number_to_currency(role.assist_Soc_Familiar) %></td>
-              <td style="font-size: 11px;"><%= number_to_currency(role.beneficio_Natalidade) %></td>
-              <td style="font-size: 11px;"><%= number_to_currency(role.ppr) %></td>
+              <td style="font-size: 11px;padding-left: 3px; padding-right: 3px;"><%= number_to_currency(role.beneficio_Natalidade) %></td>
+              <td style="font-size: 11px;padding-left: 3px; padding-right: 3px;"><%= number_to_currency(role.ppr) %></td>
               <td style="font-size: 11px;"><%= role.service.tipo_servico %></td>
               <td style="font-size: 11px;padding-right: 0px;padding-left: 2px;"><%= update_date(role.updated_at) %></td>
               <td>

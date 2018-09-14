@@ -1,6 +1,6 @@
 <div class="nested-fields" id="group_equipament">
-  <div class="col-md-4" style="padding-left: 0;margin-top: 5px;margin-bottom: 5px;">
-  	<%= f.label "Tipo do equipamento" %><br>
+  <div class="col-md-4" style="padding-left: 14px;margin-top: 5px;margin-bottom: 5px;">
+  	<%= f.label "Categoria" %><br>
   </div>
   <div class="col-md-4 col-md-offset-4">
 		<div class="tooltip-demo">
@@ -11,24 +11,26 @@
 	<#%= select_tag("selected_type", options_from_collection_for_select(@select_all_equip_type, :id, :name_type),include_blank: true,class:'form-control',style:'width: 88%;',id:'type',) %>
   <#%= f.collection_select :country_id, Country.order(:name), :id, :name, include_blank: true %>
 	-->
-  <%= f.collection_select :type_equipament_id, @select_all_equip_type, :id, :name_type,{ include_blank: true},{:required =>true,id:'type',class:'form-control',style:"width: 100%;"} %>
+  <%= f.collection_select :type_equipament_id, @select_all_equip_type, :id, :name_type,{ include_blank: true},{:required =>true,id:'type',class:'form-control',style:"width: 97%; margin-left: 14px;"} %>
   	
   <div id="painelCollapse" class="collapse ">
-  	<%= f.label "Sub-categoria do equipamento" %><br>
-  	  <%= f.grouped_collection_select :sub_type_id, @select_all_equip_type.order(:name_type){|p| [p.id]}, :sub_types, :name_type, :id, :name_select ,{ include_blank: true},class: 'form-control', id:'subType' %>
+  	<%= f.label "Sub-categoria",style:"width: 97%; margin-left: 14px;" %><br>
+  	  <%= f.grouped_collection_select :sub_type_id, @select_all_equip_type.order(:name_type){|p| [p.id]}, :sub_types, :name_type, :id, :name_select ,{ include_blank: true},class: 'form-control', id:'subType', style:"width: 97%; margin-left: 14px;" %>
   	<!--div id="painelCollapse2" class="collapse "-->
-  		<%= f.label "Equipamento"%><br>
-			<%= f.grouped_collection_select :equipament_id, @select_all_sub_type.order(:name_sub_type){|p| [p.id]}, :equipaments, :name_select, :id, :name_select ,{ include_blank: true},class: 'form-control', id:'equipament' %>
+  		<%= f.label "item",style:"width: 97%; margin-left: 14px;"%><br>
+			<%= f.grouped_collection_select :equipament_id, @select_all_sub_type.order(:name_sub_type){|p| [p.id]}, :equipaments, :name_select, :id, :name_select ,{ include_blank: true},class: 'form-control', id:'equipament', style:"width: 97%; margin-left: 14px;" %>
 		
 			<div class="col-md-6" style="padding-left: 0">
   	  	<div id='quantidadeEquipament'class="field">
-					<%= f.label "Quantidade" %><br>
-					<%= f.text_field :quantidade, step: 0.01,class:'form-control'%>
+					<%= f.label "Quantidade",style:"width: 97%; margin-left: 14px;" %><br>
+					<%= f.text_field :quantidade, step: 0.01,:required =>true,class:'form-control',style:"width: 97%; margin-left: 14px;"%>
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div id='depreciacaoAux'class="field">
-					<%= f.label "Depreciação alternativa" %><br>
+					<div class="paddingBottonProposalEquipament">
+						<strong>Depreciação alternativa</strong> (inserir valor em quantidade de mêses) <br>
+					</div>
 					<%= f.text_field :depreciacao_aux, step: 0.01,class:'form-control'%>
 				</div>
 			</div>

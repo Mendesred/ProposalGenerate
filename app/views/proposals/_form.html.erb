@@ -689,27 +689,39 @@
 					</div>
 					<div class="col-sm-12" style="height: 22px;position: relative;bottom: 10px;"> 
 						<hr style="margin-top: 10px;margin-bottom: 10px;">
-					</div>    
+					</div>
 					<!--Equipamentos--> 
-					<div class="inline">
-						<div class="row">
-							<!-- fields_for para equipamentos e acessorios -->
-							<div class="col-sm-12">
-								<div class="field">
-									<div class="proposal_equipaments">
-										<%= link_to_add_association 'Add Equip', f, :proposal_equipaments, class: 'btn btn-outline btn-info', data: { association_insertion_node: '.proposal_equipaments', association_insertion_method: :append } %><br>
-										<%= f.fields_for :proposal_equipaments do |ep|%>
-										<%= render 'proposal_equipament_fields', f: ep %>
-										<% end %>
+					<div class="col-lg-12 zeroPaddingLR">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								Produtos equipamentos e acessorios
+							</div>
+							<div class="panel-body">
+								<div class="inline">
+									<div class="row">
+										<div class="field">
+											<div class="proposal_equipaments">
+												<%= f.fields_for :proposal_equipaments do |ep|%>
+													<%= render 'proposal_equipament_fields', f: ep %>
+												<% end %>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
+							<div class="panel-footer">
+								<%= link_to_add_association 'Add produto', f, :proposal_equipaments, class: 'btn btn-info', data: { association_insertion_node: '.proposal_equipaments', association_insertion_method: :append } %><br>
+							</div>
 						</div>
 					</div>
-
 					<!--Botão subumiti-->
-					<div class="actions">
-						<button type="submit" class="btn btn-outline btn-success">Salvar</button>
+
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="actions">
+								<button type="submit" class="btn btn-outline btn-success">Salvar</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				<% end %>

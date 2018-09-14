@@ -1,37 +1,43 @@
 <div class="col-lg-12">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      Formulario
-    </div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Formulario
+		</div>
 
-    <div class="panel-body">
-      <div class="col-lg-12">
-        <%= form_for(@sub_type) do |f| %>
-        <% if @sub_type.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@sub_type.errors.count, "error") %> prohibited this sub_type from being saved:</h2>
-          <ul>
-            <% @sub_type.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-        <% end %>
-        <div class="inline">
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="field">
-                <%= f.label 'Sub-categoria de equipamento' %><br>
-                <%= f.text_field :name_sub_type,class:'form-control' %>
-              </div>
-            </div>
-          </div>
-          <div class="actions">
-            <button type="submit" class="btn btn-outline btn-success">Salvar</button>
-          </div>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
+		<div class="panel-body">
+			<div class="col-lg-12">
+				<%= form_for(@sub_type) do |f| %>
+				<% if @sub_type.errors.any? %>
+				<div id="error_explanation">
+					<h2><%= pluralize(@sub_type.errors.count, "error") %> prohibited this sub_type from being saved:</h2>
+					<ul>
+						<% @sub_type.errors.full_messages.each do |message| %>
+						<li><%= message %></li>
+						<% end %>
+					</ul>
+				</div>
+				<% end %>
+				<div class="inline">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Sub-categoria de equipamento</strong><br>
+								<%= f.text_field :name_sub_type,class:'form-control' %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Categora Principal</strong><br>
+								<%= collection_select(:sub_type, :type_equipament_id,@select_all_type, :id, :name_type,{},class:'form-control') %>
+							</div>
+						</div>
+					</div>
+					<div class="actions">
+						<button type="submit" class="btn btn-outline btn-success">Salvar</button>
+					</div>
+					<% end %>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

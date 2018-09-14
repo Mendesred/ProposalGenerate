@@ -15,12 +15,14 @@ private
 		if self.quantidade.nil?
 			self.quantidade = 0
 		end
-		puts"entro no def"
-		if (depreciacao_aux != 0 || depreciacao_aux.nil?)
+		unless (depreciacao_aux.nil? )
 			depreciacaoValida = depreciacao_aux
+			puts"estou aqui"
 		else
 			depreciacaoValida = equipament.depreciacao.to_f
 		end
+		puts"entro no def #{depreciacao_aux}"
+
 		depreciado = (quantidade*(self.equipament.valor.to_f / (depreciacaoValida.to_f == 0.0 ? 1 : depreciacaoValida.to_f))).round(2)
 		nameEquipament = self.equipament.name_equipament
 		update_column(:name_equipament,(nameEquipament))
@@ -28,7 +30,7 @@ private
 		puts"entro no def depois"
 
 		valorEquipament = equipament.valor.to_f
-
+		update_column(:depreciacao_valida, (depreciacaoValida))
 		update_column(:quantidade, (self.quantidade))
 		update_column(:valor_equipament, (valorEquipament))
 		update_column(:valor_depreciado, (depreciado))

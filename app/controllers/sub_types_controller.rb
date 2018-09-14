@@ -15,10 +15,12 @@ class SubTypesController < ApplicationMainController
   # GET /sub_types/new
   def new
     @sub_type = SubType.new
+    type_equipament
   end
 
   # GET /sub_types/1/edit
   def edit
+    type_equipament
   end
 
   # POST /sub_types
@@ -28,7 +30,7 @@ class SubTypesController < ApplicationMainController
 
     respond_to do |format|
       if @sub_type.save
-        format.html { redirect_to @sub_type, notice: 'Sub type was successfully created.' }
+        format.html { redirect_to sub_types_path, notice: 'Sub type was successfully created.' }
         format.json { render :show, status: :created, location: @sub_type }
       else
         format.html { render :new }
@@ -42,7 +44,7 @@ class SubTypesController < ApplicationMainController
   def update
     respond_to do |format|
       if @sub_type.update(sub_type_params)
-        format.html { redirect_to @sub_type, notice: 'Sub type was successfully updated.' }
+        format.html { redirect_to sub_types_path, notice: 'Sub type was successfully updated.' }
         format.json { render :show, status: :ok, location: @sub_type }
       else
         format.html { render :edit }
@@ -63,6 +65,9 @@ class SubTypesController < ApplicationMainController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def type_equipament
+      @select_all_type = TypeEquipament.all
+    end
     def set_sub_type
       @sub_type = SubType.find(params[:id])
     end

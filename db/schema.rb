@@ -123,6 +123,7 @@ ActiveRecord::Schema.define(version: 20180829195717) do
     t.float    "depreciacao_aux"
     t.float    "valor_equipament"
     t.float    "valor_depreciado"
+    t.float    "depreciacao_valida"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
   end
@@ -164,7 +165,6 @@ ActiveRecord::Schema.define(version: 20180829195717) do
     t.float    "intermunicipal"
     t.float    "h_feriado"
     t.string   "user_updated"
-    t.float    "hora_extra_feriado_all"
     t.float    "teste1"
     t.float    "teste2"
     t.float    "teste3"
@@ -176,6 +176,7 @@ ActiveRecord::Schema.define(version: 20180829195717) do
     t.integer  "h_ex_jornada_all"
     t.integer  "m_ex_jornada_all"
     t.integer  "h_ex_feriado_jornada_all"
+    t.float    "hora_extra_feriado_all"
     t.integer  "h_extra_jornada_matu"
     t.integer  "dias_ex_semana_matu"
     t.integer  "h_ex_jornada_matu"
@@ -224,6 +225,7 @@ ActiveRecord::Schema.define(version: 20180829195717) do
     t.float    "equipament_nome"
     t.float    "equipament_valor"
     t.float    "equipament_depreciacao"
+    t.float    "reserva_operacional_adminstrativo"
     t.float    "valor_passagem"
     t.float    "salario"
     t.float    "qtd_postos"

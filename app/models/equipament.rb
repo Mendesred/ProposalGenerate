@@ -5,7 +5,7 @@ class Equipament < ActiveRecord::Base
   #has_many :proposals, :through => :proposal_equipaments
 
   def name_select
-    "Nº#{id}- #{name_equipament}-Dep:#{depreciacao}-Val:#{valor}"
+    "#{name_equipament} - Ddp:#{depreciacao} - Val:R$ #{valor} - Nº#{id}"
   end
   before_save :atualiza_data_do_preco
 

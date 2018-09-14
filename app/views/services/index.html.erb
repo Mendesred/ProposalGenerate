@@ -13,25 +13,26 @@ Nova serviço
       <table class="table table-striped table-bordered table-hover">
         <thead>
           <tr>
+            <th style="width: 31px;text-align: center;">#</th>
             <th>Tipo serviço</th>
             <th>Empreza</th>
             <th>Desconto do VT</th>
             <th>Cesta</th>
             <th style="text-align: center; width: 12%">Atualizado</th>
-            <th colspan="1" class="espaco3E" style="width: 8%"></th>
+            <th colspan="1" class="espaco3E" style="width: 10%"></th>
           </tr>
         </thead>
 
         <tbody>
           <% @services.each do |service| %>
           <tr>
+            <td style="text-align: center;"><%= service.id %></td>
             <td><%= service.tipo_servico %></td>
             <td><%= service.company.name_company %></td>
             <td><%= service.desconto_vr %></td>
             <td><%= number_to_currency(service.cesta) %></td>
             <td style="text-align: center;"><%= update_date(service.updated_at) %></td>
             <td>
-
                 <%= link_to service,class:"btn btn-default btn-sm ", type:"button",title:"Exibir" do %>
                 <i class="fa fa-search"></i>
                 <% end %>
@@ -41,7 +42,6 @@ Nova serviço
                 <!--<#%= link_to service, method: :delete, data: { confirm: 'Are you sure?' },class:"btn btn-default btn-danger btn-sm ", type:"button",title:"Excluir" do %>
                 <i class="fa fa-trash-o"></i>
                 <#% end %>-->
-
             </td>
           </tr>
           <% end %>

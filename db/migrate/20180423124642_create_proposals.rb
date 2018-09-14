@@ -21,7 +21,6 @@ class CreateProposals < ActiveRecord::Migration
 
 
       ### APAGAR ###
-      t.float :hora_extra_feriado_all
       t.float :teste1
       t.float :teste2
       t.float :teste3
@@ -40,6 +39,7 @@ class CreateProposals < ActiveRecord::Migration
       t.integer :m_ex_jornada_all
       t.integer :h_ex_feriado_jornada_all
 
+      t.float :hora_extra_feriado_all
 
       #para horas extras matutino
       t.integer :h_extra_jornada_matu
@@ -116,6 +116,7 @@ class CreateProposals < ActiveRecord::Migration
       t.float :equipament_depreciacao
       #t.float :gratificacao
       
+      t.float :reserva_operacional_adminstrativo
       t.float :valor_passagem
 
       t.float :salario

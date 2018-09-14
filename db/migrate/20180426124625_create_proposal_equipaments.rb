@@ -10,6 +10,7 @@ class CreateProposalEquipaments < ActiveRecord::Migration
       t.float :depreciacao_aux
       t.float :valor_equipament
       t.float :valor_depreciado
+      t.float :depreciacao_valida
 
       t.timestamps null: false
     end

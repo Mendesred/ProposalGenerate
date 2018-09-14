@@ -26,28 +26,17 @@ class Proposal < ActiveRecord::Base
 	after_save :prenche_vasio
 	#after_save :valida_tipo_select
 
-	#validates_associated :proposal_equipaments
+	validates_associated :proposal_equipaments
 	#validates :proposal_equipaments, presence: true
-	validates :cliente, presence: true
-	#validate :proposal_equipaments,:type_equipament_id
-	#def valida_tipo_select
-	#	unless (:type_equipament_id =="")
-	#		errors.add(:type_equipament_id ,"Profavor seleciora um tipo ou remova o o tipo de equipamento")
-	#	end
-	#end
+	#validates :cliente, presence: true
 
 	private
-
-
-		#def calculos_proposta.calculo_modelo_de_horas_extras(diasDoMesTrabalhados,diasDaSemana,diasDeJonadaDeHorasExtra,feriado = 0,quantidadeDePostos,horasExJornada,minutosExJornada)
-		#	((diasDoMesTrabalhados/diasDaSemana *diasDeJonadaDeHorasExtra)+feriado)*(quantidadeDePostos)*(horasExJornada+minutosExJornada)
-		#end
 
 		def prenche_vasio
 
 			if (cliente.blank?)
-				#cliente = Faker::DragonBall.character
-				#update_column(:cliente,(cliente))
+				cliente = Faker::DragonBall.character
+				update_column(:cliente,(cliente))
 			end
 
 			if (codigo_cliente.blank?)
@@ -72,32 +61,19 @@ class Proposal < ActiveRecord::Base
 		vUniUniforme = 0,vUniVR = 0,vUniSegVida = 0, horas_vespertino = 0,vUniPpr = 0,descontoVr = 0,tipoServico = 0, valorCesta  = 0,
 		valorSocFamiliar = 0,valorBenNatalidade = 0, multiplicador = 0,totSocialFamiliar = 0,totBenNatalidade = 0,horas_trabalhadas = 0,
 		h_refeicao = 0, qtdPostos = 0,teste1 = 0,	teste2 = 0,	teste3 = 0,	teste4 = 0,#teste5 = 'to no inicio'
-		depreciacaoValida =0.0
+		depreciacaoValida =0.0,reservaTecnica = 0
 
 		self.proposal_equipaments.each do |proposal_equipament| # for usado para pegar todos os equipamentos adcionados na proposta.
 
-			puts "depreciacao"
 				puts proposal_equipament.depreciacao_aux
 				puts proposal_equipament.equipament.depreciacao.to_f
 
-			if (proposal_equipament.depreciacao_aux != 0)
+			unless (proposal_equipament.depreciacao_aux.nil?)
 				depreciacaoValida = proposal_equipament.depreciacao_aux
 			else
 				depreciacaoValida = proposal_equipament.equipament.depreciacao.to_f
 			end
-
-
-			teste1 = proposal_equipament.quantidade
-			teste2 = proposal_equipament.equipament.valor.to_f
-			teste3 = depreciacaoValida.to_f
-
 			unless (proposal_equipament.quantidade.blank? || proposal_equipament.equipament.nil? || proposal_equipament.equipament.depreciacao.nil?)
-
-				puts "inicio calc"
-				puts proposal_equipament.quantidade
-				puts proposal_equipament.equipament.valor.to_f
-				puts depreciacaoValida.to_f
-
 
 				totalEquipamento += (proposal_equipament.quantidade*(proposal_equipament.equipament.valor.to_f / 
 																(depreciacaoValida.to_f == 0.0 ? 1 : depreciacaoValida.to_f))).round(2)# total do valor de equipamento (usar na soma de totais).
@@ -208,10 +184,22 @@ class Proposal < ActiveRecord::Base
 		else
 			ajusteDivPorZero = rotation.ad_noturno / rotation.ad_noturno # correção de erro de divizão por 0
 			doisTerco = umTerco * 2 # pega apenas 2 terços quando adicional noturno for diferente de 0 e acrecenta para o calculo de horas extras feriados
-		end 
+		end
+
 		update_column(:ajuste_div_por_zero,(ajusteDivPorZero))
 		update_column(:um_terco,(umTerco))
 		update_column(:dois_terco,(doisTerco))
+
+		if (acumuladorFuncionarios%3 == 0)
+			horasMes = (((acumuladorFuncionarios/3)*253.67*2)+((acumuladorFuncionarios/3)*243.54*1)).round
+		elsif (acumuladorFuncionarios%2 == 0)
+			horasMes = ((acumuladorFuncionarios/3)*253.67*2).round
+		else
+			horasMes = ((acumuladorFuncionarios/3)*253.67*1).round
+		end
+		if 
+		 horasMesN ((acumuladorFuncionarios/3)*243.54*1)).round
+		end
 
 		if ((rotation.period_id == 2) || (rotation.period_id == 4) || (rotation.period_id == 6) || (rotation.period_id == 7))
 			
@@ -582,20 +570,20 @@ class Proposal < ActiveRecord::Base
 			update_column(:total_hr_extras, (totalHrExtras))
 		else
 			totalHrExtras = (((((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220)*1.6)*
-												horasExtras)/efetivoTotal).round(2)
+												horasExtras)/efetivoTotal)
 		 #o calculo a cima é para calcular a cobrança de horas em extras de almoço (calculo de horas extras a mais é calculado de forma diferente)
 			update_column(:total_hr_extras, (totalHrExtras))
 		end
 
-		vFeriadosDeCitiesMV = (city.feriado*0.6108) #Valor de feriado para carga horaia de matutino vespertino
+		vFeriadosDeCitiesMV = (city.feriado*0.6108).round(2) #Valor de feriado para carga horaia de matutino vespertino
 			update_column(:valor_feriados_de_cities_mv, (vFeriadosDeCitiesMV))
 
-		vFeriadosDeCitiesN = (city.feriado*0.666) #Valor de feriado para carga horaia de matutino vespertino
+		vFeriadosDeCitiesN = (city.feriado*0.666).round(2) #Valor de feriado para carga horaia de matutino vespertino
 			update_column(:valor_feriados_de_cities_n, (vFeriadosDeCitiesN))
 
 		if (h_feriado == 1)
-			totalHrExtrasFeriado = (((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220)*
-															((vFeriadosDeCitiesMV*doisTerco)+(vFeriadosDeCitiesN*umTerco)).round(2)/(efetivoTotal)).round(2)
+			totalHrExtrasFeriado = (((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220).round(2)*
+															((vFeriadosDeCitiesMV*doisTerco)+(vFeriadosDeCitiesN*umTerco))/(efetivoTotal)).round(2)
 			if totalHrExtrasFeriado == 0
 				totalHrExtrasFeriado = 0
 			end
@@ -609,10 +597,7 @@ class Proposal < ActiveRecord::Base
 
 		# Calculo para definir o valor de horas extras feriados feito apartir de horas trabalhadas dia pelas quantidade de feriados
 		refexoDSR = ((totalHrsAdNoturnoVespertino + totalHrsAdNoturno + totalHrExtras + totalHrExtrasFeriado)/25.09*5.35).round(2)
-		#teste1 =totalHrsAdNoturnoVespertino
-		#teste2 =totalHrsAdNoturno
-		#teste3 =totalHrExtras
-		#teste4 =totalHrExtrasFeriado
+
 		update_column(:refexo_dsr, (refexoDSR))
 		salarioMedioFinal = (baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+ totalHrsAdNoturno+ totalHrExtras+ totalHrExtrasFeriado+refexoDSR).round(2)
 		if salarioMedioFinal == 0
@@ -835,6 +820,7 @@ class Proposal < ActiveRecord::Base
 					end
 							# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
 					qtdVrPagas1 = ((21.75/5 *ajustePgVrMatu.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+
 						#((4.35*dias_pg_vr_semana_matu)+dias_pg_vr_feriado_matu.to_f)*controleValorFuncionario.to_f
 				else
 					qtdVrPagas1 = 0
@@ -940,7 +926,11 @@ class Proposal < ActiveRecord::Base
 		end
 
 		update_column(:qtd_vr_pagas, (qtdVrPagas))
-
+		#########################################################################################
+		## => Obs. Valor calculado com base em 30.44, gera diferença de 10 centavos no valores ##
+		## => final do calculo porem estou usando este valor pois o calculo deveria ser 			 ##
+		## => equivalente a os 25,3646 usando nos excel 																			 ##
+		#########################################################################################
 		if (descontoVr == 0.13)
 			multiplicador = 0.0
 			multiplicador = (((qtdVrPagas).round(2))+(efetivoTotal*(0.08333))).round(2) 
@@ -956,6 +946,7 @@ class Proposal < ActiveRecord::Base
 
 		else
 			multiplicador = (qtdVrPagas).round(2)
+			
 			totVR = (multiplicador * (vUniVR*descontoVr)).round(1)
 			update_column(:multiplicador, (multiplicador).round(1))
 			update_column(:tot_social_familiar, (totSocialFamiliar))
@@ -985,16 +976,15 @@ class Proposal < ActiveRecord::Base
 
 					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
 					if (rotation.id == 1) # if usado para tratar quando e Matutino/Vespertino/Noturno
-								qtdVtPagas = ((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)+
-															((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)+
-																((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)
+						qtdVtPagas = ((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)*3
+						
 						controleDePostosParaCalculoVt = qtdPostos*3
 					elsif ((rotation.id == 2)||(rotation.id == 3)||(rotation.id == 4))# if usado para tratar quando e Matutino ou Vespertino ou Noturno
 								qtdVtPagas = ((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)
 						controleDePostosParaCalculoVt = qtdPostos
 					elsif ((rotation.id == 5)||(rotation.id == 6)||(rotation.id == 7)) # if usado para tratar quando e Matutino/Vespertino ou Matutino/Noturno ou Vespertino/Vespertino
-								qtdVtPagas = ((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)+
-															((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)
+								qtdVtPagas = ((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)*2
+															#((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)
 						controleDePostosParaCalculoVt = qtdPostos*2
 					end
 				elsif (rotation.dias_trabalhados == 21.75)  #if que trata escala 5 por 2
@@ -1012,8 +1002,8 @@ class Proposal < ActiveRecord::Base
 
 					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
 					if (rotation.id == 8) # if usado para tratar quando e Matutino/Noturno
-								qtdVtPagas = ((21.75/5 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)+
-															((21.75/5 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+								qtdVtPagas = ((21.75/5 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)*2
+															#((21.75/5 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
 						controleDePostosParaCalculoVt = qtdPostos*2
 					elsif (rotation.id == 9)||(rotation.id == 10)# if usado para tratar quando e Matutino ou Noturno
 								qtdVtPagas = ((21.75/5 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
@@ -1034,8 +1024,8 @@ class Proposal < ActiveRecord::Base
 					end
 					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a6
 					if (rotation.id == 11)# if usado para tratar quando e Matutino/Noturno
-						qtdVtPagas = ((26.1/6 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)+
-													((26.1/6 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+						qtdVtPagas = ((26.1/6 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)*2
+													#((26.1/6 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
 						controleDePostosParaCalculoVt = qtdPostos*2
 					elsif (rotation.id == 12)||(rotation.id == 13)# if usado para tratar quando e Matutino ou Noturno
 						qtdVtPagas = ((26.1/6 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
@@ -1055,8 +1045,8 @@ class Proposal < ActiveRecord::Base
 					end
 					if (rotation.id == 14) # if usado para tratar quando e Matutino/Noturno
 					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a7
-							qtdVtPagas = ((15.22/7 *ajustePgVtAll)+feriadoParcial)*(controleValorFuncionario)+
-														((15.22/7 *ajustePgVtAll)+feriadoParcial)*(controleValorFuncionario)
+							qtdVtPagas = ((15.22/7 *ajustePgVtAll)+feriadoParcial)*(controleValorFuncionario)*2
+														#((15.22/7 *ajustePgVtAll)+feriadoParcial)*(controleValorFuncionario)
 						controleDePostosParaCalculoVt = qtdPostos*2
 					elsif (rotation.id == 15)||(rotation.id == 16)# if usado para tratar quando e Matutino ou Noturno
 							qtdVtPagas = ((15.22/7 *ajustePgVtAll)+feriadoParcial)*(controleValorFuncionario)
@@ -1312,11 +1302,7 @@ class Proposal < ActiveRecord::Base
 		###############################################################################################################################################
 
 		totMaoDeObraParcial = massaSalarial+totalIncargosDiretos+totalProvisaoMassaSalarial+totBeneficios
-		reservaTecnicaOld = 0
-		reservaTecnicaOld = (totMaoDeObraParcial/(1-(company.pct_reserva_tecnica)/100)-totMaoDeObraParcial).round(2)
-		reservaTecnicaOld = 0 # mudar para opções de old caso use o normal
-		update_column(:reserva_tecnica_old,(reservaTecnicaOld))
-		totMaoDeObra = totMaoDeObraParcial+reservaTecnicaOld
+		totMaoDeObra = totMaoDeObraParcial
 		update_column(:total_mao_de_obra,(totMaoDeObra))
 		
 		###############################################################################################################################################
@@ -1326,42 +1312,40 @@ class Proposal < ActiveRecord::Base
 		totParcialProposta = totMaoDeObra + totalEquipamento
 		update_column(:tot_parcial_proposta,(totParcialProposta))
 
-
-
 		###############################################################################################################################################
 		## > calculo total mais lucro #################################################################################################################
-		pctTotal = select_calculation.indiceAdministrativo+select_calculation.indiceOperacional+company.pct_reserva_tecnica
-		update_column(:pct_total,(pctTotal))
+		# pctTotal = select_calculation.indiceAdministrativo+select_calculation.indiceOperacional+company.pct_reserva_tecnica
+		# update_column(:pct_total,(pctTotal))
+		# pctTotalAlicota = totMaoDeObraParcial/(1-((pctTotal)/100))-totMaoDeObraParcial
+		# update_column(:pct_total_alicota,(pctTotalAlicota))
+		#vDeCalculoTotal = pctTotalAlicota+totMaoDeObraParcial  #####-> valor total de mão de obra <-#####
 
-		pctTotalAlicota = totParcialProposta/(1-((pctTotal)/100))-totParcialProposta
-		update_column(:pct_total_alicota,(pctTotalAlicota))
-
-		vDeCalculoTotal = pctTotalAlicota+totParcialProposta  #####-> valor total de mão de obra <-#####
-		update_column(:valor_de_calculo_total,(vDeCalculoTotal))
+		reservaTecnica = totParcialProposta*(company.pct_reserva_tecnica/100)
+		valorIndiceOperacional = totParcialProposta*(select_calculation.indiceOperacional/100)
 		
-		
-		valorIndiceOperacional = pctTotalAlicota*select_calculation.indiceOperacional/pctTotal
+		update_column(:reserva_tecnica,(reservaTecnica))
 		update_column(:valor_indice_operacional,(valorIndiceOperacional))
-
+		totPropostaComReservaTecnicaIndiceOperacional = totParcialProposta+reservaTecnica+valorIndiceOperacional
 		###############################################################################################################################################
 		## > lucro ####################################################################################################################################
 
-		valorIndiceAdministrativo = pctTotalAlicota*select_calculation.indiceAdministrativo/pctTotal
+		valorIndiceAdministrativo = totPropostaComReservaTecnicaIndiceOperacional*(select_calculation.indiceAdministrativo/100)
 		update_column(:valor_indice_administrativo,(valorIndiceAdministrativo))
-		reservaTecnica = 0
-		reservaTecnica = pctTotalAlicota*company.pct_reserva_tecnica/pctTotal
-		update_column(:reserva_tecnica,(reservaTecnica))	
 		
+		reservaOperacionalAdminstrativo = valorIndiceAdministrativo+reservaTecnica+valorIndiceOperacional
+		update_column(:reserva_operacional_adminstrativo,(reservaOperacionalAdminstrativo))
 		###############################################################################################################################################
 		## > Impotos  #################################################################################################################################
 		###############################################################################################################################################
-		valorIssqn = pctTotalAlicota*city.issqn/pctTotal
-		update_column(:valor_issqn,(valorIssqn))
+		#Trocar assim que tivermos o total de serviços
+		totComOperacaoAdmiReserva = totPropostaComReservaTecnicaIndiceOperacional+valorIndiceAdministrativo
 
-		valorPis = pctTotalAlicota*company.pis*(1-(city.issqn/100))/pctTotal
-		valorCofins = pctTotalAlicota*company.cofins*(1-(city.issqn/100))/pctTotal
-		valorCsll = pctTotalAlicota*company.csll/pctTotal
-		valorIrrf = pctTotalAlicota*company.irrf/pctTotal
+		valorIssqn = totComOperacaoAdmiReserva*(city.issqn/100)#totalDeServicos
+		valorPis = totComOperacaoAdmiReserva*(company.pis/100)#totalDeServicos
+		valorCofins = totComOperacaoAdmiReserva*(company.cofins/100)#totalDeServicos
+		valorCsll = totComOperacaoAdmiReserva*(company.csll/100)#totalDeServicos
+		valorIrrf = totComOperacaoAdmiReserva*(company.irrf/100)#totalDeServicos
+		update_column(:valor_issqn,(valorIssqn))
 		update_column(:valor_pis,(valorPis))
 		update_column(:valor_cofins,(valorCofins))
 		update_column(:valor_csll,(valorCsll))
@@ -1369,9 +1353,10 @@ class Proposal < ActiveRecord::Base
 		
 		## Total impostos sobre serviços ###
 
-		totImpostoSobServico = valorIndiceOperacional+valorIndiceAdministrativo+valorPis+valorCofins+valorCsll+valorIrrf+valorIssqn+totalEquipamento+reservaTecnica
+		totImpostoSobServico = valorPis+valorCofins+valorCsll+valorIrrf+valorIssqn
+		vDeCalculoTotal = valorPis+valorCofins+valorCsll+valorIrrf+valorIssqn+totComOperacaoAdmiReserva
+		update_column(:valor_de_calculo_total,(vDeCalculoTotal))
 		update_column(:total_imposto_sob_servico,(totImpostoSobServico))
-
 		update_column(:teste1, (teste1))
 		update_column(:teste2, (teste2))
 		update_column(:teste3, (teste3))

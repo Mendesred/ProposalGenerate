@@ -44,6 +44,10 @@
             <td><strong>Seguro aci trabalho:</strong></td>
             <td><%= @company.seguro_aci_trabalho %></td>
           </tr>
+          <tr>
+            <td><strong>Reserva técnica:</strong></td>
+            <td><%= @company.pct_reserva_tecnica %></td>
+          </tr>
         </tbody>
       </table>
       <%= link_to companies_path,class:"btn btn-default btn-sm ajusteButton", type:"button" do %>
