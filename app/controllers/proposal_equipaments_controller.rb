@@ -69,6 +69,7 @@ class ProposalEquipamentsController < ApplicationMainController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def proposal_equipament_params
-      params.require(:proposal_equipament).permit(:equipament_id, :proposal_id, :quantidade,:depreciacao_aux,:name_equipament)
+      delocalize_config = { :intermunicipal => :number }
+      params.require(:proposal_equipament).permit(:equipament_id, :proposal_id, :quantidade,:depreciacao_aux,:name_equipament).delocalize(delocalize_config)
     end
 end

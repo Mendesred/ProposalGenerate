@@ -94,7 +94,7 @@
 							<p class="showFonteSize">
 								<strong>Data de criação:</strong>
 								<%= criate_date(@proposal.created_at) %>
-							</p><!--</br></br></br></br></br>-->
+							</p></br></br></br></br></br>
 						</div>
 						<div>
 							 
@@ -106,9 +106,9 @@
 							<!--valor do qtdVtPagas: <#%=@proposal.qtd_vt_pagas %></br>-->
 							valor do teste1: <%=@proposal.teste1 %></br>
 							valor do teste2: <%=@proposal.teste2 %></br>
-							<!--valor do teste3: <#%=@proposal.teste3 %></br-->
-							<!--valor do teste4: <#%=@proposal.teste4 %></br-->
-							<!--valor do teste5: <#%=@proposal.admin.nil? ?nil : @proposal.admin.nome %>--> 
+							valor do teste3: <%=@proposal.teste3 %></br>
+							valor do teste4: <%=@proposal.teste4 %></br>
+							valor do teste5: <%=@proposal.teste5 %> 
 
 						</div>
 						<div class="col-sm-4">  
@@ -642,7 +642,7 @@
 									<strong>Numero de Funcionarios: </strong><%=@proposal.rotation.qtd_funcionarios*proposal_role.qtd_postos%>
 								<%end%>
 						</li>
-						<li><strong>N.º horas / mês: </strong> <%=(((@proposal.acumulador_funcionarios/3)*253.67*2)+((@proposal.acumulador_funcionarios/3)*243.54*1)).round%></li>
+						<li><strong>N.º horas / mês: </strong> <%=@proposal.horas_mes.round%></li>
 						<li><strong>Valore Hora: </strong><%=number_to_currency(@proposal.valor_de_calculo_total/(253.67*@proposal.acumulador_funcionarios))%></li>
 						<li><strong>Valor Dia: </strong><%=number_to_currency(@proposal.valor_de_calculo_total/@proposal.rotation.fator_escala)%></li>
 					</ul>

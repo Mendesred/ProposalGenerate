@@ -31,7 +31,7 @@ class CalculationsController < ApplicationMainController
     respond_to do |format|
       if @calculation.save
         format.html { redirect_to @calculation, notice: 'Calculation was successfully created.' }
-        format.json { render :show, status: :created, location: @calculation }
+        format.json { render :index, status: :created, location: @calculation }
       else
         format.html { render :new }
         format.json { render json: @calculation.errors, status: :unprocessable_entity }
@@ -45,7 +45,7 @@ class CalculationsController < ApplicationMainController
     respond_to do |format|
       if @calculation.update(calculation_params)
         format.html { redirect_to @calculation, notice: 'Calculation was successfully updated.' }
-        format.json { render :show, status: :ok, location: @calculation }
+        format.json { render :index, status: :ok, location: @calculation }
       else
         format.html { render :edit }
         format.json { render json: @calculation.errors, status: :unprocessable_entity }
@@ -71,6 +71,9 @@ class CalculationsController < ApplicationMainController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def calculation_params
-      params.require(:calculation).permit(:salario_minimo, :fgts, :inss, :sebrae, :incra, :salario_educacao, :sesc, :senac,:decimo_terceito,:um_terco_constitucional,:ferias,:pct_inss_sob_soma_decimo_um_terco_ferias,:pct_fgts_sob_soma_decimo_um_terco_ferias,:aviso_previo,:indenizacao_fgts,:pct_reserva_tecnica,:indiceOperacional,:indiceAdministrativo,:horasDeCalculoAdNoturno)
+      delocalize_config = { :salario_minimo => :number}
+      params.require(:calculation).permit(:salario_minimo, :fgts, :inss, :sebrae, :incra, :salario_educacao, :sesc, :senac,:decimo_terceito,:um_terco_constitucional,
+                                          :ferias,:pct_inss_sob_soma_decimo_um_terco_ferias,:pct_fgts_sob_soma_decimo_um_terco_ferias,:aviso_previo,
+                                          :indenizacao_fgts,:pct_reserva_tecnica,:indindexceOperacional,:indiceAdministrativo,:horasDeCalculoAdNoturno).delocalize(delocalize_config)
     end
 end

@@ -69,6 +69,7 @@ class ProposalRolesController < ApplicationMainController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def proposal_role_params
-      params.require(:proposal_role).permit(:proposal_id, :role_id, :qtd_postos)
+      delocalize_config = { :intermunicipal => :number }
+      params.require(:proposal_role).permit(:proposal_id, :role_id, :qtd_postos).delocalize(delocalize_config)
     end
 end

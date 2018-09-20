@@ -74,6 +74,7 @@ class ServicesController < ApplicationMainController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def service_params
-      params.require(:service).permit(:tipo_servico, :company_id, :desconto_vr, :cesta)
+      delocalize_config = { :cesta => :number }
+      params.require(:service).permit(:tipo_servico, :company_id, :desconto_vr, :cesta).delocalize(delocalize_config)
     end
 end

@@ -69,6 +69,7 @@ class CitiesController < ApplicationMainController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def city_params
-      params.require(:city).permit(:nome, :feriado, :valeTransporte, :issqn)
+      delocalize_config = { :valeTransporte => :number }
+      params.require(:city).permit(:nome, :feriado, :valeTransporte, :issqn).delocalize(delocalize_config)
     end
 end

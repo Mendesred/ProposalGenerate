@@ -69,6 +69,7 @@ class PeriodsController < ApplicationMainController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def period_params
-      params.require(:period).permit(:periodo)
+      delocalize_config = { :intermunicipal => :number }
+      params.require(:period).permit(:periodo).delocalize(delocalize_config)
     end
 end

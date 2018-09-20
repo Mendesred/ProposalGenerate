@@ -192,6 +192,7 @@ ActiveRecord::Schema.define(version: 20180829195717) do
     t.integer  "h_ex_jornada_notur"
     t.integer  "m_ex_jornada_notur"
     t.integer  "h_ex_feriado_jornada_notur"
+    t.float    "horas_mes"
     t.float    "horas_extras"
     t.integer  "controle_vr"
     t.integer  "vr_all"

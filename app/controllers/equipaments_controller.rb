@@ -82,7 +82,8 @@ class EquipamentsController < ApplicationMainController
 
 		# Never trust parameters from the scary internet, only allow the white list through.
 		def equipament_params
+			delocalize_config = { :valor => :number }
 			params.require(:equipament).permit( :name_equipament,:fornecedor ,:marca_mod ,:rec_manutencao ,:obs_equipament ,
-																					:valor, :depreciacao, :proposal_id, :type_equipament_id, :sub_type_id)
+																					:valor, :depreciacao, :proposal_id, :type_equipament_id, :sub_type_id).delocalize(delocalize_config)
 		end
 end

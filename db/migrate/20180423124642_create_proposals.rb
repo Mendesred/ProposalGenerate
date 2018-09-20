@@ -62,7 +62,7 @@ class CreateProposals < ActiveRecord::Migration
       t.integer :m_ex_jornada_notur
       t.integer :h_ex_feriado_jornada_notur
 
-
+      t.float :horas_mes
       t.float :horas_extras
       ######################################
       # VR all

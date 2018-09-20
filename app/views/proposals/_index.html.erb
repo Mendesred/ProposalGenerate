@@ -10,12 +10,9 @@
 			<% @select_all_service.each do |service| %>
 				<li>
 					<div class="">
-						<%if service.id >7 %> 
-							<div style="display: none">
-						<% end %>
 						<%= link_to "/services/#{service.id}/proposals/new",class:"btn btn-success TamanhaBotoes", type:"button" do %>
 							Proposta <%=service.tipo_servico%>
-						<% end %>
+						<% end %>						
 					</div>  
 				</li>
 			<% end %>

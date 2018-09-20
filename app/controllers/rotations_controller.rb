@@ -74,6 +74,7 @@ class RotationsController < ApplicationMainController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def rotation_params
-      params.require(:rotation).permit(:tipo_escala, :dias_trabalhados, :qtd_funcionarios, :v_reciclagem, :efetivo, :fator_escala, :period_id, :ad_vespertido_noturno, :ad_noturno, :Dias_trabalhados_mes)
+      delocalize_config = { :intermunicipal => :number }
+      params.require(:rotation).permit(:tipo_escala, :dias_trabalhados, :qtd_funcionarios, :v_reciclagem, :efetivo, :fator_escala, :period_id, :ad_vespertido_noturno, :ad_noturno, :Dias_trabalhados_mes).delocalize(delocalize_config)
     end
 end

@@ -189,19 +189,11 @@ class Proposal < ActiveRecord::Base
 		update_column(:ajuste_div_por_zero,(ajusteDivPorZero))
 		update_column(:um_terco,(umTerco))
 		update_column(:dois_terco,(doisTerco))
+		horasMes = 0
 
-		if (acumuladorFuncionarios%3 == 0)
-			horasMes = (((acumuladorFuncionarios/3)*253.67*2)+((acumuladorFuncionarios/3)*243.54*1)).round
-		elsif (acumuladorFuncionarios%2 == 0)
-			horasMes = ((acumuladorFuncionarios/3)*253.67*2).round
-		else
-			horasMes = ((acumuladorFuncionarios/3)*253.67*1).round
-		end
-		if 
-		 horasMesN ((acumuladorFuncionarios/3)*243.54*1)).round
-		end
 
-		if ((rotation.period_id == 2) || (rotation.period_id == 4) || (rotation.period_id == 6) || (rotation.period_id == 7))
+
+		if ((rotation.period_id == 2) || (rotation.period_id == 4) || (rotation.period_id == 6) || (rotation.period_id == 7)) 
 			
 			horas_vespertino = (((rotation.ad_vespertido_noturno*100)/select_calculation.horasDeCalculoAdNoturno).round(4)*rotation.fator_escala).round(4)
 			update_column(:horas_vespertino,(horas_vespertino))
@@ -561,6 +553,34 @@ class Proposal < ActiveRecord::Base
 			end
 		end
 		update_column(:horas_extras, (horasExtras))
+		case 
+		when (rotation.id == 1|| rotation.id == 2 || rotation.id == 3 || rotation.id == 4 || rotation.id == 5 || rotation.id == 6 || rotation.id == 7)
+			
+			case 
+			when (rotation.id == 1)
+				horasMes = ((((acumuladorFuncionarios/3)*253.67*2)+((acumuladorFuncionarios/3)*243.54*1)).round)+horasExtras
+			when ( rotation.id == 2 || rotation.id == 3 || rotation.id == 5 )
+				horasMes = (((acumuladorFuncionarios)*253.67))+horasExtras
+			when ( rotation.id == 4 )
+				horasMes = ((acumuladorFuncionarios)*243.54)+horasExtras
+			when ( rotation.id == 6 || rotation.id == 7 )
+				horasMes = ((acumuladorFuncionarios/2)*253.67+(acumuladorFuncionarios/2)*243.54)+horasExtras
+			end
+
+		when (rotation.id == 8|| rotation.id == 9 || rotation.id == 10)
+
+			horasMes = (218*acumuladorFuncionarios.round)+horasExtras
+
+		when (rotation.id == 11|| rotation.id == 11 || rotation.id == 12)
+
+			horasMes = (218*acumuladorFuncionarios.round)+horasExtras
+
+		when (rotation.id == 14|| rotation.id == 15 || rotation.id == 16)
+
+			horasMes = ((12*acumuladorFuncionarios*rotation.fator_escala).round)+horasExtras
+			
+		end
+		update_column(:horas_mes,(horasMes))
 
 		###############################################################################################################################################
 		## calculos horas extras ######################################################################################################################
@@ -669,24 +689,25 @@ class Proposal < ActiveRecord::Base
 ######################colar aqui
 		controleDePostosParaCalculoVt = 0
 		if umTerco == 0
-			controleValorFuncionario = efetivoIndivitual*qtdPostos
+			controleValorFuncionario = efetivoIndivitual.to_f*qtdPostos.to_f
 			controleValorFuncionarioSemEfetivo = qtdPostos
 		end
-
+		 
 		if (controle_vr == 0)
 			if (vr_all == 0)
 				qtdVrPagas = 0
 			elsif (vr_all == 1)
-				if (rotation.dias_trabalhados == 25.3646)  #if que trata escala 5 por 1
-					if (dias_pg_vr_semana_all > 7)
-						ajustePgVrAll = 7
-					else
-						ajustePgVrAll = dias_pg_vr_semana_all.to_f
-					end
+
 					if ((dias_pg_vr_semana_all < 7) && (dias_pg_vr_feriado_all == 1))# teste dias se menor que 7 para calcular feriado
 						feriadoParcial = (city.feriado/12)
 					else	
 						feriadoParcial = 0
+					end
+				if (rotation.dias_trabalhados == 25.3646)  #if que trata escala 5 por 1
+					if (dias_pg_vr_semana_all > 7)
+						ajustePgVrAll.to_f = 7
+					else
+						ajustePgVrAll = dias_pg_vr_semana_all.to_f
 					end
 
 					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
@@ -703,51 +724,50 @@ class Proposal < ActiveRecord::Base
 				elsif (rotation.dias_trabalhados == 21.75)  #if que trata escala 5 por 2
 					if (dias_pg_vr_semana_all > 5)
 						ajustePgVrAll = 5
-						feriadoParcial = (city.feriado/12)
-					else
-						ajustePgVrAll = dias_pg_vr_semana_all.to_f
 						feriadoParcial = 0
+					else
+						######  feriadoParcial = (city.feriado/12) #####
+						ajustePgVrAll = dias_pg_vr_semana_all.to_f
 					end
-
 					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
 					if (rotation.id == 8) # if usado para tratar quando e Matutino/Noturno
-								qtdVrPagas = ((21.75/5 *diasJornadaExSemanaAll)+feriadoParcial)*(qtdPostos)*(hExJornadaAll+hExJornadaAll)+
-															((21.75/5 *ajustePgVrAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+						qtdVrPagas = ((21.75/5 *ajustePgVrAll.to_f)+feriadoParcial)*(qtdPostos.to_f)*2
 					elsif (rotation.id == 9)||(rotation.id == 10)# if usado para tratar quando e Matutino ou Noturno
-								qtdVrPagas = ((21.75/5 *ajustePgVrAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+						qtdVrPagas = ((21.75/5 *ajustePgVrAll.to_f)+feriadoParcial)*(qtdPostos.to_f)
 					end
 				elsif (rotation.dias_trabalhados == 26.1)  #if que trata escala 6 por 1
-					if dias_pg_vr_semana_all > 6
+					if (dias_pg_vr_semana_all > 6)
 						ajustePgVrAll = 6
-						feriadoParcial = (city.feriado/12)
+						feriadoParcial = 0
 					else
 						ajustePgVrAll = dias_pg_vr_semana_all.to_f
-						feriadoParcial = 0
+						######  feriadoParcial = (city.feriado/12) #####
 					end
 					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a6
 					if (rotation.id == 11)# if usado para tratar quando e Matutino/Noturno
-						qtdVrPagas = ((26.1/6 *ajustePgVrAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)+
-													((26.1/6 *ajustePgVrAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+						qtdVrPagas = ((26.1/6 *ajustePgVrAll.to_f)+feriadoParcial)*(qtdPostos.to_f)*2
 					elsif (rotation.id == 12)||(rotation.id == 13)# if usado para tratar quando e Matutino ou Noturno
-						qtdVrPagas = ((26.1/6 *ajustePgVrAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+						qtdVrPagas = ((26.1/6 *ajustePgVrAll.to_f)+feriadoParcial)*(qtdPostos.to_f)
 					end   
 				elsif (rotation.dias_trabalhados == 15.22)  #if que trata escala 12 X 36
-					if (dias_pg_vr_semana_all >= 6)
-						ajustePgVrAll = 6
-						feriadoParcial = (city.feriado/12)
-					else
-						ajustePgVrAll = dias_pg_vr_semana_all.to_f
+					if (dias_pg_vr_semana_all > 6)
+						ajustePgVrAll = 7
 						feriadoParcial = 0
+					elsif (dias_pg_vr_semana_all <= 6)
+						ajustePgVrAll = dias_pg_vr_semana_all.to_f
+						######  feriadoParcial = (city.feriado/12) #####
 					end
 					if (rotation.id == 14) # if usado para tratar quando e Matutino/Noturno
 					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a7
-							qtdVrPagas = ((15.22/7 *ajustePgVrAll)+feriadoParcial)*(controleValorFuncionario)+
-														((15.22/7 *ajustePgVrAll)+feriadoParcial)*(controleValorFuncionario)
+						qtdVrPagas = (((15.22/7)*ajustePgVrAll.to_f)+feriadoParcial)*(qtdPostos.to_f)*2
 					elsif (rotation.id == 15)||(rotation.id == 16)# if usado para tratar quando e Matutino ou Noturno
-							qtdVrPagas = ((15.22/7 *ajustePgVrAll)+feriadoParcial)*(controleValorFuncionario)
+						qtdVrPagas = (((15.22/7) *ajustePgVrAll.to_f)+feriadoParcial)*(qtdPostos.to_f)
 					end
 				end
 			end
+			teste1 = ajustePgVrAll.to_f
+			teste2 = feriadoParcial
+			teste3 = qtdPostos.to_f
 		else #(controle_vr == 1)
 
 			if (rotation.dias_trabalhados == 25.3646)  #if que trata escala 5 por 1
@@ -819,9 +839,9 @@ class Proposal < ActiveRecord::Base
 						feriadoParcial = 0
 					end
 							# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
-					qtdVrPagas1 = ((21.75/5 *ajustePgVrMatu.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+					qtdVrPagas1 = ((21.75/5 *ajustePgVrMatu.to_f)+(feriadoParcial).round(2))*(qtdPostos.to_f)
 
-						#((4.35*dias_pg_vr_semana_matu)+dias_pg_vr_feriado_matu.to_f)*controleValorFuncionario.to_f
+						#((4.35*dias_pg_vr_semana_matu)+dias_pg_vr_feriado_matu.to_f)*qtdPostos.to_f
 				else
 					qtdVrPagas1 = 0
 				end
@@ -842,7 +862,7 @@ class Proposal < ActiveRecord::Base
 						feriadoParcial = 0
 					end
 
-					qtdVrPagas3 = ((21.75/5 *ajustePgVrNotur.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+					qtdVrPagas3 = ((21.75/5 *ajustePgVrNotur.to_f)+(feriadoParcial).round(2))*(qtdPostos.to_f)
 				else
 					qtdVrPagas3 = 0
 				end
@@ -862,7 +882,7 @@ class Proposal < ActiveRecord::Base
 					end
 
 						# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
-					qtdVrPagas1 = ((26.1/6 *ajustePgVrMatu.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+					qtdVrPagas1 = ((26.1/6 *ajustePgVrMatu.to_f)+(feriadoParcial).round(2))*(qtdPostos.to_f)
 				else
 					qtdVrPagas1 = 0
 				end
@@ -879,7 +899,7 @@ class Proposal < ActiveRecord::Base
 					else	
 						feriadoParcial = 0
 					end
-					qtdVrPagas3 = ((26.1/6 *ajustePgVrNotur.to_f)+(feriadoParcial).round(2))*(controleValorFuncionario.to_f)
+					qtdVrPagas3 = ((26.1/6 *ajustePgVrNotur.to_f)+(feriadoParcial).round(2))*(qtdPostos.to_f)
 				else
 					qtdVrPagas3 = 0
 				end
@@ -899,13 +919,13 @@ class Proposal < ActiveRecord::Base
 					end
 
 						# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
-					qtdVrPagas1 = (15.22/7 *ajustePgVrMatu)*(controleValorFuncionario)
+					qtdVrPagas1 = (15.22/7 *ajustePgVrMatu)+(feriadoParcial).round(2)*(qtdPostos.to_f)
 						#((4.35*dias_pg_vr_semana_matu)+dias_pg_vr_feriado_matu)*controleValorFuncionario
 				else
 					qtdVrPagas1 = 0
 				end
 				if (vr_notur == 1)&&((rotation.id == 14)||(rotation.id == 16))
-					if (dias_pg_vr_semana_notur > 7)
+					if (dias_pg_vr_semana_notur >= 7)
 						ajustePgVrNotur = 7
 					else
 						ajustePgVrNotur = dias_pg_vr_semana_notur.to_f
@@ -917,7 +937,7 @@ class Proposal < ActiveRecord::Base
 						feriadoParcial = 0
 					end
 
-					qtdVrPagas3 = (15.22/7 *ajustePgVrNotur)*(controleValorFuncionario)
+					qtdVrPagas3 = (15.22/7 *ajustePgVrNotur)+(feriadoParcial).round(2)*(qtdPostos.to_f)
 				else
 					qtdVrPagas3 = 0
 				end
@@ -943,19 +963,18 @@ class Proposal < ActiveRecord::Base
 			update_column(:multiplicador, (multiplicador))
 			update_column(:tot_social_familiar, (totSocialFamiliar))
 			update_column(:tot_ben_natalidade, (totBenNatalidade))
-
 		else
-			multiplicador = (qtdVrPagas).round(2)
 			
-			totVR = (multiplicador * (vUniVR*descontoVr)).round(1)
-			update_column(:multiplicador, (multiplicador).round(1))
+			multiplicador = (qtdVrPagas).round(2)
+			totVR = (multiplicador * (vUniVR*descontoVr)).round(2)
+			update_column(:multiplicador, (multiplicador).round(2))
 			update_column(:tot_social_familiar, (totSocialFamiliar))
 			update_column(:tot_ben_natalidade, (totBenNatalidade))
 		end
 		if (vUniAssistMedica == 0)
 			totAssiteciaMedica = 0
 		else
-			totAssiteciaMedica = ((vUniAssistMedica*efetivoTotal)-((salario*0.05)*efetivoTotal)).round(2)   
+			totAssiteciaMedica = ((vUniAssistMedica*efetivoTotal)-((salario*0.05)*efetivoTotal)).round(2)
 		end
 
 		if (controle_vt == 0)
@@ -1002,11 +1021,11 @@ class Proposal < ActiveRecord::Base
 
 					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
 					if (rotation.id == 8) # if usado para tratar quando e Matutino/Noturno
-								qtdVtPagas = ((21.75/5 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)*2
-															#((21.75/5 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+								qtdVtPagas = ((21.75/5 *ajustePgVtAll.to_f)+feriadoParcial)*(qtdPostos.to_f)*2
+															#((21.75/5 *ajustePgVtAll.to_f)+feriadoParcial)*(qtdPostos.to_f)
 						controleDePostosParaCalculoVt = qtdPostos*2
 					elsif (rotation.id == 9)||(rotation.id == 10)# if usado para tratar quando e Matutino ou Noturno
-								qtdVtPagas = ((21.75/5 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+								qtdVtPagas = ((21.75/5 *ajustePgVtAll.to_f)+feriadoParcial)*(qtdPostos.to_f)
 						controleDePostosParaCalculoVt = qtdPostos
 					end
 				elsif (rotation.dias_trabalhados == 26.1)  #if que trata escala 6 por 1
@@ -1024,11 +1043,11 @@ class Proposal < ActiveRecord::Base
 					end
 					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a6
 					if (rotation.id == 11)# if usado para tratar quando e Matutino/Noturno
-						qtdVtPagas = ((26.1/6 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)*2
-													#((26.1/6 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+						qtdVtPagas = ((26.1/6 *ajustePgVtAll.to_f)+feriadoParcial)*(qtdPostos.to_f)*2
+													#((26.1/6 *ajustePgVtAll.to_f)+feriadoParcial)*(qtdPostos.to_f)
 						controleDePostosParaCalculoVt = qtdPostos*2
 					elsif (rotation.id == 12)||(rotation.id == 13)# if usado para tratar quando e Matutino ou Noturno
-						qtdVtPagas = ((26.1/6 *ajustePgVtAll.to_f)+feriadoParcial)*(controleValorFuncionario.to_f)
+						qtdVtPagas = ((26.1/6 *ajustePgVtAll.to_f)+feriadoParcial)*(qtdPostos.to_f)
 						controleDePostosParaCalculoVt = qtdPostos
 					end   
 				elsif (rotation.dias_trabalhados == 15.22)  #if que trata escala 12 X 36
@@ -1045,11 +1064,11 @@ class Proposal < ActiveRecord::Base
 					end
 					if (rotation.id == 14) # if usado para tratar quando e Matutino/Noturno
 					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a7
-							qtdVtPagas = ((15.22/7 *ajustePgVtAll)+feriadoParcial)*(controleValorFuncionario)*2
-														#((15.22/7 *ajustePgVtAll)+feriadoParcial)*(controleValorFuncionario)
+							qtdVtPagas = ((15.22/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos.to_f)*2
+														#((15.22/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos.to_f)
 						controleDePostosParaCalculoVt = qtdPostos*2
 					elsif (rotation.id == 15)||(rotation.id == 16)# if usado para tratar quando e Matutino ou Noturno
-							qtdVtPagas = ((15.22/7 *ajustePgVtAll)+feriadoParcial)*(controleValorFuncionario)
+							qtdVtPagas = ((15.22/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos.to_f)
 					end
 				end
 			end
@@ -1223,7 +1242,7 @@ class Proposal < ActiveRecord::Base
 					end
 
 						# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
-					qtdVtPagas1 = (15.22/7 *ajustePgVtMatu)*(controleValorFuncionario)
+					qtdVtPagas1 = (15.22/7 *ajustePgVtMatu)*(controleValorFuncionario.to_f)
 						#((4.35*dias_pg_vt_semana_matu)+dias_pg_vt_feriado_matu)*controleValorFuncionario
 				else
 					qtdVtPagas1 = 0
@@ -1241,7 +1260,7 @@ class Proposal < ActiveRecord::Base
 						feriadoParcial = 0
 					end
 
-					qtdVtPagas3 = (15.22/7 *ajustePgVtNotur)*(controleValorFuncionario)
+					qtdVtPagas3 = (15.22/7 *ajustePgVtNotur)*(controleValorFuncionario.to_f)
 				else
 					qtdVtPagas3 = 0
 				end
@@ -1250,7 +1269,7 @@ class Proposal < ActiveRecord::Base
 				elsif (qtdVtPagas3 != 0)
 					mut = 2
 				end
-				controleDePostosParaCalculoVt = qtdPostos*mut
+				controleDePostosParaCalculoVt = qtdPostos.to_f*mut.to_f
 				qtdVtPagas = (qtdVtPagas1+qtdVtPagas3)
 			end# fim do if que trata escala
 		end

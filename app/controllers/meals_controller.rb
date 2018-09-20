@@ -69,6 +69,7 @@ class MealsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def meal_params
+      delocalize_config = { :intermunicipal => :number }
       params.require(:meal).permit(:type, :value)
     end
 end

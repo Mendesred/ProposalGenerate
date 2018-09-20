@@ -75,7 +75,9 @@ class RolesController < ApplicationMainController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def role_params
+      delocalize_config = { :salario => :number,:assist_medica => :number, :seg_vida => :number, :uniformes => :number, 
+                            :assist_Soc_Familiar => :number, :vale_refeicao => :number, :ppr => :number,:beneficio_Natalidade => :number, :uniformes => :number }
       params.require(:role).permit(:cargo, :salario, :gratificacao, :assist_medica,:seg_vida, :uniformes, 
-        :assist_Soc_Familiar, :beneficio_Natalidade, :ppr, :vale_refeicao, :service_id)
+        :assist_Soc_Familiar, :beneficio_Natalidade, :ppr, :vale_refeicao, :service_id).delocalize(delocalize_config)
     end
 end
