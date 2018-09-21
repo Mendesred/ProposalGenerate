@@ -94,7 +94,7 @@
 							<p class="showFonteSize">
 								<strong>Data de criação:</strong>
 								<%= criate_date(@proposal.created_at) %>
-							</p></br></br></br></br></br>
+							</p> </br></br></br></br></br><!-- -->
 						</div>
 						<div>
 							 
@@ -243,7 +243,7 @@
 								</tr>
 								<tr>
 									<td class="showFonteSize">  Adicional noturno - noturno:</td>  
-									<td class="showFonteSize"> <%=(((@proposal.ajuste_div_por_zero * 60)/@select_all_calculation.horasDeCalculoAdNoturno).round(6) * @proposal.rotation.fator_escala * @proposal.rotation.ad_noturno).round(4) %> Hs</td>  
+									<td class="showFonteSize"> <%=@proposal.show_horas%> Hs</td>  
 									<td class="showFonteSize"> <%= number_to_currency(@proposal.total_hrs_ad_noturno) %></td>  
 								</tr>
 								<tr>
@@ -409,7 +409,7 @@
 
 									<tbody> 
 										<tr>
-											<td class="showFonteSize">Cesta</td>
+											<td class="showFonteSize">Cesta básica</td>
 											<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
 											<td class="showFonteSize"><%=number_to_currency(@proposal.valor_cesta)%></td>
 											<td class="showFonteSize"><%=number_to_currency(@proposal.total_cesta)%></td>
@@ -526,7 +526,7 @@
 						</div>
 					</div>
 					<% end %>
-					<h5><strong>Total (II)- Mão de Obra + Materiais e Equipamentos:</strong><%= number_to_currency((@proposal.total_mao_de_obra+@proposal.total_equipamento).round(2))%></h5>
+					<h5><strong>Total (II) - Mão de Obra + Materiais e Equipamentos:</strong><%= number_to_currency((@proposal.total_mao_de_obra+@proposal.total_equipamento).round(2))%></h5>
 					<hr/>
 
 					<div class="panel panel-default">

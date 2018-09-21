@@ -228,6 +228,7 @@ ActiveRecord::Schema.define(version: 20180829195717) do
     t.float    "equipament_depreciacao"
     t.float    "reserva_operacional_adminstrativo"
     t.float    "valor_passagem"
+    t.float    "show_horas"
     t.float    "salario"
     t.float    "qtd_postos"
     t.float    "total_salarios"
