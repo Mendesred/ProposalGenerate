@@ -226,10 +226,6 @@ class Proposal < ActiveRecord::Base
 		else
 			totalHrsAdNoturno =totalHrsAdNoturno
 		end
-		teste1 = rotation.dias_trabalhados * rotation.ad_noturno
-		teste2 = rotation.dias_trabalhados
-		teste3 = rotation.ad_noturno
-		teste4 = select_calculation
 		update_column(:total_hrs_ad_noturno, (totalHrsAdNoturno))
 		update_column(:show_horas, (showHoras))
 		#adVespertidoNoturno = rotation.ad_vespertido_noturno
@@ -703,8 +699,7 @@ class Proposal < ActiveRecord::Base
 		###############################################################################################################################################
 
 		totCesta = (valorCesta*efetivoTotal).round(2)
-######################colar aqui
-		controleDePostosParaCalculoVt = 0
+		######################colar aqui
 		if umTerco == 0
 			controleValorFuncionario = efetivoIndivitual.to_f*qtdPostos.to_f
 			controleValorFuncionarioSemEfetivo = qtdPostos
@@ -958,6 +953,7 @@ class Proposal < ActiveRecord::Base
 				qtdVrPagas = qtdVrPagas1+qtdVrPagas3
 			end# fim do if que trata escala
 		end
+		teste1 = qtdVrPagas
 
 		update_column(:qtd_vr_pagas, (qtdVrPagas))
 		#########################################################################################
@@ -973,13 +969,19 @@ class Proposal < ActiveRecord::Base
 			totSocialFamiliar = (efetivoTotal*valorSocFamiliar).round(2) 
 			totBenNatalidade = (efetivoTotal*valorBenNatalidade).round(2) 
 
-
 			update_column(:multiplicador, (multiplicador))
 			update_column(:tot_social_familiar, (totSocialFamiliar))
 			update_column(:tot_ben_natalidade, (totBenNatalidade))
 		else
-			
-			multiplicador = (qtdVrPagas*efetivoIndivitual).round(2)
+			teste1 = qtdVrPagas 
+			teste2 = efetivoIndivitual
+			teste3 = descontoVr
+			teste5 = "to no normal"
+			if (rotation.id == 1 || rotation.id == 2 || rotation.id == 3 || rotation.id == 4 || rotation.id == 5 || rotation.id == 6 || rotation.id == 7)
+				multiplicador = (qtdVrPagas).round(2)
+			else
+				multiplicador = (qtdVrPagas*efetivoIndivitual).round(2)
+			end
 			totVR = (multiplicador * (vUniVR*descontoVr)).round(2)
 			update_column(:multiplicador, (multiplicador).round(2))
 			update_column(:tot_social_familiar, (totSocialFamiliar))
@@ -991,6 +993,7 @@ class Proposal < ActiveRecord::Base
 			totAssiteciaMedica = ((vUniAssistMedica*efetivoTotal)-((salario*0.05)*efetivoTotal)).round(2)
 		end
 
+		controleDePostosParaCalculoVt = 0
 		if (controle_vt == 0)
 			if (vt_all == 0)
 				qtdVtPagas = 0
@@ -1389,9 +1392,21 @@ class Proposal < ActiveRecord::Base
 		## Total impostos sobre serviços ###
 
 		totImpostoSobServico = valorPis+valorCofins+valorCsll+valorIrrf+valorIssqn
-		vDeCalculoTotal = valorPis+valorCofins+valorCsll+valorIrrf+valorIssqn+totComOperacaoAdmiReserva
-		update_column(:valor_de_calculo_total,(vDeCalculoTotal))
 		update_column(:total_imposto_sob_servico,(totImpostoSobServico))
+		
+		vDeCalculoTotal = valorPis+valorCofins+valorCsll+valorIrrf+valorIssqn+totComOperacaoAdmiReserva
+		## Valores de totais de calculo com impostos com a proposta sem sajuste
+
+		update_column(:valor_de_calculo_total,(vDeCalculoTotal))
+		
+		## total com ajuste de escala 
+		
+		valorHorasProposta = valorDeCalculoTotal/horasMes
+		valorDiaProposta = valorDeCalculoTotal/rotation.fatorEscala
+		## 
+
+		update_column(:valor_horas_proposta, (valorHorasProposta))
+		update_column(:valor_dia_proposta, (valorDiaProposta))
 		update_column(:teste1, (teste1))
 		update_column(:teste2, (teste2))
 		update_column(:teste3, (teste3))

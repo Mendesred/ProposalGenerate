@@ -104,11 +104,11 @@
 
 							<!--valor do horas_extras: <#%=@proposal.horas_extras %></br>-->
 							<!--valor do qtdVtPagas: <#%=@proposal.qtd_vt_pagas %></br>-->
-							valor do teste1: <%=@proposal.teste1 %></br>
-							valor do teste2: <%=@proposal.teste2 %></br>
-							valor do teste3: <%=@proposal.teste3 %></br>
-							valor do teste4: <%=@proposal.teste4 %></br>
-							valor do teste5: <%=@proposal.teste5 %> 
+							valor do teste1: <#%=@proposal.teste1 %></br>
+							valor do teste2: <#%=@proposal.teste2 %></br>
+							valor do teste3: <#%=@proposal.teste3 %></br>
+							valor do teste4: <#%=@proposal.teste4 %></br>
+							valor do teste5: <#%=@proposal.teste5 %> 
 
 						</div>
 						<div class="col-sm-4">  
@@ -213,16 +213,16 @@
 											<%= number_to_currency(@select_all_calculation.salario_minimo)%></td> 
 										<td class="showFonteSize"><%=number_to_currency(@proposal.grau_de_insalubridade*@select_all_calculation.salario_minimo)%></td> 
 									</tr>
-<!--                <#%else%>
-	<tr>                 
-		<td class="showFonteSize"> Maior valor entre insalubridade e periculosidade: </b></td>  
-		<td class="showFonteSize"> Aplicavel: <b><#% if @proposal.valorPeriOuIsalubri == 0 %>
-			"Não"
-		<#%else%>
-			"Sim"
-		<#% end %> </td>  
-		<td class="showFonteSize"> <#%=number_to_currency(@proposal.valorPeriOuIsalubri)%>  </td>  
-	</tr> -->
+						<!--<#%else%>
+									<tr>                 
+										<td class="showFonteSize"> Maior valor entre insalubridade e periculosidade: </b></td>  
+										<td class="showFonteSize"> Aplicavel: <b><#% if @proposal.valorPeriOuIsalubri == 0 %>
+											"Não"
+										<#%else%>
+											"Sim"
+										<#% end %> </td>  
+										<td class="showFonteSize"> <#%=number_to_currency(@proposal.valorPeriOuIsalubri)%>  </td>  
+									</tr> -->
 								<%end %>
 								<% if @proposal.total_hr_extras >0 %>
 									<tr>                 
@@ -243,7 +243,7 @@
 								</tr>
 								<tr>
 									<td class="showFonteSize">  Adicional noturno - noturno:</td>  
-									<td class="showFonteSize"> <%=@proposal.show_horas%> Hs</td>  
+									<td class="showFonteSize"> <%=@proposal.show_horas.round(5)%> Hs</td>  
 									<td class="showFonteSize"> <%= number_to_currency(@proposal.total_hrs_ad_noturno) %></td>  
 								</tr>
 								<tr>
@@ -643,12 +643,12 @@
 								<%end%>
 						</li>
 						<li><strong>N.º horas / mês: </strong> <%=@proposal.horas_mes.round%></li>
-						<li><strong>Valore Hora: </strong><%=number_to_currency(@proposal.valor_de_calculo_total/(253.67*@proposal.acumulador_funcionarios))%></li>
+						<li><strong>Valore Hora: </strong><%=number_to_currency(@proposal.valor_de_calculo_total/@proposal.horas_mes.round)%></li>
 						<li><strong>Valor Dia: </strong><%=number_to_currency(@proposal.valor_de_calculo_total/@proposal.rotation.fator_escala)%></li>
 					</ul>
 
-				</div>
-				<!-- /.col-lg-12 -->
+				</div><!-- /.col-lg-12 -->
 			</div>
 		</div>
 	</div>
+</div>
