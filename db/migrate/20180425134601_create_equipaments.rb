@@ -1,5 +1,18 @@
 class CreateEquipaments < ActiveRecord::Migration
   def change
+    create_table :type_equipaments do |t|
+      t.string :name_type
+
+      t.timestamps null: false
+    end
+
+    create_table :sub_types do |t|
+      t.string :name_sub_type
+      t.references :type_equipament, index: true, foreign_key: true
+
+      t.timestamps null: false
+    end
+
     create_table :equipaments do |t|
       t.string :fornecedor
       t.references :type_equipament, index: true, foreign_key: true
@@ -10,7 +23,6 @@ class CreateEquipaments < ActiveRecord::Migration
       t.float :valor
       t.float :depreciacao
       t.text :obs_equipament
-      t.references :proposal, index: true, foreign_key: true
       t.datetime :updated_date_valor
       t.timestamps null: false
     end

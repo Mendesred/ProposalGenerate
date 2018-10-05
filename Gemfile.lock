@@ -155,6 +155,7 @@ GEM
       mime-types
       mimemagic (~> 0.3.0)
     pdf-core (0.7.0)
+    pg (0.21.0)
     prawn (2.2.2)
       pdf-core (~> 0.7.0)
       ttfunk (~> 1.5)
@@ -285,6 +286,7 @@ DEPENDENCIES
   kaminari
   kaminari-i18n
   paperclip (~> 5.0.0)
+  pg (~> 0.15)
   prawn-rails
   pundit
   rails (= 4.2.5)
@@ -304,4 +306,4 @@ DEPENDENCIES
   wkhtmltopdf-binary
 
 BUNDLED WITH
-   1.16.1
+   1.16.2

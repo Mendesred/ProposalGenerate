@@ -8,7 +8,6 @@ class CreateProposals < ActiveRecord::Migration
       t.references :city, index: true, foreign_key: true
       t.references :company, index: true, foreign_key: true
       t.references :rotation, index: true, foreign_key: true
-      t.references :equipament, index: true, foreign_key: true
       t.references :role, index: true, foreign_key: true
       t.references :period, index: true, foreign_key: true
       t.integer :adcional_periculosidade_insalubridade
