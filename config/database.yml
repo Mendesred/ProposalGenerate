@@ -22,8 +22,8 @@ test:
 
 production:
   adapter: postgresql
-  host: localhost
   database: proposta
-  encoding: utf8
+  encoding: unicode
+  pool: 5
   username: rails_dev
   password: ironvetor2007!
