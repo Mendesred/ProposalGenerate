@@ -36,7 +36,7 @@
 					<li>
 								<a href="/services/1/proposals"><i class="fa fa-clipboard fa-fw"></i>Proposta</a>
 					</li>
-						<% if policy(Admin).new? %>
+					<% if policy(Admin).new? %>
 						<li>
 							<%= link_to dashboard_admin_index_path do %><i class="fa fa-users fa-fw"></i>Dashboard<%end%>
 						</li>
