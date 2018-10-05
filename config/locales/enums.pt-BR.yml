@@ -4,3 +4,5 @@
       privilegio:
         full_access: Acesso Completo
         restricted_access: Acesso Restrito
+        partial_access: Acesso Parcial
+        salesman_access: Acesso de Vendedor

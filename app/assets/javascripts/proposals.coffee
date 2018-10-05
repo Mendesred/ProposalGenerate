@@ -202,15 +202,17 @@ $(document).on 'change', '#type', ->
 	subType = $(this).parent().find('#subType')
 	console.log("value changed type")
 
-	#if(lista_html_equip == null)
-		#lista_html_equip = equipaments.html()
+	if(lista_html_sub_type == null)
+		lista_html_sub_type = subType.html()
 
 	subType.html(lista_html_sub_type)
 	type =  $(this).find('option:selected').text();
 	escaped_type = type.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g, '\\$1')
 	console.log(escaped_type)
+	console.log(subType.html())
 	options = $(subType.html()).filter("optgroup[label='#{escaped_type}']").html()
 	if options
+		console.log("estou no if")
 		subType.html(options)
 		
 		subType.show()
@@ -218,6 +220,7 @@ $(document).on 'change', '#type', ->
 		$(this).parent().find('#painelCollapse').collapse 'show'
 		#$(this).parent().find('#painelCollapse2').collapse 'show'
 	else
+		console.log("estou no else")
 		subType.empty()
 		#subType.hide()
 		$(this).parent().find('#painelCollapse').collapse 'hide'
@@ -232,8 +235,9 @@ $(document).on 'change', '#subType', ->
 	equipaments = $(this).parent().find('#equipament')
 	
 
-	#if(lista_html_equip == null)
-		#lista_html_equip = equipaments.html()
+
+	if(lista_html_equip == null)
+		lista_html_equip = equipaments.html()
 
 	equipaments.html(lista_html_equip)
 	subType =  $(this).find('option:selected').text();

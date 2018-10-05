@@ -44,11 +44,13 @@ gem 'schemard', '~> 0.4.1'
 # This gem packages the jQuery DataTables plugin for easy use with the Rails 3.1+ asset pipleine. It provides all the basic DataTables files, and a few of the extras.
 gem 'jquery-datatables-rails','~> 3.4.0'
 
-gem "delocalize"
+gem 'delocalize'
 
 gem 'draper'
 
 gem 'csv'
+
+gem 'paperclip','~> 5.0.0'
 
 
 # Wrappers for JavaScript alert(), confirm() and other flexible dialogs using Twitter's bootstrap framework

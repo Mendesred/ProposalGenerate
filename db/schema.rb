@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180829195717) do
+ActiveRecord::Schema.define(version: 20180926204515) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -306,6 +306,11 @@ ActiveRecord::Schema.define(version: 20180829195717) do
     t.float    "total_imposto_sob_servico"
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
+    t.float    "valor_horas_proposta"
+    t.float    "valor_dia_proposta"
+    t.float    "tot_com_reserva_indce_op_indice_adm"
+    t.float    "total_para_ajuste"
+    t.float    "valor_de_ajuste"
   end
 
   add_index "proposals", ["admin_id"], name: "index_proposals_on_admin_id"

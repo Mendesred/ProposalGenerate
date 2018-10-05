@@ -23,7 +23,7 @@ class Proposal < ActiveRecord::Base
 
 
 	after_save :execult_saving_routine
-	after_save :prenche_vasio
+	#after_save :prenche_vasio
 	#after_save :valida_tipo_select
 
 	validates_associated :proposal_equipaments
@@ -953,8 +953,6 @@ class Proposal < ActiveRecord::Base
 				qtdVrPagas = qtdVrPagas1+qtdVrPagas3
 			end# fim do if que trata escala
 		end
-		teste1 = qtdVrPagas
-
 		update_column(:qtd_vr_pagas, (qtdVrPagas))
 		#########################################################################################
 		## => Obs. Valor calculado com base em 30.44, gera diferença de 10 centavos no valores ##
@@ -973,10 +971,7 @@ class Proposal < ActiveRecord::Base
 			update_column(:tot_social_familiar, (totSocialFamiliar))
 			update_column(:tot_ben_natalidade, (totBenNatalidade))
 		else
-			teste1 = qtdVrPagas 
-			teste2 = efetivoIndivitual
-			teste3 = descontoVr
-			teste5 = "to no normal"
+
 			if (rotation.id == 1 || rotation.id == 2 || rotation.id == 3 || rotation.id == 4 || rotation.id == 5 || rotation.id == 6 || rotation.id == 7)
 				multiplicador = (qtdVrPagas).round(2)
 			else
@@ -1376,13 +1371,13 @@ class Proposal < ActiveRecord::Base
 		## > Impotos  #################################################################################################################################
 		###############################################################################################################################################
 		#Trocar assim que tivermos o total de serviços
-		totComOperacaoAdmiReserva = totPropostaComReservaTecnicaIndiceOperacional+valorIndiceAdministrativo
-
-		valorIssqn = totComOperacaoAdmiReserva*(city.issqn/100)#totalDeServicos
-		valorPis = totComOperacaoAdmiReserva*(company.pis/100)#totalDeServicos
-		valorCofins = totComOperacaoAdmiReserva*(company.cofins/100)#totalDeServicos
-		valorCsll = totComOperacaoAdmiReserva*(company.csll/100)#totalDeServicos
-		valorIrrf = totComOperacaoAdmiReserva*(company.irrf/100)#totalDeServicos
+		totComOperacaoAdmReserva = totPropostaComReservaTecnicaIndiceOperacional+valorIndiceAdministrativo
+		update_column(:tot_com_reserva_indce_op_indice_adm,(totComOperacaoAdmReserva))
+		valorIssqn = totComOperacaoAdmReserva*(city.issqn/100)#totalDeServicos
+		valorPis = totComOperacaoAdmReserva*(company.pis/100)#totalDeServicos
+		valorCofins = totComOperacaoAdmReserva*(company.cofins/100)#totalDeServicos
+		valorCsll = totComOperacaoAdmReserva*(company.csll/100)#totalDeServicos
+		valorIrrf = totComOperacaoAdmReserva*(company.irrf/100)#totalDeServicos
 		update_column(:valor_issqn,(valorIssqn))
 		update_column(:valor_pis,(valorPis))
 		update_column(:valor_cofins,(valorCofins))
@@ -1394,17 +1389,27 @@ class Proposal < ActiveRecord::Base
 		totImpostoSobServico = valorPis+valorCofins+valorCsll+valorIrrf+valorIssqn
 		update_column(:total_imposto_sob_servico,(totImpostoSobServico))
 		
-		vDeCalculoTotal = valorPis+valorCofins+valorCsll+valorIrrf+valorIssqn+totComOperacaoAdmiReserva
+		vDeCalculoTotal = valorPis+valorCofins+valorCsll+valorIrrf+valorIssqn+totComOperacaoAdmReserva
 		## Valores de totais de calculo com impostos com a proposta sem sajuste
 
-		update_column(:valor_de_calculo_total,(vDeCalculoTotal))
 		
 		## total com ajuste de escala 
 		
-		valorHorasProposta = valorDeCalculoTotal/horasMes
-		valorDiaProposta = valorDeCalculoTotal/rotation.fatorEscala
-		## 
+		valorHorasProposta = vDeCalculoTotal/horasMes
+		valorDiaProposta = vDeCalculoTotal/rotation.fator_escala
+		
+		## Ajuste de escala ##
+		totalParaAjuste = horasMes.round(2)*valorHorasProposta.round(2)
+		valorDeAjuste =  totalParaAjuste.round(2)-vDeCalculoTotal.round(2)
+		puts"#{totalParaAjuste}"
+		puts"#{valorDeAjuste}"
+		puts"#{vDeCalculoTotal}"
 
+		##
+		update_column(:total_para_ajuste,(totalParaAjuste))
+		update_column(:valor_de_ajuste,(valorDeAjuste))
+
+		update_column(:valor_de_calculo_total,(vDeCalculoTotal))
 		update_column(:valor_horas_proposta, (valorHorasProposta))
 		update_column(:valor_dia_proposta, (valorDiaProposta))
 		update_column(:teste1, (teste1))
