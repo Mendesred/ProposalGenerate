@@ -1244,3 +1244,283 @@ Processing by EquipamentsController#index as HTML
   Rendered layouts/layoutePersion/_notification.html.erb (0.1ms)
   Rendered layouts/layoutePersion/_rodape.html.erb (0.1ms)
 Completed 200 OK in 234ms (Views: 225.0ms | ActiveRecord: 0.7ms)
+
+
+Started GET "/" for 10.0.2.2 at 2018-10-08 17:40:08 -0300
+Cannot render console from 10.0.2.2! Allowed networks: 127.0.0.1, ::1, 127.0.0.0/127.255.255.255
+  [1m[36mActiveRecord::SchemaMigration Load (2.2ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Processing by HomeController#index as HTML
+  [1m[35mAdmin Load (2.1ms)[0m  SELECT  "admins".* FROM "admins" WHERE "admins"."id" = ?  ORDER BY "admins"."id" ASC LIMIT 1  [["id", 5]]
+Completed 401 Unauthorized in 2259ms (ActiveRecord: 6.9ms)
+
+
+Started GET "/admins/sign_in" for 10.0.2.2 at 2018-10-08 17:40:10 -0300
+Cannot render console from 10.0.2.2! Allowed networks: 127.0.0.1, ::1, 127.0.0.0/127.255.255.255
+Processing by Devise::SessionsController#new as HTML
+  Rendered admins/sessions/new.html.erb within layouts/application (137.4ms)
+Completed 200 OK in 24786ms (Views: 24743.5ms | ActiveRecord: 0.0ms)
+
+
+Started POST "/admins/sign_in" for 10.0.2.2 at 2018-10-08 17:40:48 -0300
+Cannot render console from 10.0.2.2! Allowed networks: 127.0.0.1, ::1, 127.0.0.0/127.255.255.255
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"UnUhDMS2Wsu1v8hcCvdvQVNqNIlBlT3srC7xsz3NCWwPMcvS6EldX/nxDz2+sdlWSzo6giPmfH/xIFN0u7v/EA==", "admin"=>{"email"=>"ti@grupoiron.com", "password"=>"[FILTERED]", "remember_me"=>"0"}, "commit"=>"Log in"}
+  [1m[36mAdmin Load (20.9ms)[0m  [1mSELECT  "admins".* FROM "admins" WHERE "admins"."email" = ?  ORDER BY "admins"."id" ASC LIMIT 1[0m  [["email", "ti@grupoiron.com"]]
+  [1m[35m (0.1ms)[0m  begin transaction
+  [1m[36mSQL (5.6ms)[0m  [1mUPDATE "admins" SET "current_sign_in_at" = ?, "current_sign_in_ip" = ?, "sign_in_count" = ?, "updated_at" = ? WHERE "admins"."id" = ?[0m  [["current_sign_in_at", "2018-10-08 20:40:48.540622"], ["current_sign_in_ip", "10.0.2.2"], ["sign_in_count", 2], ["updated_at", "2018-10-08 20:40:48.543131"], ["id", 1]]
+  [1m[35m (9.0ms)[0m  commit transaction
+Redirected to http://localhost:3000/
+Completed 302 Found in 539ms (ActiveRecord: 35.7ms)
+
+
+Started GET "/" for 10.0.2.2 at 2018-10-08 17:40:48 -0300
+Cannot render console from 10.0.2.2! Allowed networks: 127.0.0.1, ::1, 127.0.0.0/127.255.255.255
+Processing by HomeController#index as HTML
+  [1m[36mAdmin Load (115.9ms)[0m  [1mSELECT  "admins".* FROM "admins" WHERE "admins"."id" = ?  ORDER BY "admins"."id" ASC LIMIT 1[0m  [["id", 1]]
+  [1m[35mCalculation Load (2.3ms)[0m  SELECT  "calculations".* FROM "calculations"  ORDER BY "calculations"."id" ASC LIMIT 1
+  [1m[36mProposal Load (2.6ms)[0m  [1mSELECT  "proposals".* FROM "proposals"  ORDER BY "proposals"."id" ASC LIMIT 1[0m
+  Rendered home/index.html.erb within layouts/mainLayouts (15.7ms)
+  Rendered layouts/layoutePersion/_navigation.html.erb (45.3ms)
+  Rendered layouts/layoutePersion/_initBody.html.erb (0.5ms)
+  Rendered layouts/layoutePersion/_notification.html.erb (0.8ms)
+  Rendered layouts/layoutePersion/_rodape.html.erb (0.4ms)
+Completed 200 OK in 1621ms (Views: 1307.3ms | ActiveRecord: 148.2ms)
+
+
+Started GET "/services/1/proposals" for 10.0.2.2 at 2018-10-08 17:40:52 -0300
+Cannot render console from 10.0.2.2! Allowed networks: 127.0.0.1, ::1, 127.0.0.0/127.255.255.255
+Processing by ProposalsController#index as HTML
+  Parameters: {"service_id"=>"1"}
+  [1m[35mAdmin Load (2.2ms)[0m  SELECT  "admins".* FROM "admins" WHERE "admins"."id" = ?  ORDER BY "admins"."id" ASC LIMIT 1  [["id", 1]]
+  [1m[36mService Load (2.7ms)[0m  [1mSELECT "services".* FROM "services"[0m
+  [1m[35mProposal Load (2.4ms)[0m  SELECT  "proposals".* FROM "proposals" LIMIT 25 OFFSET 0
+  Rendered proposals/_index.html.erb (20.7ms)
+  Rendered proposals/index.html.erb within layouts/mainLayouts (94.9ms)
+  Rendered layouts/layoutePersion/_navigation.html.erb (0.8ms)
+  Rendered layouts/layoutePersion/_initBody.html.erb (0.1ms)
+  Rendered layouts/layoutePersion/_notification.html.erb (0.2ms)
+  Rendered layouts/layoutePersion/_rodape.html.erb (0.2ms)
+Completed 200 OK in 1249ms (Views: 1208.1ms | ActiveRecord: 11.0ms)
+
+
+Started GET "/dashboard/admin" for 10.0.2.2 at 2018-10-08 17:40:53 -0300
+Cannot render console from 10.0.2.2! Allowed networks: 127.0.0.1, ::1, 127.0.0.0/127.255.255.255
+Processing by Dashboard::AdminController#index as HTML
+  [1m[36mAdmin Load (2.1ms)[0m  [1mSELECT  "admins".* FROM "admins" WHERE "admins"."id" = ?  ORDER BY "admins"."id" ASC LIMIT 1[0m  [["id", 1]]
+  [1m[35mAdmin Load (2.5ms)[0m  SELECT  "admins".* FROM "admins"  ORDER BY "admins"."created_at" ASC LIMIT 5
+  Rendered dashboard/admin/index.html.erb within layouts/mainLayouts (8.3ms)
+  Rendered layouts/layoutePersion/_navigation.html.erb (0.4ms)
+  Rendered layouts/layoutePersion/_initBody.html.erb (0.1ms)
+  Rendered layouts/layoutePersion/_notification.html.erb (0.3ms)
+  Rendered layouts/layoutePersion/_rodape.html.erb (0.2ms)
+Completed 200 OK in 1137ms (Views: 1128.5ms | ActiveRecord: 4.6ms)
+
+
+Started GET "/services/1/proposals" for 10.0.2.2 at 2018-10-08 17:40:55 -0300
+Cannot render console from 10.0.2.2! Allowed networks: 127.0.0.1, ::1, 127.0.0.0/127.255.255.255
+Processing by ProposalsController#index as HTML
+  Parameters: {"service_id"=>"1"}
+  [1m[36mAdmin Load (2.4ms)[0m  [1mSELECT  "admins".* FROM "admins" WHERE "admins"."id" = ?  ORDER BY "admins"."id" ASC LIMIT 1[0m  [["id", 1]]
+  [1m[35mService Load (2.4ms)[0m  SELECT "services".* FROM "services"
+  [1m[36mProposal Load (2.8ms)[0m  [1mSELECT  "proposals".* FROM "proposals" LIMIT 25 OFFSET 0[0m
+  Rendered proposals/_index.html.erb (11.2ms)
+  Rendered proposals/index.html.erb within layouts/mainLayouts (47.2ms)
+  Rendered layouts/layoutePersion/_navigation.html.erb (0.4ms)
+  Rendered layouts/layoutePersion/_initBody.html.erb (0.1ms)
+  Rendered layouts/layoutePersion/_notification.html.erb (0.1ms)
+  Rendered layouts/layoutePersion/_rodape.html.erb (0.1ms)
+Completed 200 OK in 1165ms (Views: 1151.0ms | ActiveRecord: 7.6ms)
+  [1m[36mActiveRecord::SchemaMigration Load (1.7ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35mActiveRecord::SchemaMigration Load (1.2ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36m (1.8ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_admins_on_reset_password_token' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_admins_on_reset_password_token' AND type='index'
+[0m
+  [1m[35m (1.8ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_admins_on_email' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_admins_on_email' AND type='index'
+
+  [1m[36m (1.5ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_equipaments_on_proposal_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_equipaments_on_proposal_id' AND type='index'
+[0m
+  [1m[35m (1.7ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_equipaments_on_sub_type_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_equipaments_on_sub_type_id' AND type='index'
+
+  [1m[36m (1.5ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_equipaments_on_type_equipament_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_equipaments_on_type_equipament_id' AND type='index'
+[0m
+  [1m[35m (1.3ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_proposal_equipaments_on_proposal_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_proposal_equipaments_on_proposal_id' AND type='index'
+
+  [1m[36m (1.2ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_proposal_equipaments_on_equipament_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_proposal_equipaments_on_equipament_id' AND type='index'
+[0m
+  [1m[35m (1.2ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_proposal_equipaments_on_sub_type_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_proposal_equipaments_on_sub_type_id' AND type='index'
+
+  [1m[36m (1.1ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_proposal_equipaments_on_type_equipament_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_proposal_equipaments_on_type_equipament_id' AND type='index'
+[0m
+  [1m[35m (1.2ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_proposal_roles_on_role_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_proposal_roles_on_role_id' AND type='index'
+
+  [1m[36m (1.2ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_proposal_roles_on_proposal_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_proposal_roles_on_proposal_id' AND type='index'
+[0m
+  [1m[35m (1.7ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_proposals_on_period_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_proposals_on_period_id' AND type='index'
+
+  [1m[36m (1.8ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_proposals_on_role_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_proposals_on_role_id' AND type='index'
+[0m
+  [1m[35m (1.5ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_proposals_on_equipament_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_proposals_on_equipament_id' AND type='index'
+
+  [1m[36m (1.4ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_proposals_on_rotation_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_proposals_on_rotation_id' AND type='index'
+[0m
+  [1m[35m (1.5ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_proposals_on_company_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_proposals_on_company_id' AND type='index'
+
+  [1m[36m (1.3ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_proposals_on_city_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_proposals_on_city_id' AND type='index'
+[0m
+  [1m[35m (1.2ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_proposals_on_admin_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_proposals_on_admin_id' AND type='index'
+
+  [1m[36m (1.3ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_roles_on_service_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_roles_on_service_id' AND type='index'
+[0m
+  [1m[35m (1.4ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_rotations_on_period_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_rotations_on_period_id' AND type='index'
+
+  [1m[36m (1.3ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_services_on_company_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_services_on_company_id' AND type='index'
+[0m
+  [1m[35m (1.2ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_sub_types_on_type_equipament_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_sub_types_on_type_equipament_id' AND type='index'
+
+  [1m[36m (1.3ms)[0m  [1m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_users_on_reset_password_token' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_users_on_reset_password_token' AND type='index'
+[0m
+  [1m[35m (1.3ms)[0m              SELECT sql
+            FROM sqlite_master
+            WHERE name='index_users_on_email' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_users_on_email' AND type='index'
+
