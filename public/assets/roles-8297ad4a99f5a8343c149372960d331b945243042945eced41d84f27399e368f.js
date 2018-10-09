@@ -1,0 +1,1 @@
+(function(){jQuery(function(){return $("#roleTab").DataTable({responsive:!0})})}).call(this);

@@ -1524,3 +1524,18 @@ Completed 200 OK in 1165ms (Views: 1151.0ms | ActiveRecord: 7.6ms)
             FROM sqlite_temp_master
             WHERE name='index_users_on_email' AND type='index'
 
+
+
+Started GET "/services/1/proposals" for 10.0.2.2 at 2018-10-09 10:16:26 -0300
+Cannot render console from 10.0.2.2! Allowed networks: 127.0.0.1, ::1, 127.0.0.0/127.255.255.255
+  [1m[36mActiveRecord::SchemaMigration Load (1.9ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Processing by ProposalsController#index as HTML
+  Parameters: {"service_id"=>"1"}
+Completed 401 Unauthorized in 1620ms (ActiveRecord: 0.0ms)
+
+
+Started GET "/admins/sign_in" for 10.0.2.2 at 2018-10-09 10:16:28 -0300
+Cannot render console from 10.0.2.2! Allowed networks: 127.0.0.1, ::1, 127.0.0.0/127.255.255.255
+Processing by Devise::SessionsController#new as HTML
+  Rendered admins/sessions/new.html.erb within layouts/application (95.6ms)
+Completed 200 OK in 12653ms (Views: 12622.2ms | ActiveRecord: 4.5ms)

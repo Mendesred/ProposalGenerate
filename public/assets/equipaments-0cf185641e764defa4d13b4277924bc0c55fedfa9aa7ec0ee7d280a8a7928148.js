@@ -1,0 +1,1 @@
+(function(){jQuery(function(){return $("#equipamentTab").DataTable({responsive:!0})})}).call(this);

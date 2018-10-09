@@ -1,0 +1,1 @@
+(function(){jQuery(function(){return $("#cityTab").DataTable({responsive:!0})})}).call(this);
