@@ -5,13 +5,21 @@
 #   gem 'sqlite3'
 #
 default: &default
-  adapter: sqlite3
+  adapter: pg
   pool: 5
   timeout: 5000
 
 development:
-  <<: *default
-  database: db/development.sqlite3
+  adapter: postgresql
+  database: proposta_dev 
+  encoding: unicode
+  pool: 5
+  username: rails_dev
+  password: ironvetor2007!
+
+#development:
+#  <<: *default
+#  database: db/development.sqlite3
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

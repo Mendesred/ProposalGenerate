@@ -61,7 +61,7 @@
 					</thead>
 
 					<tbody>
-					<% @proposals.each do |proposal| %>
+					<% @proposals.order("id").each do |proposal| %>
 						<tr>
 							<td id='' class="reductionVertical alinhaTopProposal"><%= check_box_tag "product_ids[]", proposal.id %></td> 
 							<td class="reductionVertical idProposta alinhaTopProposal "><%= proposal.id %></td>

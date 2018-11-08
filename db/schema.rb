@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180926204515) do
+ActiveRecord::Schema.define(version: 20181019150635) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "admins", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -30,8 +33,8 @@ ActiveRecord::Schema.define(version: 20180926204515) do
     t.integer  "privilegio"
   end
 
-  add_index "admins", ["email"], name: "index_admins_on_email", unique: true
-  add_index "admins", ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
+  add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
+  add_index "admins", ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true, using: :btree
 
   create_table "calculations", force: :cascade do |t|
     t.float    "salario_minimo"
@@ -90,15 +93,14 @@ ActiveRecord::Schema.define(version: 20180926204515) do
     t.float    "valor"
     t.float    "depreciacao"
     t.text     "obs_equipament"
-    t.integer  "proposal_id"
     t.datetime "updated_date_valor"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.integer  "control_print"
   end
 
-  add_index "equipaments", ["proposal_id"], name: "index_equipaments_on_proposal_id"
-  add_index "equipaments", ["sub_type_id"], name: "index_equipaments_on_sub_type_id"
-  add_index "equipaments", ["type_equipament_id"], name: "index_equipaments_on_type_equipament_id"
+  add_index "equipaments", ["sub_type_id"], name: "index_equipaments_on_sub_type_id", using: :btree
+  add_index "equipaments", ["type_equipament_id"], name: "index_equipaments_on_type_equipament_id", using: :btree
 
   create_table "meals", force: :cascade do |t|
     t.string   "type"
@@ -128,10 +130,10 @@ ActiveRecord::Schema.define(version: 20180926204515) do
     t.datetime "updated_at",         null: false
   end
 
-  add_index "proposal_equipaments", ["equipament_id"], name: "index_proposal_equipaments_on_equipament_id"
-  add_index "proposal_equipaments", ["proposal_id"], name: "index_proposal_equipaments_on_proposal_id"
-  add_index "proposal_equipaments", ["sub_type_id"], name: "index_proposal_equipaments_on_sub_type_id"
-  add_index "proposal_equipaments", ["type_equipament_id"], name: "index_proposal_equipaments_on_type_equipament_id"
+  add_index "proposal_equipaments", ["equipament_id"], name: "index_proposal_equipaments_on_equipament_id", using: :btree
+  add_index "proposal_equipaments", ["proposal_id"], name: "index_proposal_equipaments_on_proposal_id", using: :btree
+  add_index "proposal_equipaments", ["sub_type_id"], name: "index_proposal_equipaments_on_sub_type_id", using: :btree
+  add_index "proposal_equipaments", ["type_equipament_id"], name: "index_proposal_equipaments_on_type_equipament_id", using: :btree
 
   create_table "proposal_roles", force: :cascade do |t|
     t.float    "qtd_postos"
@@ -144,8 +146,8 @@ ActiveRecord::Schema.define(version: 20180926204515) do
     t.datetime "updated_at",   null: false
   end
 
-  add_index "proposal_roles", ["proposal_id"], name: "index_proposal_roles_on_proposal_id"
-  add_index "proposal_roles", ["role_id"], name: "index_proposal_roles_on_role_id"
+  add_index "proposal_roles", ["proposal_id"], name: "index_proposal_roles_on_proposal_id", using: :btree
+  add_index "proposal_roles", ["role_id"], name: "index_proposal_roles_on_role_id", using: :btree
 
   create_table "proposals", force: :cascade do |t|
     t.string   "user_criate"
@@ -155,7 +157,6 @@ ActiveRecord::Schema.define(version: 20180926204515) do
     t.integer  "city_id"
     t.integer  "company_id"
     t.integer  "rotation_id"
-    t.integer  "equipament_id"
     t.integer  "role_id"
     t.integer  "period_id"
     t.integer  "adcional_periculosidade_insalubridade"
@@ -313,13 +314,12 @@ ActiveRecord::Schema.define(version: 20180926204515) do
     t.float    "valor_de_ajuste"
   end
 
-  add_index "proposals", ["admin_id"], name: "index_proposals_on_admin_id"
-  add_index "proposals", ["city_id"], name: "index_proposals_on_city_id"
-  add_index "proposals", ["company_id"], name: "index_proposals_on_company_id"
-  add_index "proposals", ["equipament_id"], name: "index_proposals_on_equipament_id"
-  add_index "proposals", ["period_id"], name: "index_proposals_on_period_id"
-  add_index "proposals", ["role_id"], name: "index_proposals_on_role_id"
-  add_index "proposals", ["rotation_id"], name: "index_proposals_on_rotation_id"
+  add_index "proposals", ["admin_id"], name: "index_proposals_on_admin_id", using: :btree
+  add_index "proposals", ["city_id"], name: "index_proposals_on_city_id", using: :btree
+  add_index "proposals", ["company_id"], name: "index_proposals_on_company_id", using: :btree
+  add_index "proposals", ["period_id"], name: "index_proposals_on_period_id", using: :btree
+  add_index "proposals", ["role_id"], name: "index_proposals_on_role_id", using: :btree
+  add_index "proposals", ["rotation_id"], name: "index_proposals_on_rotation_id", using: :btree
 
   create_table "roles", force: :cascade do |t|
     t.string   "cargo"
@@ -337,7 +337,7 @@ ActiveRecord::Schema.define(version: 20180926204515) do
     t.datetime "updated_at",           null: false
   end
 
-  add_index "roles", ["service_id"], name: "index_roles_on_service_id"
+  add_index "roles", ["service_id"], name: "index_roles_on_service_id", using: :btree
 
   create_table "rotations", force: :cascade do |t|
     t.string   "tipo_escala"
@@ -353,7 +353,7 @@ ActiveRecord::Schema.define(version: 20180926204515) do
     t.datetime "updated_at",            null: false
   end
 
-  add_index "rotations", ["period_id"], name: "index_rotations_on_period_id"
+  add_index "rotations", ["period_id"], name: "index_rotations_on_period_id", using: :btree
 
   create_table "services", force: :cascade do |t|
     t.string   "tipo_servico"
@@ -364,7 +364,7 @@ ActiveRecord::Schema.define(version: 20180926204515) do
     t.datetime "updated_at",   null: false
   end
 
-  add_index "services", ["company_id"], name: "index_services_on_company_id"
+  add_index "services", ["company_id"], name: "index_services_on_company_id", using: :btree
 
   create_table "sub_types", force: :cascade do |t|
     t.string   "name_sub_type"
@@ -373,7 +373,7 @@ ActiveRecord::Schema.define(version: 20180926204515) do
     t.datetime "updated_at",         null: false
   end
 
-  add_index "sub_types", ["type_equipament_id"], name: "index_sub_types_on_type_equipament_id"
+  add_index "sub_types", ["type_equipament_id"], name: "index_sub_types_on_type_equipament_id", using: :btree
 
   create_table "type_equipaments", force: :cascade do |t|
     t.string   "name_type"
@@ -396,7 +396,25 @@ ActiveRecord::Schema.define(version: 20180926204515) do
     t.datetime "updated_at",                          null: false
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "equipaments", "sub_types"
+  add_foreign_key "equipaments", "type_equipaments"
+  add_foreign_key "proposal_equipaments", "equipaments"
+  add_foreign_key "proposal_equipaments", "proposals"
+  add_foreign_key "proposal_equipaments", "sub_types"
+  add_foreign_key "proposal_equipaments", "type_equipaments"
+  add_foreign_key "proposal_roles", "proposals"
+  add_foreign_key "proposal_roles", "roles"
+  add_foreign_key "proposals", "admins"
+  add_foreign_key "proposals", "cities"
+  add_foreign_key "proposals", "companies"
+  add_foreign_key "proposals", "periods"
+  add_foreign_key "proposals", "roles"
+  add_foreign_key "proposals", "rotations"
+  add_foreign_key "roles", "services"
+  add_foreign_key "rotations", "periods"
+  add_foreign_key "services", "companies"
+  add_foreign_key "sub_types", "type_equipaments"
 end

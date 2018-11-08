@@ -53,7 +53,6 @@
 								<strong>Sub categoria</strong><br>
 								<%= collection_select(:equipament, :sub_type_id, @select_all_sub_type, :id, :name_select2,{},class:'form-control') %>
 							</div>
-
 						</div>
 						<div class="col-sm-3">
 							<div class="field">
@@ -71,6 +70,12 @@
 							<div class="field">
 								<strong>Marca ou modelo</strong><br>
 								<%= f.text_field :marca_mod, class:'form-control', placeholder:'' %>
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<div class="field">
+								<strong>Exibir na impreção pricipal?</strong><br>
+								<%= f.select :control_print, options_for_select([["Não",0],["Sim",1]], @equipament.control_print),{},class:'form-control' %>
 							</div>
 						</div>
 					</div>

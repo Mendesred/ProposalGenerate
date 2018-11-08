@@ -486,49 +486,54 @@
 <!--Colocar aqui -->
 					<h5><strong>Total ( I ):</strong><%= number_to_currency((@proposal.total_mao_de_obra).round(2))%></h5>
 					<hr/>
-<% if @proposal.proposal_equipaments.blank?%>
-					<div class="panel panel-default" style="display:none">
-					</div>
+					<% if @proposal.proposal_equipaments.blank?%>
+						<div class="panel panel-default" style="display:none">
+						</div>
 					<% else%>
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<strong>Equipamentos e acessorios:</strong>
-						</div>  
-						<div class="panel-body">
-							<div class="table-responsive">
-								<table class="table table-striped table-bordered table-hover">
-
-									<thead>
-										<tr>
-											<th class="padraoEspaco1">Nome do equipamento</th>
-											<th class="padraoEspaco2">Quantidade de equipamento</th>
-											<th>Preço depreciado total</th>
-										</tr>
-									</thead>
-
-									<tbody>
-										<% @proposal.proposal_equipaments.each do |proposal_equipament| %>
-										<tr> 
-											<!--<#% if proposal_equipament.name_equipament.nil? %>-->
-											<td class="showFonteSize"><%= proposal_equipament.name_equipament %></td>
-											<td class="showFonteSize"><%= proposal_equipament.quantidade %></td>
-											<!-- corrigi -->
-											<td class="showFonteSize"><%= number_to_currency(proposal_equipament.valor_depreciado)%></td>
-											<!--<#% else %>-->
-
-											<!--<#% end %>--> 
-										</tr>
-										<% end %>
-									</tbody>
-								</table>
-								<strong>Valor Total dos equipamentos:</strong><%= number_to_currency(@proposal.total_equipamento) %>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<strong>Equipamentos e acessorios:</strong>
+							</div>  
+							<div class="panel-body">
+								<div class="table-responsive">
+									<table class="table table-striped table-bordered table-hover">
+										<thead>
+											<tr>
+												<th class="padraoEspaco1">Nome do equipamento</th>
+												<th class="padraoEspaco2">Quantidade de equipamento</th>
+												<th>Preço depreciado total</th>
+											</tr>
+										</thead>
+										<tbody>
+											<% @proposal.proposal_equipaments.each do |proposal_equipament| %>
+												<% if proposal_equipament.equipament.control_print == 1 %>
+													<tr> 
+														<td class="showFonteSize"><%= proposal_equipament.name_equipament %></td>
+														<td class="showFonteSize"><%= proposal_equipament.quantidade %></td>
+														<!-- corrigi -->
+														<td class="showFonteSize"><%= number_to_currency(proposal_equipament.valor_depreciado)%></td>
+													</tr>
+												<% end %>
+											<% end %>
+											<% @proposal.proposal_equipaments.each do |proposal_equipament| %>
+												<% if proposal_equipament.equipament.control_print == 0 || proposal_equipament.equipament.control_print.nil? %>
+													<tr> 
+														<!--<#% if proposal_equipament.name_equipament.nil? %>-->
+														<td class="showFonteSize" colspan="2">Equipamentos, EPI’s e acessórios a serem fornecidos estão detalhados em anexo.</td>
+														<td class="showFonteSize" > - </td>
+													</tr>
+													<% break %>
+												<% end %>
+											<% end %>
+										</tbody>
+									</table>
+									<strong>Valor Total dos equipamentos:</strong><%= number_to_currency(@proposal.total_equipamento) %>
+								</div>
 							</div>
 						</div>
-					</div>
 					<% end %>
 					<h5><strong>Total (II) - Mão de Obra + Materiais e Equipamentos:</strong><%= number_to_currency((@proposal.total_mao_de_obra+@proposal.total_equipamento).round(2))%></h5>
 					<hr/>
-
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<strong><h4>Operação, Administração, Materiais e Equipamentos:</h4></strong>
@@ -653,6 +658,44 @@
 						<ul class="proposal-roda-pe">
 							<li>Valor dos Serviços: <%= number_to_currency(@proposal.valor_de_calculo_total.round(2))%></li>
 						</ul>
+					<% if @proposal.proposal_equipaments.blank? %>
+						<div class="panel panel-default" style="display:none">
+						</div>
+					<% else%>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<strong>Equipamentos e acessorios:</strong>
+							</div>  
+							<div class="panel-body">
+								<div class="table-responsive">
+									<table class="table table-striped table-bordered table-hover">
+										<thead>
+											<tr>
+												<th class="padraoEspaco1">Nome do equipamento</th>
+												<th class="padraoEspaco2">Quantidade de equipamento</th>
+												<th>Preço depreciado total</th>
+											</tr>
+										</thead>
+										<tbody>
+											<% @proposal.proposal_equipaments.order("updated_at").each do |proposal_equipament| %>
+												<tr> 
+													<!--<#% if proposal_equipament.name_equipament.nil? %>-->
+													<td class="showFonteSize"><%= proposal_equipament.name_equipament %></td>
+													<td class="showFonteSize"><%= proposal_equipament.quantidade %></td>
+													<!-- corrigi -->
+													<td class="showFonteSize"><%= number_to_currency(proposal_equipament.valor_depreciado)%></td>
+													<!--<#% else %>-->
+													<!--<#% end %>--> 
+												</tr>
+											<% end %>
+
+										</tbody>
+									</table>
+									<strong>Valor Total dos equipamentos:</strong><%= number_to_currency(@proposal.total_equipamento) %>
+								</div>
+							</div>
+						</div>
+					<% end %>
 				</div><!-- /.col-lg-12 -->
 			</div>
 		</div>

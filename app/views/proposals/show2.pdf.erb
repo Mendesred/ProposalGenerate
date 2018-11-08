@@ -20,16 +20,12 @@
     </div>
     <div class="panel-body">
       <strong>Total Propostas Selecionadas:</strong>
-                <%= @proposals.count %>
-
+        <%= @proposals.count %>
       <% @proposals.each do |proposal| %>
-              </p>
-              <strong>id:</strong>
-                <%= proposal.id %>
-              </p>
-              <strong>cod cliente:</strong>
-                <%= proposal.codigo_cliente %>
-              </p>
-              <% end %>
+        <strong>id:</strong>
+          <%= proposal.id %>
+        <strong>cod cliente:</strong>
+          <%= proposal.codigo_cliente %>
+      <% end %>
     </div>
   </div>
