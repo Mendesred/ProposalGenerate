@@ -1,4 +1,4 @@
-# SQLite version 3.x
+   # SQLite version 3.x
 #   gem install sqlite3
 #
 #   Ensure the SQLite 3 gem is defined in your Gemfile
@@ -26,7 +26,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: db/test.sqlite3
+  database: proposta_dev_teste
 
 production:
   adapter: postgresql
