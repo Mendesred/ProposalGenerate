@@ -54,7 +54,7 @@ gem 'paperclip','~> 5.0.0'
 
 gem 'pg','~> 0.15'
 # A modern web server and application server for Ruby, Python and Node.js, optimized for performance, low memory usage and ease of use.
-gem 'passenger', '~> 5.0'
+gem 'passenger', '~> 5.3', '>= 5.3.7'
 
 # Wrappers for JavaScript alert(), confirm() and other flexible dialogs using Twitter's bootstrap framework
 gem 'rails-assets-bootbox',source:'https://rails-assets.org' 
