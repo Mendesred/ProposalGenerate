@@ -33,8 +33,8 @@
 						</div>
 						<div class="col-sm-4">
 							<div class="field">
-								<strong>Codigo do Cliente:</strong><br>
-								<%= f.text_field :codigo_cliente, class:'form-control', placeholder:'Codigo do cliente' %><!--:required =>true-->
+								<strong>Codigo da Proposta:</strong><br>
+								<%= f.text_field :codigo_cliente, class:'form-control', placeholder:'Codigo da Proposta' %><!--:required =>true-->
 							</div>
 						</div>
 
@@ -71,18 +71,29 @@
 				</div>
 				<div class="inline">
 					<div class="row">
-						<div class="col-sm-4">
+						<div class="col-sm-3">
 							<div class="field">
 								<strong>Horas feriado</strong><br>
 								<%= f.select :h_feriado, options_for_select([["Não",0.0],["Sim",1.0]], @proposal.h_feriado),{},class:'form-control' %>
 							</div>
 						</div>
+						<div class="col-sm-3">
+							<div class="field">
+								<strong>Gestão Administrativa</strong><br>
+								<%= f.text_field :txopracional, :value => number_with_precision(f.object.txopracional,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:80%",:data => {:mask=> '99.99'} %>
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<div class="field">
+								<strong>Gestão Operacional</strong><br>
+								<%= f.text_field :txadministrativa, :value => number_with_precision(f.object.txadministrativa,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:88%",:data => {:mask=> '99.99'} %>
+							</div>
+						</div>
 						<!--Valor para VT--> 
-
-						<div class="col-sm-4">
+						<div class="col-sm-3">
 							<div class="field">
 								<strong>Valor de vale transpote unitário</strong><br>
-								<%= f.text_field :intermunicipal, :value => number_with_precision(f.object.intermunicipal,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:88%",:data => {:mask=> '99.99'} %>
+								<%= f.text_field :intermunicipal, :value => number_with_precision(f.object.intermunicipal,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:80%",:data => {:mask=> '99.99'} %>
 								<div class="tooltip-demo">
 									<button type="button" class="btn btn-warning btn-circle pull-right" data-toggle="tooltip" data-placement="botton" title="So Precher se o valor do vale Transporte seja maior que o da cidade selecionada" style="position: relative;bottom: 33px;"><i class="fa fa-info"></i></button>
 								</div>

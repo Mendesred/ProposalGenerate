@@ -1354,15 +1354,28 @@ class Proposal < ActiveRecord::Base
 		#vDeCalculoTotal = pctTotalAlicota+totMaoDeObraParcial  #####-> valor total de mão de obra <-#####
 
 		reservaTecnica = totParcialProposta*(company.pct_reserva_tecnica/100)
-		valorIndiceOperacional = totParcialProposta*(select_calculation.indiceOperacional/100)
-		
+		txOpr = 0
+		if (txopracional.nil? || txopracional == 0)
+			txOpr = select_calculation.indiceOperacional
+			puts "txOpr"
+		else
+			txOpr = txopracional
+			puts "else"
+		end
+		valorIndiceOperacional = totParcialProposta*(txOpr/100)
 		update_column(:reserva_tecnica,(reservaTecnica))
 		update_column(:valor_indice_operacional,(valorIndiceOperacional))
 		totPropostaComReservaTecnicaIndiceOperacional = totParcialProposta+reservaTecnica+valorIndiceOperacional
 		###############################################################################################################################################
 		## > lucro ####################################################################################################################################
+		txAdm = 0
+		if (txadministrativa.nil? || txadministrativa == 0)
+			txAdm = select_calculation.indiceAdministrativo
+		else
+			txAdm = txadministrativa
+		end
 
-		valorIndiceAdministrativo = totPropostaComReservaTecnicaIndiceOperacional*(select_calculation.indiceAdministrativo/100)
+		valorIndiceAdministrativo = totPropostaComReservaTecnicaIndiceOperacional*(txAdm/100)
 		update_column(:valor_indice_administrativo,(valorIndiceAdministrativo))
 		
 		reservaOperacionalAdminstrativo = valorIndiceAdministrativo+reservaTecnica+valorIndiceOperacional

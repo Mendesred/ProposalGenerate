@@ -212,7 +212,7 @@ class ProposalsController < ApplicationMainController
     # Never trust parameters from the scary internet, only allow the white list through.
     def proposal_params
       delocalize_config = { :intermunicipal => :number }
-      params.require(:proposal).permit(:admin_id,:cliente, :codigo_cliente, :company_id, :city_id, :rotation_id, :role_id,:period_id, 
+      params.require(:proposal).permit(:admin_id,:cliente, :codigo_cliente, :company_id,:txopracional,:txadministrativa, :city_id, :rotation_id, :role_id,:period_id, 
         :intermunicipal, :h_almoco,:h_feriado, :dias_vr, :dias_vt, :adcional_periculosidade_insalubridade,:grau_de_insalubridade, 
         :controle_hora_extra,:h_extra_jornada_all,:dias_jornada_ex_semana_all,:h_ex_jornada_all,:m_ex_jornada_all,:h_ex_feriado_jornada_all,
         :h_extra_jornada_matu,:dias_ex_semana_matu,:h_ex_jornada_matu,:m_ex_jornada_matu,:h_ex_feriado_jornada_matu,:h_extra_jornada_vesp,
