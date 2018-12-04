@@ -3,13 +3,13 @@ class Admin < ActiveRecord::Base
   has_many :proposal
 
   #Enums
-  enum privilegio: {:full_access =>0,:restricted_access =>1,:partial_access =>2, :salesman_access =>3 }
+  enum privilegio: {:full_access =>0,:partial_access =>1, :salesman_access =>2 }# :partial_access =>2,
 
   #Scope
   scope :with_full_access, ->{where(privilegio:0)}
-  scope :with_partial_access, ->{where(privilegio:2)}
-  scope :with_salesman_access, ->{where(privilegio:3)}
-  scope :with_restricted_access, ->{where(privilegio:1)}
+  scope :with_partial_access, ->{where(privilegio:1)}
+  scope :with_salesman_access, ->{where(privilegio:2)}
+  #scope :with_restricted_access, ->{where(privilegio:1)}
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -20,13 +20,13 @@ class Admin < ActiveRecord::Base
     case 
     when  self.privilegio == 'full_access'
       'Acesso Completo'
-    when self.privilegio == 'restricted_access'
-      'Acesso Restrito'
     when self.privilegio == 'partial_access'
       `Acesso Parcial`
     when self.privilegio == 'salesman_access'
       `Acesso de Vendedor`    
     end
   end
+      #when self.privilegio == 'restricted_access'
+      #'Acesso Restrito'
 
 end

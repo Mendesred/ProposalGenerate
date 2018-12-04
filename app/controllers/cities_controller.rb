@@ -4,21 +4,38 @@ class CitiesController < ApplicationMainController
   # GET /cities
   # GET /cities.json
   def index
-    @cities = City.all
+    if  current_admin.full_access? || current_admin.partial_access?
+      @cities = City.all.page(params[:page])
+    else
+      redirect_to "/404.html"# configurar pagina 403
+    end
   end
 
   # GET /cities/1
   # GET /cities/1.json
   def show
+    if  current_admin.full_access? || current_admin.partial_access?
+      @cities = City.all.page(params[:page])
+    else
+      redirect_to "/404.html"# configurar pagina 403
+    end
   end
 
   # GET /cities/new
   def new
     @city = City.new
+    if  current_admin.full_access? || current_admin.partial_access?
+      @city = City.new
+    else
+      redirect_to "/404.html"# configurar pagina 403
+    end
   end
 
   # GET /cities/1/edit
   def edit
+    unless current_admin.full_access? || current_admin.partial_access?
+      redirect_to "/404.html"# configurar pagina 403
+    end
   end
 
   # POST /cities

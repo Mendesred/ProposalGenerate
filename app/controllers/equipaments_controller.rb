@@ -4,7 +4,11 @@ class EquipamentsController < ApplicationMainController
 	# GET /equipaments
 	# GET /equipaments.json
 	def index
-		@equipaments = Equipament.all
+		if  current_admin.full_access? || current_admin.partial_access?
+			@equipaments = Equipament.all.page(params[:page])
+		else
+			redirect_to "/404.html"# configurar pagina 403
+		end
 	end
 
 	# GET /equipaments/1
@@ -12,19 +16,31 @@ class EquipamentsController < ApplicationMainController
 	def show
 		select_type
 		select_sub_type
+		if  current_admin.full_access? || current_admin.partial_access?
+			@equipaments = Equipament.all.page(params[:page])
+		else
+			redirect_to "/404.html"# configurar pagina 403
+		end
 	end
 
 	# GET /equipaments/new
 	def new
-		@equipament = Equipament.new
 		select_type
 		select_sub_type
+		if  current_admin.full_access? || current_admin.partial_access?
+			@equipament = Equipament.new
+		else
+			redirect_to "/404.html"# configurar pagina 403
+		end
 	end
 
 	# GET /equipaments/1/edit
 	def edit
 		select_type
 		select_sub_type
+		unless current_admin.full_access? || current_admin.partial_access?
+			redirect_to "/404.html"# configurar pagina 403
+		end
 	end
 
 	# POST /equipaments
