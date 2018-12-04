@@ -8,7 +8,7 @@ class Admin < ActiveRecord::Base
   #Scope
   scope :with_full_access, ->{where(privilegio:0)}
   scope :with_partial_access, ->{where(privilegio:2)}
-  scope :with_salesman_access, ->{where(privilegio:2)}
+  scope :with_salesman_access, ->{where(privilegio:3)}
   scope :with_restricted_access, ->{where(privilegio:1)}
 
   # Include default devise modules. Others available are:

@@ -80,13 +80,13 @@
 						<div class="col-sm-3">
 							<div class="field">
 								<strong>Gestão Administrativa</strong><br>
-								<%= f.text_field :txopracional, :value => number_with_precision(f.object.txopracional,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:80%",:data => {:mask=> '99.99'} %>
+								<%= f.text_field :txopracional, :value => number_with_precision(f.object.txopracional,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:100%",:data => {:mask=> '99.99'} %>
 							</div>
 						</div>
 						<div class="col-sm-3">
 							<div class="field">
 								<strong>Gestão Operacional</strong><br>
-								<%= f.text_field :txadministrativa, :value => number_with_precision(f.object.txadministrativa,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:88%",:data => {:mask=> '99.99'} %>
+								<%= f.text_field :txadministrativa, :value => number_with_precision(f.object.txadministrativa,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:100%",:data => {:mask=> '99.99'} %>
 							</div>
 						</div>
 						<!--Valor para VT--> 

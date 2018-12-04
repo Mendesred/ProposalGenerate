@@ -69,8 +69,10 @@
 														<% end %>
 													</tbody>
 												</table>
-												<strong>Valor Total dos equipamentos:</strong><%= number_to_currency(@proposal.total_equipamento) %>
 											</div>
+											<p class="showFonteSize">
+												<strong>Valor Total dos equipamentos:</strong><%= number_to_currency(@proposal.total_equipamento) %>
+											</p>
 										</div>
 									</div>
 									<% end %>
@@ -129,9 +131,9 @@
 					<div class="panel-heading">
 					 <strong> Cargos e Salarios </strong>
 				 </div>
-				 <div class="panel-body">
-					<div class="table-responsive ">
-						<table class="table table-striped table-bordered table-hover ">
+				 <div class="panel-body padding-bottom4">
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered table-hover">
 							<thead>
 								<tr>
 									<th>Cargos</th>
@@ -178,8 +180,10 @@
 							</table>
 						</div>
 						<!-- /.table-responsive -->
-						<strong>Total de efetivo: </strong><%= (@proposal.efetivo_total).round(2)%><br>
-						<strong>Total dos salarios da escala: </strong><%= number_to_currency(@proposal.total_salarios) %><br><!--Salarios totais-->
+						<p class="showFonteSize totaisStyle">
+							<strong>Total de efetivo: </strong><%= (@proposal.efetivo_total).round(2)%><br>
+							<strong>Total dos salarios da escala: </strong><%= number_to_currency(@proposal.total_salarios) %><br><!--Salarios totais-->
+						</p>	
 					</div>
 					<!-- /.panel-body -->
 				</div>
@@ -188,7 +192,7 @@
 					<div class="panel-heading">
 					 <strong> Mão de obra direta </strong>
 				 </div>
-				 <div class="panel-body">
+				 <div class="panel-body padding-4">
 					<div class="table-responsive">
 						<table class="table table-striped table-bordered table-hover">
 							<thead>
@@ -200,30 +204,22 @@
 							</thead>
 
 							<tbody>
-								<%if  @proposal.adcional_periculosidade_insalubridade == 1 %>
-									<tr>
-										<td class="showFonteSize"> Valor de Periculosidade:</td>  
-										<td class="showFonteSize">30% de <%=number_to_currency(@proposal.salario)%></td>
-										<td class="showFonteSize"><%=number_to_currency(0.3*@proposal.salario)%></td>
-									</tr>
-								<% elsif @proposal.adcional_periculosidade_insalubridade == 2  %>
-									<tr>
-										<td class="showFonteSize"> Valor de Insalubridade:</td>  
-										<td class="showFonteSize"><%=((@proposal.grau_de_insalubridade)*100).round(0)%> % de 
-											<%= number_to_currency(@select_all_calculation.salario_minimo)%></td> 
-										<td class="showFonteSize"><%=number_to_currency(@proposal.grau_de_insalubridade*@select_all_calculation.salario_minimo)%></td> 
-									</tr>
-						<!--<#%else%>
-									<tr>                 
-										<td class="showFonteSize"> Maior valor entre insalubridade e periculosidade: </b></td>  
-										<td class="showFonteSize"> Aplicavel: <b><#% if @proposal.valorPeriOuIsalubri == 0 %>
-											"Não"
-										<#%else%>
-											"Sim"
-										<#% end %> </td>  
-										<td class="showFonteSize"> <#%=number_to_currency(@proposal.valorPeriOuIsalubri)%>  </td>  
-									</tr> -->
-								<%end %>
+
+									<%if  @proposal.adcional_periculosidade_insalubridade == 1 %>
+										<tr>
+											<td class="showFonteSize"> Valor de Periculosidade:</td>  
+											<td class="showFonteSize">30% de <%=number_to_currency(@proposal.salario)%></td>
+											<td class="showFonteSize"><%=number_to_currency(0.3*@proposal.salario)%></td>
+										</tr>
+									<% elsif @proposal.adcional_periculosidade_insalubridade == 2  %>
+										<tr>
+											<td class="showFonteSize"> Valor de Insalubridade:</td>  
+											<td class="showFonteSize"><%=((@proposal.grau_de_insalubridade)*100).round(0)%> % de 
+												<%= number_to_currency(@select_all_calculation.salario_minimo)%></td> 
+											<td class="showFonteSize"><%=number_to_currency(@proposal.grau_de_insalubridade*@select_all_calculation.salario_minimo)%></td> 
+										</tr>
+
+								<% end %>
 								<% if @proposal.total_hr_extras >0 %>
 									<tr>                 
 										<td class="showFonteSize"> Hora extra intervalo e jornada: <b></td>  
@@ -231,11 +227,14 @@
 										<td class="showFonteSize"> <%= number_to_currency(@proposal.total_hr_extras) %></td>  
 									</tr>
 								<% end %>
+								<% if @proposal.h_feriado.nil? || @proposal.h_feriado ==0 %>
+								<% else %>
 								<tr>
 									<td class="showFonteSize"> Hora Feriado: </td>  
 									<td class="showFonteSize"> <%= (((@proposal.valor_feriados_de_cities_mv*@proposal.dois_terco)+(@proposal.valor_feriados_de_cities_n*@proposal.um_terco)).round(3)).round(3) %> Hs</td>  
-									<td class="showFonteSize"> <%= number_to_currency(@proposal.total_hr_extras_feriado) %></td>  
+										<td class="showFonteSize"> <%= number_to_currency(@proposal.total_hr_extras_feriado) %></td>  
 								</tr>
+								<% end %>
 								<tr>
 									<td class="showFonteSize">  Adicional noturno - vespertino:</td>  
 									<td class="showFonteSize"> <%= (((@proposal.rotation.ad_vespertido_noturno*100)/@select_all_calculation.horasDeCalculoAdNoturno).round(4)*@proposal.rotation.fator_escala).round(4)%> Hs</td>  
@@ -258,10 +257,10 @@
 								</tr>
 							</tbody>
 						</table>
-						<p class="showFonteSize">
-							<strong>Total massa salarial: </strong><%=number_to_currency((@proposal.massa_salarial).round(2))%>
-						</p>
 					</div>
+					<p class="showFonteSize totaisStyle">
+						<strong>Total massa salarial: </strong><%=number_to_currency((@proposal.massa_salarial).round(2))%>
+					</p>
 				</div>
 			</div>
 
@@ -322,10 +321,10 @@
 									</tr>
 								</tbody>
 							</table>
-							<p class="showFonteSize">
-								<strong>Total de encargos diretos: </strong><%=number_to_currency(@proposal.total_incargos_diretos)%>
-							</p>
 						</div>
+						<p class="showFonteSize">
+							<strong>Total de encargos diretos: </strong><%=number_to_currency(@proposal.total_incargos_diretos)%>
+						</p>
 					</div>
 				</div>
 	
@@ -379,15 +378,12 @@
 											<td class="showFonteSize"><%=@select_all_calculation.indenizacao_fgts%><span>%.</span></td>
 											<td class="showFonteSize"><%=number_to_currency(@proposal.total_indenizacao_sobre_fgts)%></td>
 										</tr>
-<!--                    <tr>
-	<td class="showFonteSize">Reserva tecnica (campo obsoleto)</td>
-	<td class="showFonteSize"><#%=@proposal.company.pct_reserva_tecnica%><span>%.</span></td>
-	<td class="showFonteSize"><#%=number_to_currency(@proposal.reservaTecnica)%></td>
-</tr> -->
 									</tbody>
 								</table>
-								<strong>Total de provisões sobre massa salarial: </strong><%=number_to_currency(@proposal.total_provisao_massa_salarial)%>
 							</div>
+							<p class="showFonteSize">
+								<strong>Total de provisões sobre massa salarial: </strong><%=number_to_currency(@proposal.total_provisao_massa_salarial)%>
+							</p>
 						</div>
 					</div>
 
@@ -407,83 +403,106 @@
 										</tr>
 									</thead>
 
-									<tbody> 
-										<tr>
-											<td class="showFonteSize">Cesta básica</td>
-											<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.valor_cesta)%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.total_cesta)%></td>
-										</tr>
-										<tr>
-											<td class="showFonteSize">Vale refeição.</td>
-											<td class="showFonteSize"><%=@proposal.multiplicador %></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.valor_unitario_vr)%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.total_vr)%></td>
-										</tr>
-										<tr>
-											<td class="showFonteSize">Assitencia medica</td>
-											<!--<%#if %>-->
-											<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.valor_uni_assist_medica)%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.total_assitecia_medica)%></td>
-										</tr>
-										<tr>
-											<td class="showFonteSize">Seguro de vida</td>
-											<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.valor_unitario_seg_vida)%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.total_seguro_vida)%></td>
-										</tr>
-										<tr>
-											<td class="showFonteSize">Vale Trasporte.</td>
-											<td class="showFonteSize"><%=(2*@proposal.qtd_vt_pagas.to_f).round(1)%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.valor_passagem)%></td>
-											<td class="showFonteSize"><% if @proposal.total_vt == 0.00%>
-																									"Não será cobrado"
-																								<%else%>
-																									<%=number_to_currency(@proposal.total_vt)%>
-																								<%end %></td>
-										</tr>
-										<tr>
-											<td class="showFonteSize">Reciclagem</td>
-											<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.rotation.v_reciclagem)%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.total_reciclagem)%></td>
-										</tr>
-										<% if @proposal.company.id == 2 %>  
-										<tr>
-											<td class="showFonteSize">PPR</td>
-											<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.valor_unitario_ppr)%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.total_ppr)%></td>
-										</tr>
+									<tbody>
+										<% if @proposal.total_cesta.nil? || @proposal.total_cesta ==0 %>
+										<% else %>
+											<tr>
+												<td class="showFonteSize">Cesta básica</td>
+												<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.valor_cesta)%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.total_cesta)%></td>
+											</tr>
+										<% end %>
+										<% if @proposal.total_vr.nil? || @proposal.total_vr ==0 %>
+										<% else %>
+											<tr>
+												<td class="showFonteSize">Vale refeição.</td>
+												<td class="showFonteSize"><%=@proposal.multiplicador %></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.valor_unitario_vr)%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.total_vr)%></td>
+											</tr>
+										<% end %>
+										<% if @proposal.total_assitecia_medica.nil? || @proposal.total_assitecia_medica ==0 %>
+										<% else %>
+											<tr>
+												<td class="showFonteSize">Assitencia medica</td>
+												<!--<%#if %>-->
+												<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.valor_uni_assist_medica)%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.total_assitecia_medica)%></td>
+											</tr>
+										<% end %>
+										<% if @proposal.total_seguro_vida.nil? || @proposal.total_seguro_vida ==0 %>
+										<% else %>
+											<tr>
+												<td class="showFonteSize">Seguro de vida</td>
+												<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.valor_unitario_seg_vida)%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.total_seguro_vida)%></td>
+											</tr>
+										<% end %>
+											<tr>
+												<td class="showFonteSize">Vale Trasporte.</td>
+												<td class="showFonteSize"><%=(2*@proposal.qtd_vt_pagas.to_f).round(1)%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.valor_passagem)%></td>
+												<td class="showFonteSize"><% if @proposal.total_vt == 0.00%>
+																										"Não será cobrado"
+																									<%else%>
+																										<%=number_to_currency(@proposal.total_vt)%>
+																									<%end %></td>
+											</tr>
+										<% if @proposal.total_reciclagem.nil? || @proposal.total_reciclagem ==0 %>
+										<% else %>
+											<tr>
+												<td class="showFonteSize">Reciclagem</td>
+												<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.rotation.v_reciclagem)%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.total_reciclagem)%></td>
+											</tr>
+										<% end %>
+  									<% if @proposal.total_reciclagem.nil? || @proposal.total_reciclagem ==0 %>
+										<% else %>
+											<tr>
+												<td class="showFonteSize">PPR</td>
+												<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.valor_unitario_ppr)%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.total_ppr)%></td>
+											</tr>
 										<%end%>
-										<tr>
-											<td class="showFonteSize">Uniformes</td>
-											<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.valor_unitario_uniforme)%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.total_uniforme)%></td>
-										</tr>
-										<% if @proposal.company.id == 2%> 
-										<tr>
-											<td class="showFonteSize"> Assistência Social Familiar</td>
-											<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.valor_soc_familiar)%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.tot_social_familiar)%></td>
-										</tr>
-										<tr>
-											<td class="showFonteSize"> Benefício Natalidade</td>
-											<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.valor_ben_natalidade)%></td>
-											<td class="showFonteSize"><%=number_to_currency(@proposal.tot_ben_natalidade)%></td>
-										</tr>
+											<tr>
+												<td class="showFonteSize">Uniformes</td>
+												<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.valor_unitario_uniforme)%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.total_uniforme)%></td>
+											</tr>
+										<% if @proposal.tot_social_familiar.nil? || @proposal.tot_social_familiar == 0 %>
+										<% else %>
+											<tr>
+												<td class="showFonteSize"> Assistência Social Familiar</td>
+												<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.valor_soc_familiar)%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.tot_social_familiar)%></td>
+											</tr>
 										<%end%>
+										<% if @proposal.tot_ben_natalidade.nil? || @proposal.tot_ben_natalidade ==0 %>
+										<% else %>
+											<tr>
+												<td class="showFonteSize"> Benefício Natalidade</td>
+												<td class="showFonteSize"><%=@proposal.efetivo_total%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.valor_ben_natalidade)%></td>
+												<td class="showFonteSize"><%=number_to_currency(@proposal.tot_ben_natalidade)%></td>
+											</tr>
+										<%end%>
+
 									</tbody>
 								</table>
-								<strong>Total dos beneficios: </strong><%=number_to_currency(@proposal.total_beneficios)%>
 							</div>
+							<p class="showFonteSize">
+								<strong>Total dos beneficios: </strong><%=number_to_currency(@proposal.total_beneficios)%>
+							</p>
 						</div>
 					</div>
-<!--Colocar aqui -->
+					<!--Colocar aqui -->
 					<h5><strong>Total ( I ):</strong><%= number_to_currency((@proposal.total_mao_de_obra).round(2))%></h5>
 					<hr/>
 					<% if @proposal.proposal_equipaments.blank?%>
@@ -527,8 +546,10 @@
 											<% end %>
 										</tbody>
 									</table>
-									<strong>Valor Total dos equipamentos:</strong><%= number_to_currency(@proposal.total_equipamento) %>
 								</div>
+								<p class="showFonteSize">
+									<strong>Valor Total dos equipamentos:</strong><%= number_to_currency(@proposal.total_equipamento) %>
+								</p>
 							</div>
 						</div>
 					<% end %>
@@ -544,22 +565,28 @@
 									<thead>
 										<tr>
 											<th class="padraoEspaco1">Operação </th>
-											<th colspan="3"> </th>
+											<th colspan="2"> </th>
 										</tr>
 									</thead>
 									<tbody> 
 										<tr>
 											<td class="showFonteSize">Gestão operacional</td>
-											<td class="showFonteSize"><%= @proposal.txopracional %></td>
+											<% if (@proposal.txopracional.nil? || @proposal.txopracional == 0) %>
+												<td class="showFonteSize"><%=@select_all_calculation.indiceOperacional%></td>
+											<% else %>
+												<td class="showFonteSize"><%= @proposal.txopracional %></td>
+											<% end %>
 											<td class="showFonteSize" style="width: 29%;"><%=number_to_currency(@proposal.valor_indice_operacional)%></td>
 										</tr>
 										<tr>
 											<td class="showFonteSize">Reserva tecnica operacional</td>
-											<td class="showFonteSize"><%=@proposal.company.pct_reserva_tecnica%></td>
+											<td class="showFonteSize"><%=@select_all_calculation.indiceAdministrativo%></td>
 											<td class="showFonteSize" style="width: 29%;"><%=number_to_currency(@proposal.reserva_tecnica)%></td>
 										</tr>
 									</tbody>
 								</table>
+							</div>
+							<div class="table-responsive">
 								<table class="table table-striped table-bordered table-hover">
 									<thead>
 										<tr>
@@ -570,7 +597,11 @@
 									<tbody> 
 										<tr>
 											<td class="showFonteSize"> Gestão administrativa</td>
-											<td class="showFonteSize"><%=@select_all_calculation.indiceAdministrativo%></td>
+											<% if (@proposal.txadministrativa.nil? || @proposal.txadministrativa == 0) %>
+												<td class="showFonteSize"><%= @select_all_calculation.indiceAdministrativo %></td>
+											<% else %>
+												<td class="showFonteSize"><%= @proposal.txadministrativa %></td>
+											<% end %>
 											<td class="showFonteSize" style="width: 29%;"><%=number_to_currency((@proposal.valor_indice_administrativo).round(2))%></td>
 										</tr>
 									</tbody>
@@ -622,10 +653,10 @@
 										</tr>
 									</tbody>
 								</table>
-								<p class="showFonteSize">
-									<strong>Total de Impostos sobre serviços: </strong><%=number_to_currency((@proposal.total_imposto_sob_servico).round(2))%>
-								</p>
 							</div>
+							<p class="showFonteSize">
+								<strong>Total de Impostos sobre serviços: </strong><%=number_to_currency((@proposal.total_imposto_sob_servico).round(2))%>
+							</p>
 						</div>
 					</div>
 					<h5>
@@ -691,8 +722,10 @@
 
 										</tbody>
 									</table>
-									<strong>Valor Total dos equipamentos:</strong><%= number_to_currency(@proposal.total_equipamento) %>
 								</div>
+								<p class="showFonteSize">
+									<strong>Valor Total dos equipamentos:</strong><%= number_to_currency(@proposal.total_equipamento) %>
+								</p>
 							</div>
 						</div>
 					<% end %>

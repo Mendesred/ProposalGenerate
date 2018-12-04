@@ -4,9 +4,12 @@ class CalculationsController < ApplicationMainController
   # GET /calculations
   # GET /calculations.json
   def index
-    @calculations = Calculation.all
+    if  current_admin.full_access? || current_admin.partial_access?
+      @calculations = Calculation.all.page(params[:page])
+    else
+      redirect_to "/404.html"# configurar pagina 403
+    end
   end
-
   # GET /calculations/1
   # GET /calculations/1.json
   def show
@@ -15,12 +18,18 @@ class CalculationsController < ApplicationMainController
 
   # GET /calculations/new
   def new
-    @calculation = Calculation.new
+    if  current_admin.full_access? || current_admin.partial_access?
+      @calculations = Calculation.new.page(params[:page])
+    else
+      redirect_to "/404.html"# configurar pagina 403
+    end
   end
 
   # GET /calculations/1/edit
   def edit
-
+    unless current_admin.full_access? || current_admin.partial_access?
+      redirect_to "/404.html"# configurar pagina 403
+    end
   end
 
   # POST /calculations

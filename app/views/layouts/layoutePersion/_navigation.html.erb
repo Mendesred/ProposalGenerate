@@ -33,39 +33,41 @@
 						<li>
 							<a href="/"><i class="fa fa-home fa-fw"></i>Inicio</a>
 						</li>
-					<li>
-								<a href="/services/1/proposals"><i class="fa fa-clipboard fa-fw"></i>Proposta</a>
-					</li>
-					<% if policy(Admin).new? %>
+					<% if current_admin.full_access? || current_admin.partial_access?  %>
+						<li>
+							<a href="/services/1/proposals"><i class="fa fa-clipboard fa-fw"></i>Proposta</a>
+						</li>
+						<li>
+							<a href="/roles"><i class="fa fa-user fa-fw"></i>Cargos</a>
+						</li>
+						<li>
+							<a href="/equipaments"><i class="fa fa-wrench fa-fw"></i>Equipamento e acessorios</a>
+             </li>
+						<li>
+							<a href="/cities"><i class="fa fa-hospital-o fa-fw"></i>Cidades</a>
+						</li>
+          <% end %>
+					<% if current_admin.full_access? %>
 						<li>
 							<%= link_to dashboard_admin_index_path do %><i class="fa fa-users fa-fw"></i>Dashboard<%end%>
 						</li>
 						<li>
-									<a href="/calculations"><i class="fa fa-bar-chart-o fa-fw"></i>Campos de calculos</a>
+							<a href="/calculations"><i class="fa fa-bar-chart-o fa-fw"></i>Campos de calculos</a>
 						</li>					
 						<li>
-									<a href="/companies"><i class="fa fa-building fa-fw"></i>Empresa</a>
+							<a href="/companies"><i class="fa fa-building fa-fw"></i>Empresa</a>
 						</li>
 						<li>
-									<a href="/services"><i class="fa fa-briefcase fa-fw"></i>Serviço</a>
+							<a href="/services"><i class="fa fa-briefcase fa-fw"></i>Serviço</a>
 						</li>
 						<li>
-									<a href="/roles"><i class="fa fa-user fa-fw"></i>Cargos</a>
+							<a href="/periods"><i class="fa fa-compress fa-fw"></i>Periodo</a>
 						</li>
 						<li>
-									<a href="/periods"><i class="fa fa-compress fa-fw"></i>Periodo</a>
-						</li>
-						<li>
-									<a href="/rotations"><i class="fa fa-plane fa-fw"></i>Escala</a>
-						</li>
-						<li>
-									<a href="/equipaments"><i class="fa fa-wrench fa-fw"></i>Equipamento e acessorios</a>
-             </li>
-						</li>
-						<li>
-									<a href="/cities"><i class="fa fa-hospital-o fa-fw"></i>Cidades</a>
+							<a href="/rotations"><i class="fa fa-plane fa-fw"></i>Escala</a>
 						</li>
 					<%end%>
+					
 					
 				</ul>
 			</div>

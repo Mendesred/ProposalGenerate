@@ -6,7 +6,7 @@ class ProposalsController < ApplicationMainController
   def index
     select_service
     @admins = policy_scope(Admin)
-    if  current_admin.full_access?
+    if  current_admin.full_access? || current_admin.partial_access?
       @proposals = Proposal.all.page(params[:page])
     else
       @proposals = Proposal.where(admin_id: current_admin.id).page(params[:page])
@@ -211,7 +211,7 @@ class ProposalsController < ApplicationMainController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def proposal_params
-      delocalize_config = { :intermunicipal => :number }
+      delocalize_config = { :intermunicipal => :number,:txopracional => :number, :txadministrativa=> :number  }
       params.require(:proposal).permit(:admin_id,:cliente, :codigo_cliente, :company_id,:txopracional,:txadministrativa, :city_id, :rotation_id, :role_id,:period_id, 
         :intermunicipal, :h_almoco,:h_feriado, :dias_vr, :dias_vt, :adcional_periculosidade_insalubridade,:grau_de_insalubridade, 
         :controle_hora_extra,:h_extra_jornada_all,:dias_jornada_ex_semana_all,:h_ex_jornada_all,:m_ex_jornada_all,:h_ex_feriado_jornada_all,
