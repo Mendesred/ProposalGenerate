@@ -16,7 +16,7 @@ def permitted_attributes
   end
 end
   class Scope < Scope
-    def resolve
+    def resolvea
       if user.full_access?
       	scope.all
       else

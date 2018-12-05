@@ -18,7 +18,7 @@ class ProposalsController < ApplicationMainController
     if current_admin.full_access? || @proposal.admin_id == current_admin.id
       select_calculation
     else
-      flash[:alert] = "Você não esta autorizado a executar essa ação."
+      flash[:alert] = "Você não esta autorizado para executar essa ação."
       redirect_to(request.referrer || root_path)
     end
     respond_to do |format|

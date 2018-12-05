@@ -19,7 +19,7 @@ class CalculationsController < ApplicationMainController
 	# GET /calculations/new
 	def new
 		if  current_admin.full_access? || current_admin.partial_access?
-			@calculation = Calculation.new.page(params[:page])
+			@calculation = Calculation.new
 		else
 			redirect_to "/404.html"# configurar pagina 403
 		end
