@@ -19,7 +19,7 @@ class RolesController < ApplicationMainController
 	# GET /roles/new
 	def new
 		if  current_admin.full_access? || current_admin.partial_access?
-			@Roles = Role.new.page(params[:page])
+			@role = Role.new
 		else
 			redirect_to "/404.html"# configurar pagina 403
 		end

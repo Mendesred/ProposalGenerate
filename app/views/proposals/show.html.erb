@@ -9,7 +9,7 @@
 				<%= link_to "/services/#{@proposal.proposal_roles[0].role.service_id}/proposals",class:"btn btn-outline btn-success pull-right topHeader", type:"button" do %>
 				<i class="fa fa-arrow-left"></i> Voltar
 				<% end %>
-				<%= link_to "/services/#{@proposal.proposal_roles[0].role.service_id}/proposals/#{@proposal.id}.pdf",class:"btn btn btn-danger btn-circle pull-right topHeader",style:'right: 4px;position: relative;', type:"button" do %>
+				<%= link_to "/services/#{@proposal.proposal_roles[0].role.service_id}/proposals/#{@proposal.id}.pdf",class:"btn btn btn-danger btn-circle pull-right topHeader",style:'right: 4px;position: relative;', type:"button",target: :_blank do  %>
 					<i class="fa fa-file-pdf-o"></i>
 				<% end %>
 			</div>
