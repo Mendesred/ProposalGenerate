@@ -5,7 +5,7 @@ class CitiesController < ApplicationMainController
   # GET /cities.json
   def index
     if  current_admin.full_access? || current_admin.partial_access?
-      @cities = City.all.page(params[:page])
+      @cities = City.all
     else
       redirect_to "/404.html"# configurar pagina 403
     end
@@ -14,9 +14,7 @@ class CitiesController < ApplicationMainController
   # GET /cities/1
   # GET /cities/1.json
   def show
-    if  current_admin.full_access? || current_admin.partial_access?
-      @cities = City.all.page(params[:page])
-    else
+    unless current_admin.full_access? || current_admin.partial_access?
       redirect_to "/404.html"# configurar pagina 403
     end
   end

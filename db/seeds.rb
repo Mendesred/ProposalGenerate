@@ -226,7 +226,7 @@ Rotation.find_or_create_by(
 		ad_noturno:7)
 
 Rotation.find_or_create_by(
-		tipo_escala:'12x36 24h Dia',
+		tipo_escala:'12x36 12h Dia',
 		qtd_funcionarios:1,
 		efetivo:2,
 		dias_trabalhados:15.22,
@@ -237,7 +237,7 @@ Rotation.find_or_create_by(
 		ad_noturno:0)
 
 Rotation.find_or_create_by(
-		tipo_escala:'12x36 24h Noite',
+		tipo_escala:'12x36 12h Noite',
 		qtd_funcionarios:1,
 		efetivo:2,
 		dias_trabalhados:15.22,
@@ -247,27 +247,48 @@ Rotation.find_or_create_by(
 		ad_vespertido_noturno:0.0,
 		ad_noturno:7)
 
+Rotation.find_or_create_by(
+		tipo_escala:'5x1 4h Dia',
+		qtd_funcionarios:1,
+		efetivo:1.2,
+		dias_trabalhados:25.3646,
+		fator_escala:30.44,
+		v_reciclagem:28,78,
+		period:Period.find_by(id:1),
+		ad_vespertido_noturno:0.0,
+		ad_noturno:0)
+
+Rotation.find_or_create_by(
+		tipo_escala:'5x1 4h Noite',
+		qtd_funcionarios:1,
+		efetivo:1.2,
+		dias_trabalhados:25.3646,
+		fator_escala:30.44,
+		v_reciclagem:28,78,
+		period:Period.find_by(id:1),
+		ad_vespertido_noturno:0.0,
+		ad_noturno:4)
 
 
 puts  "Escala criada"
 	
-City.find_or_create_by!(
-		nome:'Campinas',
-		feriado:13,
-		valeTransporte:4.30,
-		issqn:2.0)
-City.find_or_create_by!(
-		nome:'Valinhos',
-		feriado:14,
-		valeTransporte:4.0,
-		issqn:3.0)
-City.find_or_create_by!(
-		nome:'Teste 0',
-		feriado:11,
-		valeTransporte:2,
-		issqn:0.0)
+# City.find_or_create_by!(
+# 		nome:'Campinas',
+# 		feriado:13,
+# 		valeTransporte:4.30,
+# 		issqn:2.0)
+# City.find_or_create_by!(
+# 		nome:'Valinhos',
+# 		feriado:14,
+# 		valeTransporte:4.0,
+# 		issqn:3.0)
+# City.find_or_create_by!(
+# 		nome:'Teste 0',
+# 		feriado:11,
+# 		valeTransporte:2,
+# 		issqn:0.0)
 
-puts  "Cidade criada"
+#puts  "Cidade criada"
 
 
 Role.find_or_create_by!(
