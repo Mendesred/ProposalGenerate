@@ -99,10 +99,10 @@
 							</p> <!--</br></br></br></br></br> -->
 						</div>
 						<div>
-							 
-<!-- Valor das Somas de horas diurno: <#%=@proposal.soma_horas_ex_jorn_refeicao_dia %></br>
-		Valor das Somas de horas Noturno: <#%=@proposal.soma_horas_ex_jorn_refeicao_noite %></br>
-		valor do feriado: <#%=@proposal.hora_extra_feriado_all %></br>  -->
+							 a
+							<!-- Valor das Somas de horas diurno: <#%=@proposal.soma_horas_ex_jorn_refeicao_dia %></br>
+							Valor das Somas de horas Noturno: <#%=@proposal.soma_horas_ex_jorn_refeicao_noite %></br>
+							valor do feriado: <#%=@proposal.hora_extra_feriado_all %></br>  -->
 
 							<!--valor do horas_extras: <#%=@proposal.horas_extras %></br>-->
 							<!--valor do qtdVtPagas: <#%=@proposal.qtd_vt_pagas %></br>
@@ -140,7 +140,7 @@
 									<th>Salarios</th>
 									<th>Efetivo </th>
 									<th>Qtd. de postos</th>
-									<th>Funcionarios p/ escala</th>
+									<th>Número de funcionários</th>
 									<th>Salário efetivo</th>
 									<th>Salário efetivo total</th>
 
@@ -580,7 +580,7 @@
 										</tr>
 										<tr>
 											<td class="showFonteSize">Reserva tecnica operacional</td>
-											<td class="showFonteSize"><%=@select_all_calculation.indiceAdministrativo%></td>
+											<td class="showFonteSize"><%=@proposal.company.pct_reserva_tecnica%></td>
 											<td class="showFonteSize" style="width: 29%;"><%=number_to_currency(@proposal.reserva_tecnica)%></td>
 										</tr>
 									</tbody>
