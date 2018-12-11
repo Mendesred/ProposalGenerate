@@ -5,7 +5,7 @@ class EquipamentsController < ApplicationMainController
 	# GET /equipaments.json
 	def index
 		if  current_admin.full_access? || current_admin.partial_access?
-			@equipaments = Equipament.all.page(params[:page])
+			@equipaments = Equipament.all
 		else
 			redirect_to "/404.html"# configurar pagina 403
 		end
@@ -16,10 +16,8 @@ class EquipamentsController < ApplicationMainController
 	def show
 		select_type
 		select_sub_type
-		if  current_admin.full_access? || current_admin.partial_access?
-			@equipaments = Equipament.all.page(params[:page])
-		else
-			redirect_to "/404.html"# configurar pagina 403
+		unless current_admin.full_access? || current_admin.partial_access?
+		  redirect_to "/404.html"# configurar pagina 403
 		end
 	end
 
