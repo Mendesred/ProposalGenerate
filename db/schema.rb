@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181130125005) do
+ActiveRecord::Schema.define(version: 20181211122755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -314,6 +314,7 @@ ActiveRecord::Schema.define(version: 20181130125005) do
     t.float    "valor_de_ajuste"
     t.float    "txopracional"
     t.float    "txadministrativa"
+    t.float    "v_calc"
   end
 
   add_index "proposals", ["admin_id"], name: "index_proposals_on_admin_id", using: :btree

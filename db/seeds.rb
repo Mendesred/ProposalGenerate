@@ -269,6 +269,38 @@ Rotation.find_or_create_by(
 		ad_vespertido_noturno:0.0,
 		ad_noturno:4)
 
+Rotation.find_or_create_by(
+		tipo_escala:'5x1 dois periodo Matutino/Noturno e 1 escala 4h',
+		qtd_funcionarios:2,
+		efetivo:2.4,
+		dias_trabalhados:25.3646,
+		fator_escala:30.44,
+		v_reciclagem:28.78,
+		period:Period.find_by(id:6),
+		ad_vespertido_noturno:0.1,
+		ad_noturno:7)
+
+Rotation.find_or_create_by(
+		tipo_escala:'5x1 dois periodo Matutino e 1 escala 4h',
+		qtd_funcionarios:1,
+		efetivo:1.2,
+		dias_trabalhados:25.3646,
+		fator_escala:30.44,
+		v_reciclagem:28.78,
+		period:Period.find_by(id:6),
+		ad_vespertido_noturno:0,
+		ad_noturno:0)
+
+Rotation.find_or_create_by(
+		tipo_escala:'5x1 dois periodo Noturno e 1 escala 4h',
+		qtd_funcionarios:1,
+		efetivo:1.2,
+		dias_trabalhados:25.3646,
+		fator_escala:30.44,
+		v_reciclagem:28.78,
+		period:Period.find_by(id:6),
+		ad_vespertido_noturno:0.1,
+		ad_noturno:4)
 
 puts  "Escala criada"
 	

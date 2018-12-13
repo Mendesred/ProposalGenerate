@@ -99,11 +99,9 @@
 							</p> <!--</br></br></br></br></br> -->
 						</div>
 						<div>
-							 a
 							<!-- Valor das Somas de horas diurno: <#%=@proposal.soma_horas_ex_jorn_refeicao_dia %></br>
 							Valor das Somas de horas Noturno: <#%=@proposal.soma_horas_ex_jorn_refeicao_noite %></br>
 							valor do feriado: <#%=@proposal.hora_extra_feriado_all %></br>  -->
-
 							<!--valor do horas_extras: <#%=@proposal.horas_extras %></br>-->
 							<!--valor do qtdVtPagas: <#%=@proposal.qtd_vt_pagas %></br>
 							valor do teste1: <#%=@proposal.teste1 %></br>
@@ -111,7 +109,6 @@
 							valor do teste3: <#%=@proposal.teste3 %></br>
 							valor do teste4: <#%=@proposal.teste4 %></br>
 							valor do teste5: <#%=@proposal.teste5 %> -->
-
 						</div>
 						<div class="col-sm-4">  
 							<p class="showFonteSize">
@@ -209,7 +206,7 @@
 										<tr>
 											<td class="showFonteSize"> Valor de Periculosidade:</td>  
 											<td class="showFonteSize">30% de <%=number_to_currency(@proposal.salario)%></td>
-											<td class="showFonteSize"><%=number_to_currency(0.3*@proposal.salario)%></td>
+											<td class="showFonteSize"><%=number_to_currency(@proposal.valor_peri_ou_isalubri)%></td>
 										</tr>
 									<% elsif @proposal.adcional_periculosidade_insalubridade == 2  %>
 										<tr>
@@ -229,20 +226,28 @@
 								<% end %>
 								<% if @proposal.h_feriado.nil? || @proposal.h_feriado ==0 %>
 								<% else %>
-								<tr>
-									<td class="showFonteSize"> Hora Feriado: </td>  
-									<td class="showFonteSize"> <%= (((@proposal.valor_feriados_de_cities_mv*@proposal.dois_terco)+(@proposal.valor_feriados_de_cities_n*@proposal.um_terco)).round(3)).round(3) %> Hs</td>  
+									<tr>
+										<td class="showFonteSize"> Hora Feriado: </td>  
+										<% if  @proposal.v_calc > 0 %>
+											<td class="showFonteSize"> <%= (@proposal.v_calc).round(2)%> Hs</td>  
+										<% else %>
+											<td class="showFonteSize"> <%= (((@proposal.valor_feriados_de_cities_mv*@proposal.dois_terco)+(@proposal.valor_feriados_de_cities_n*@proposal.um_terco)).round(3)).round(3) %> Hs</td>  
+										<% end %>
 										<td class="showFonteSize"> <%= number_to_currency(@proposal.total_hr_extras_feriado) %></td>  
-								</tr>
+									</tr>
 								<% end %>
 								<tr>
-									<td class="showFonteSize">  Adicional noturno - vespertino:</td>  
+									<td class="showFonteSize">  Adicional noturno - vespertino:</td>
 									<td class="showFonteSize"> <%= (((@proposal.rotation.ad_vespertido_noturno*100)/@select_all_calculation.horasDeCalculoAdNoturno).round(4)*@proposal.rotation.fator_escala).round(4)%> Hs</td>  
 									<td class="showFonteSize"> <%= number_to_currency(@proposal.total_hrs_ad_noturno_vespertino) %></td>  
 								</tr>
 								<tr>
 									<td class="showFonteSize">  Adicional noturno - noturno:</td>  
-									<td class="showFonteSize"> <%=@proposal.show_horas.round(5)%> Hs</td>  
+										<% if @proposal.v_calc =!0 && @proposal.v_calc.nil?  %>
+											<td class="showFonteSize"> 30.44 Hs</td>  
+										<% else %>
+											<td class="showFonteSize"> <%=@proposal.show_horas.round(5)%> Hs</td>  
+										<% end%>
 									<td class="showFonteSize"> <%= number_to_currency(@proposal.total_hrs_ad_noturno) %></td>  
 								</tr>
 								<tr>
@@ -398,7 +403,7 @@
 										<tr>
 											<th class="padraoEspaco1">Beneficio </th>
 											<th >Quantidade </th>
-											<th class="padraoEspaco3">valor unitario: </th>
+											<th class="padraoEspaco3">valor unitario:</th>
 											<th>Valor total:</th>
 										</tr>
 									</thead>
@@ -460,7 +465,7 @@
 												<td class="showFonteSize"><%=number_to_currency(@proposal.total_reciclagem)%></td>
 											</tr>
 										<% end %>
-  									<% if @proposal.total_reciclagem.nil? || @proposal.total_reciclagem ==0 %>
+  									<% if @proposal.total_ppr.nil? || @proposal.total_ppr ==0 %>
 										<% else %>
 											<tr>
 												<td class="showFonteSize">PPR</td>
@@ -708,7 +713,7 @@
 											</tr>
 										</thead>
 										<tbody>
-											<% @proposal.proposal_equipaments.order("updated_at").each do |proposal_equipament| %>
+											<% @proposal.proposal_equipaments.order("created_at").each do |proposal_equipament| %>
 												<tr> 
 													<!--<#% if proposal_equipament.name_equipament.nil? %>-->
 													<td class="showFonteSize"><%= proposal_equipament.name_equipament %></td>

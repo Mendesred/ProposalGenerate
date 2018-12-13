@@ -172,7 +172,7 @@ class ProposalsController < ApplicationMainController
       @select_all_company = Company.all
     end
     def select_period
-      @select_all_period = Period.all
+      @select_all_period = Period.order("created_at").all
     end
     def select_equipament
       @select_all_equip = Equipament.all
@@ -184,7 +184,7 @@ class ProposalsController < ApplicationMainController
       @select_all_role = Role.all
     end
     def selected_role
-      @select_role_from_params = Role.where(["service_id =?", params[:service_id]]) 
+      @select_role_from_params = Role.order("created_at").where(["service_id =?", params[:service_id]]) 
     end
     def selected_service
       @selected_service = Service.where(["id =?", params[:service_id]]).first 

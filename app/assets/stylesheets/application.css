@@ -111,3 +111,11 @@ div.cal-lg-12 .peddingsIndex{
     bottom: 10px;
     margin-bottom: 0;
 }
+.page-break { 
+  display:block; 
+  clear:both; 
+  page-break-after:always; 
+}
+.corFundo{
+	background: #fff;
+}
