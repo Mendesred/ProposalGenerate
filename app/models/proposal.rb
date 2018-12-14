@@ -953,6 +953,10 @@ class Proposal < ActiveRecord::Base
 			multiplicador = 0.0
 			multiplicador = (((qtdVrPagas).round(2))+(efetivoTotal*(0.08333))).round(2) 
 			totVR = ( multiplicador * (vUniVR-descontoVr)).round(2)
+			puts"multiplicador"
+			puts"#{qtdVrPagas}"
+			puts"#{efetivoTotal}"
+			puts"#{vUniVR}"
 
 			totSocialFamiliar = (efetivoTotal*valorSocFamiliar).round(2) 
 			totBenNatalidade = (efetivoTotal*valorBenNatalidade).round(2) 
