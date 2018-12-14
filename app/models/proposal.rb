@@ -112,9 +112,7 @@ class Proposal < ActiveRecord::Base
 			
 			vUniSegVida = proposal_role.role.seg_vida.to_f
 		end # fim do for proposal_role.
-		puts"qtdPostos"
-		puts"qtdPostos"
-		puts"#{qtdPostos}"
+
 		efetivoTotal =(efetivoTotal).round(2)
 		
 		if (totalEquipamento.nil?)
@@ -262,14 +260,13 @@ class Proposal < ActiveRecord::Base
 					if (rotation.id == 1) # if usado para tratar quando e Matutino/Vespertino/Noturno
 						horasExtras = (calculos_proposta.calculo_modelo_de_horas_extras(30.44,7,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)*2+
 														calculos_proposta.calculo_modelo_de_horas_extras(30.44,7,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)*1.142875).round(2)
-							
-					elsif ((rotation.id == 2)||(rotation.id == 3)||(rotation.id == 4))# if usado para tratar quando e Matutino ou Vespertino ou Noturno
-						unless (rotation.id == 4)
+					elsif ((rotation.id == 2)||(rotation.id == 3)||(rotation.id == 4)||(rotation.id == 18)||(rotation.id == 19))# if usado para tratar quando e Matutino ou Vespertino ou Noturno
+						unless (rotation.id == 4) || (rotation.id == 19)
 							horasExtras = (calculos_proposta.calculo_modelo_de_horas_extras(30.44,7,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)).round(2)
 						else
 							horasExtras = (calculos_proposta.calculo_modelo_de_horas_extras(30.44,7,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)*1.142857).round(2)
 						end
-					elsif ((rotation.id == 5)||(rotation.id == 6)||(rotation.id == 7)) # if usado para tratar quando e Matutino/Vespertino ou Matutino/Noturno ou Vespertino/Vespertino
+					elsif ((rotation.id == 5)||(rotation.id == 6)||(rotation.id == 7)||(rotation.id == 4)||(rotation.id == 17)) # if usado para tratar quando e Matutino/Vespertino ou Matutino/Noturno ou Vespertino/Vespertino
 						unless (rotation.id  == 6)||(rotation.id  == 7)
 							horasExtras = (calculos_proposta.calculo_modelo_de_horas_extras(30.44,7,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)*2).round(2)
 						else
@@ -277,15 +274,12 @@ class Proposal < ActiveRecord::Base
 															(calculos_proposta.calculo_modelo_de_horas_extras(30.44,7,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)*1.142857)).round(2)
 						end
 					end
-					
 				elsif (rotation.dias_trabalhados == 21.75)  #if que trata escala 5 por 2
 					if (dias_jornada_ex_semana_all >5)
 						diasJornadaExSemanaAll = 5
 					else
 						diasJornadaExSemanaAll = dias_jornada_ex_semana_all.to_f
 					end
-
-
 					if ((dias_jornada_ex_semana_all < 7) && (h_ex_feriado_jornada_all == 1))# teste dias se menor que 7 para calcular feriado
 						feriadoParcial = (city.feriado/12)
 					else	
@@ -295,7 +289,6 @@ class Proposal < ActiveRecord::Base
 					if (rotation.id == 8) # if usado para tratar quando e Matutino/Noturno
 						horasExtras = (calculos_proposta.calculo_modelo_de_horas_extras(21.75,5,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)+
 														(calculos_proposta.calculo_modelo_de_horas_extras(21.75,5,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)*1.142857)).round(2)
-
 					elsif (rotation.id == 9)||(rotation.id == 10)# if usado para tratar quando e Matutino ou Noturno
 						unless (rotation.id == 10)
 							horasExtras = (calculos_proposta.calculo_modelo_de_horas_extras(21.75,5,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)).round(2)
@@ -331,7 +324,6 @@ class Proposal < ActiveRecord::Base
 					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a7
 						horasExtras = (calculos_proposta.calculo_modelo_de_horas_extras(15.22,7,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)+
 													(calculos_proposta.calculo_modelo_de_horas_extras(15.22,7,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)*1.142857)).round(2)
-
 					elsif (rotation.id == 15)||(rotation.id == 16)# if usado para tratar quando e Matutino ou Noturno
 						unless (rotation.id == 16)
 							horasExtras = (calculos_proposta.calculo_modelo_de_horas_extras(15.22,7,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)).round(2)
@@ -374,21 +366,17 @@ class Proposal < ActiveRecord::Base
 
 			#
 		if (rotation.dias_trabalhados == 25.3646)  #if que trata escala 5 por 1
-
 			if (h_extra_jornada_matu == 1)&&((rotation.id == 1)||(rotation.id == 2)||(rotation.id == 5)||(rotation.id == 6))
-
 				if (dias_ex_semana_matu > 7)# teste dias se maior que 7 e tranforma e 7
 					ajustePgHoraExMatu = 7
 				else
 					ajustePgHoraExMatu = dias_ex_semana_matu.to_f
 				end
-
 				if ((dias_ex_semana_matu < 7) && (h_ex_feriado_jornada_matu == 1))# teste dias se menor que 7 para calcular feriado
 					feriadoParcial = (city.feriado/12)
 				else	
 					feriadoParcial = 0
 				end
-
 				# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
 				horasExtras1 = (calculos_proposta.calculo_modelo_de_horas_extras(30.44,7,ajustePgHoraExMatu,feriadoParcial,qtdPostos,hExJornadaMatu,mExJornadaMatu)).round(2)
 				#horasExtras1 = (((30.44/7 * ajustePgHoraExMatu)+feriadoParcial)*(qtdPostos)*(hExJornadaVesp+mExJornadaVesp)).round(2)
@@ -396,19 +384,16 @@ class Proposal < ActiveRecord::Base
 				horasExtras1 = 0
 			end
 			if (h_extra_jornada_vesp == 1)&&((rotation.id == 1)||(rotation.id == 3)||(rotation.id == 5)||(rotation.id == 7))
-
 				if (dias_ex_semana_vesp > 7)# teste dias se maior que 7 e tranforma e 7
 					ajustePgHoraEXVesp = 7
 				else
 					ajustePgHoraEXVesp = dias_ex_semana_vesp.to_f
 				end
-
 				if ((dias_ex_semana_vesp < 7) && (h_ex_feriado_jornada_vesp == 1))# teste dias se menor que 7 para calcular feriado
 					feriadoParcial = (city.feriado/12)
 				else	
 					feriadoParcial = 0
 				end
-
 				# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a5
 				horasExtras2 = (calculos_proposta.calculo_modelo_de_horas_extras(30.44,7,ajustePgHoraEXVesp,feriadoParcial,qtdPostos,hExJornadaVesp,mExJornadaVesp)).round(2)
 				#horasExtras2 = (((30.44/7 * ajustePgHoraEXVesp)+feriadoParcial)*(qtdPostos)*(hExJornadaVesp+mExJornadaVesp)).round(2)
@@ -416,13 +401,11 @@ class Proposal < ActiveRecord::Base
 				horasExtras2 = 0
 			end
 			if (h_extra_jornada_notur == 1)&&((rotation.id == 1)||(rotation.id == 4)||(rotation.id == 6)||(rotation.id == 7))
-
 				if (dias_ex_semana_notur > 7)# teste dias se maior que 7 e tranforma e 7
 					ajustePgHoraExNotur = 7
 				else
 					ajustePgHoraExNotur = dias_ex_semana_notur.to_f
 				end
-
 				if ((dias_ex_semana_notur < 7) && (h_ex_feriado_jornada_notur == 1))# teste dias se menor que 7 para calcular feriado
 					feriadoParcial = (city.feriado/12)
 				else	
@@ -434,7 +417,6 @@ class Proposal < ActiveRecord::Base
 			else
 				horasExtras3 = 0
 			end
-
 			horasExtras = horasExtras1+horasExtras2+horasExtras3
 		elsif (rotation.dias_trabalhados == 21.75)  #if que trata escala 5 por 2
 			if (h_extra_jornada_matu == 1)&&((rotation.id == 8)||(rotation.id == 9))
@@ -587,8 +569,13 @@ class Proposal < ActiveRecord::Base
 			totalHrExtras = 0
 			update_column(:total_hr_extras, (totalHrExtras))
 		else
-			totalHrExtras = (((((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220)*1.6)*
+			if (company.id == 1)
+				totalHrExtras = (((((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220)*1.6)*
+													horasExtras)/efetivoTotal)
+			else
+				totalHrExtras = (((((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220)*1.5)*
 												horasExtras)/efetivoTotal)
+			end
 		 #o calculo a cima é para calcular a cobrança de horas em extras de almoço (calculo de horas extras a mais é calculado de forma diferente)
 			update_column(:total_hr_extras, (totalHrExtras))
 		end
