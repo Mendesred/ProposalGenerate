@@ -12,7 +12,7 @@ namespace :carregar do
        depreciacao:depreciacao,#7
        obs_equipament:obsEquipament)#8
   end
-  desc "TODO"
+desc "TODO"
   task equipamentos: :environment do
     require "csv"
   
@@ -25,40 +25,55 @@ namespace :carregar do
   
   end
 end
-desc "Example of task with parameters and prerequisites"
-task escala: :rotation do
+# desc "Example of task with parameters and prerequisites"
+# task escala: :rotation do
 
-Rotation.find_or_create_by(
-    tipo_escala:'5x1 dois periodo Matutino/Noturno e 1 escala 4h',
-    qtd_funcionarios:2,
-    efetivo:2.4,
-    dias_trabalhados:25.3646,
-    fator_escala:30.44,
-    v_reciclagem:28.78,
-    period:Period.find_by(id:6),
-    ad_vespertido_noturno:0.1,
-    ad_noturno:7)
+# Rotation.find_or_create_by(
+#     tipo_escala:'5x1 dois periodo Matutino/Noturno e 1 escala 4h',
+#     qtd_funcionarios:2,
+#     efetivo:2.4,
+#     dias_trabalhados:25.3646,
+#     fator_escala:30.44,
+#     v_reciclagem:28.78,
+#     period:Period.find_by(id:6),
+#     ad_vespertido_noturno:0.1,
+#     ad_noturno:7)
 
-Rotation.find_or_create_by(
-    tipo_escala:'5x1 dois periodo Matutino e 1 escala 4h',
-    qtd_funcionarios:1,
-    efetivo:1.2,
-    dias_trabalhados:25.3646,
-    fator_escala:30.44,
-    v_reciclagem:28.78,
-    period:Period.find_by(id:6),
-    ad_vespertido_noturno:0,
-    ad_noturno:0)
+# Rotation.find_or_create_by(
+#     tipo_escala:'5x1 dois periodo Matutino e 1 escala 4h',
+#     qtd_funcionarios:1,
+#     efetivo:1.2,
+#     dias_trabalhados:25.3646,
+#     fator_escala:30.44,
+#     v_reciclagem:28.78,
+#     period:Period.find_by(id:6),
+#     ad_vespertido_noturno:0,
+#     ad_noturno:0)
 
-Rotation.find_or_create_by(
-    tipo_escala:'5x1 dois periodo Noturno e 1 escala 4h',
-    qtd_funcionarios:1,
-    efetivo:1.2,
-    dias_trabalhados:25.3646,
-    fator_escala:30.44,
-    v_reciclagem:28.78,
-    period:Period.find_by(id:6),
-    ad_vespertido_noturno:0.1,
-    ad_noturno:4)
-  end
-puts "escalas Criadas"
+# Rotation.find_or_create_by(
+#     tipo_escala:'5x1 dois periodo Noturno e 1 escala 4h',
+#     qtd_funcionarios:1,
+#     efetivo:1.2,
+#     dias_trabalhados:25.3646,
+#     fator_escala:30.44,
+#     v_reciclagem:28.78,
+#     period:Period.find_by(id:6),
+#     ad_vespertido_noturno:0.1,
+#     ad_noturno:4)
+#   end
+# puts "escalas Criadas"
+
+# desc "Example of task with parameters and prerequisites"
+# task service: :service do
+
+# Service.find_or_create_by!(
+#   tipo_servico: 'Portaria Parcial', company: Company.last, desconto_vr:0.8, cesta:127.5)
+# Service.find_or_create_by!(
+#   tipo_servico: 'Limpeza Parcial', company: Company.last, desconto_vr:0.13, cesta:102.59)
+# Service.find_or_create_by!(
+#   tipo_servico: 'Manutenção Parcial', company: Company.last, desconto_vr:0.13, cesta:102.59)
+# Service.find_or_create_by!(
+#   tipo_servico: 'Jardinagem Parcial', company: Company.last, desconto_vr:0.13,cesta:102.59)
+# end
+
+# puts "escalas serviço"

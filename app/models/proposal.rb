@@ -193,7 +193,7 @@ class Proposal < ActiveRecord::Base
 		
 		#adDoturno5x2e6x1 = 9.14
 		#else
-		#adDoturno5x2e6x1 = 1	
+		#adDoturno5x2e6x1 = 1
 		#end
 		showHoras = (((ajusteDivPorZero * 60)/select_calculation.horasDeCalculoAdNoturno).round(6) * rotation.fator_escala * rotation.ad_noturno)
 		totalHrsAdNoturno = (((((baseCalculoSalarioMedio + valorPeriOuIsalubri).round(2)/220)) * 0.2 *
@@ -219,8 +219,6 @@ class Proposal < ActiveRecord::Base
 		update_column(:show_horas, (showHoras))
 		#adVespertidoNoturno = rotation.ad_vespertido_noturno
 		#update_column(:ad_vespertido_noturno, (adVespertidoNoturno))
-
-		
 
 		###############################################################################################################################################
 		###### Começo dos ifs para hora extra  ########################################################################################################
@@ -580,30 +578,38 @@ class Proposal < ActiveRecord::Base
 			update_column(:total_hr_extras, (totalHrExtras))
 		end
 
-		vFeriadosDeCitiesMV = (city.feriado*0.6108).round(2) #Valor de feriado para carga horaia de matutino vespertino
+		vFeriadosDeCitiesMV = (city.feriado*0.610833) #Valor de feriado para carga horaia de matutino vespertino
 			update_column(:valor_feriados_de_cities_mv, (vFeriadosDeCitiesMV))
 
 		vFeriadosDeCitiesN = (city.feriado*0.666).round(2) #Valor de feriado para carga horaia de matutino vespertino
 			update_column(:valor_feriados_de_cities_n, (vFeriadosDeCitiesN))
 
-		v_calc = 0
+		vCalc = 0
 		if (h_feriado == 1)
 			totalHrExtrasFeriado = (((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220)*
 															((vFeriadosDeCitiesMV*doisTerco)+(vFeriadosDeCitiesN*umTerco))/(efetivoTotal)).round(2)
+			teste = ((vFeriadosDeCitiesMV*doisTerco)+(vFeriadosDeCitiesN*umTerco))
+			puts"#{teste}"
+			puts"#{baseCalculoSalarioMedio},#{valorPeriOuIsalubri},#{totalHrsAdNoturnoVespertino},#{totalHrsAdNoturno},#{vFeriadosDeCitiesMV},#{doisTerco},#{vFeriadosDeCitiesN},#{umTerco},efetivo toral->#{totalHrExtrasFeriado}"
 			if totalHrExtrasFeriado == 0
 				totalHrExtrasFeriado = 0
 			end
 			if (( rotation.id == 17 )||( rotation.id == 18)||( rotation.id == 19 ))
-				if  ( rotation.id ==17 )
+				if  ( rotation.id ==19 )
 					vCalc	= 4.33*(2*qtdPostos)
 					totalHrExtrasFeriado =(((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220)*
 															(vCalc)/(efetivoTotal)).round(2)
-				elsif ( rotation.id == 18)||( rotation.id == 19)
+				elsif ( rotation.id == 18)||( rotation.id == 17)
+					if ( rotation.id == 17)
+						totalHrsAdNoturnoSuporte = 0
+					else
+						totalHrsAdNoturnoSuporte = totalHrsAdNoturno
+					end
 					vCalc	= 4.33*qtdPostos
-					totalHrExtrasFeriado = (((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220)*
+					totalHrExtrasFeriado = (((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturnoSuporte)/220)*
 															(vCalc)/(efetivoTotal)).round(2)
 				end
-				update_column(:v_calc,(vCalc))
+			update_column(:v_calc,(vCalc))
 			end
 			update_column(:total_hr_extras_feriado, (totalHrExtrasFeriado))
 		elsif (h_feriado == 0)
@@ -613,12 +619,25 @@ class Proposal < ActiveRecord::Base
 			update_column(:total_hr_extras_feriado, (totalHrExtrasFeriado))
 
 		end
+		totalHrsAdNoturnoDSR = 0
+		totalHrsAdNoturnoVespertinoDSR = 0
+		if (rotation.id == 1 || rotation.id == 4 || rotation.id == 6 || rotation.id == 8 || rotation.id == 10 || rotation.id == 11 || rotation.id == 13 || rotation.id == 14 || rotation.id == 16 || rotation.id == 18 || rotation.id == 19 )
+				totalHrsAdNoturnoDSR = totalHrsAdNoturno
+		else
+			totalHrsAdNoturnoDSR = 0
+		end
+		if (rotation.id == 1 || rotation.id == 3 || rotation.id == 5 || rotation.id == 7)
+			totalHrsAdNoturnoVespertinooDSR = totalHrsAdNoturnoVespertino
+		else
+			totalHrsAdNoturnoVespertinooDSR = 0
+		end
 
 		# Calculo para definir o valor de horas extras feriados feito apartir de horas trabalhadas dia pelas quantidade de feriados
-		refexoDSR = ((totalHrsAdNoturnoVespertino + totalHrsAdNoturno + totalHrExtras + totalHrExtrasFeriado)/25.09*5.35).round(2)
+		refexoDSR = ((totalHrsAdNoturnoVespertinooDSR + totalHrsAdNoturnoDSR + totalHrExtras + totalHrExtrasFeriado)/25.09*5.35).round(2)
 
 		update_column(:refexo_dsr, (refexoDSR))
-		salarioMedioFinal = (baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+ totalHrsAdNoturno+ totalHrExtras+ totalHrExtrasFeriado+refexoDSR).round(2)
+		salarioMedioFinal = (baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+ totalHrsAdNoturnoDSR+ totalHrExtras+ totalHrExtrasFeriado+refexoDSR).round(2)
+
 		if salarioMedioFinal == 0
 			salarioMedioFinal = 0
 		end
@@ -952,14 +971,19 @@ class Proposal < ActiveRecord::Base
 		if (descontoVr == 0.13)
 			multiplicador = 0.0
 			multiplicador = (((qtdVrPagas).round(2))+(efetivoTotal*(0.08333))).round(2) 
+			if (controle_vr == 0)
+				if (vr_all == 0)
+					multiplicador = 0
+				end
+			end
 			totVR = ( multiplicador * (vUniVR-descontoVr)).round(2)
-			puts"multiplicador"
-			puts"#{qtdVrPagas}"
-			puts"#{efetivoTotal}"
-			puts"#{vUniVR}"
 
 			totSocialFamiliar = (efetivoTotal*valorSocFamiliar).round(2) 
 			totBenNatalidade = (efetivoTotal*valorBenNatalidade).round(2) 
+			puts"qrdVrPagas"
+			puts"#{multiplicador}"
+			#puts"#{}"
+			#puts"#{}"
 
 			update_column(:multiplicador, (multiplicador))
 			update_column(:tot_social_familiar, (totSocialFamiliar))
@@ -980,6 +1004,7 @@ class Proposal < ActiveRecord::Base
 		else
 			totAssiteciaMedica = ((vUniAssistMedica*efetivoTotal)-((salario*0.05)*efetivoTotal)).round(2)
 		end
+
 		mut1 = 0
 		mut2 = 0
 		mut3 = 0
@@ -1004,10 +1029,10 @@ class Proposal < ActiveRecord::Base
 					if (rotation.id == 1) # if usado para tratar quando e Matutino/Vespertino/Noturno
 						qtdVtPagas = ((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)*3
 						controleDePostosParaCalculoVt = qtdPostos*3
-					elsif ((rotation.id == 2)||(rotation.id == 3)||(rotation.id == 4)||(rotation.id == 18)||(rotation.id == 19))# if usado para tratar quando e Matutino ou Vespertino ou Noturno
+					elsif ((rotation.id == 2)||(rotation.id == 3)||(rotation.id == 4)||(rotation.id == 18)||(rotation.id == 17))# if usado para tratar quando e Matutino ou Vespertino ou Noturno
 						qtdVtPagas = ((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)
 						controleDePostosParaCalculoVt = qtdPostos
-					elsif ((rotation.id == 5)||(rotation.id == 6)||(rotation.id == 7)||(rotation.id == 17)) # if usado para tratar quando e Matutino/Vespertino ou Matutino/Noturno ou Vespertino/Vespertino parcial 4h Maturino/Vespertino
+					elsif ((rotation.id == 5)||(rotation.id == 6)||(rotation.id == 7)||(rotation.id == 19)) # if usado para tratar quando e Matutino/Vespertino ou Matutino/Noturno ou Vespertino/Vespertino parcial 4h Maturino/Vespertino
 						qtdVtPagas = ((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)*2
 															#((30.44/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos)
 						controleDePostosParaCalculoVt = qtdPostos*2
@@ -1377,11 +1402,11 @@ class Proposal < ActiveRecord::Base
 		#Trocar assim que tivermos o total de serviços
 		totComOperacaoAdmReserva = totPropostaComReservaTecnicaIndiceOperacional+valorIndiceAdministrativo
 		update_column(:tot_com_reserva_indce_op_indice_adm,(totComOperacaoAdmReserva))
-		valorIssqn = totComOperacaoAdmReserva*(city.issqn/100)#totalDeServicos
-		valorPis = totComOperacaoAdmReserva*(company.pis/100)#totalDeServicos
-		valorCofins = totComOperacaoAdmReserva*(company.cofins/100)#totalDeServicos
-		valorCsll = totComOperacaoAdmReserva*(company.csll/100)#totalDeServicos
-		valorIrrf = totComOperacaoAdmReserva*(company.irrf/100)#totalDeServicos
+		valorIssqn = (totComOperacaoAdmReserva*(city.issqn/100)).round(2)#totalDeServicos
+		valorPis = (totComOperacaoAdmReserva*(company.pis/100)).round(2)#totalDeServicos
+		valorCofins = (totComOperacaoAdmReserva*(company.cofins/100)).round(2)#totalDeServicos
+		valorCsll = (totComOperacaoAdmReserva*(company.csll/100)).round(2)#totalDeServicos
+		valorIrrf = (totComOperacaoAdmReserva*(company.irrf/100)).round(2)#totalDeServicos
 		update_column(:valor_issqn,(valorIssqn))
 		update_column(:valor_pis,(valorPis))
 		update_column(:valor_cofins,(valorCofins))

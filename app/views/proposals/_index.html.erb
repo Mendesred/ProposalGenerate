@@ -8,7 +8,7 @@
 		</button>
 		<ul class="dropdown-menu proposta pull-right">
 			<% @select_all_service.order("created_at").each do |service| %>
-				<% if service.id< 6 %>
+				<% if service.id< 7 %>
 					<li>
 						<div class="">
 							<%= link_to "/services/#{service.id}/proposals/new",class:"btn btn-success TamanhaBotoes", type:"button" do %>
@@ -16,7 +16,7 @@
 							<% end %>
 						</div>
 					</li>
-					<% else %>
+				<% else %>
 					<li>
 						<div class="">
 							<%= link_to "/services/#{service.id}/proposals/new",class:"btn btn-warning TamanhaBotoes", type:"button" do %>

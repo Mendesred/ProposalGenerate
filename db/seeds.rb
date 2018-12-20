@@ -26,35 +26,27 @@ Company.find_or_create_by(
 
 puts "Empresas criadas"
 Service.find_or_create_by!(
-		tipo_servico: 'Segurança', 
-		company: Company.first,
-		desconto_vr:0.82,
-		cesta:49.11)
+		tipo_servico: 'Segurança', company: Company.first, desconto_vr:0.82, cesta:49.11)
 Service.find_or_create_by!(
-		tipo_servico: 'Portaria', 
-		company: Company.last,
-		desconto_vr:0.8,
-		cesta:127.5)
+		tipo_servico: 'Portaria',	company: Company.last, desconto_vr:0.8,	cesta:127.5)
 Service.find_or_create_by!(
-		tipo_servico: 'Limpeza', 
-		company: Company.last,
-		desconto_vr:0.13,
-		cesta:102.59)
+		tipo_servico: 'Limpeza', 	company: Company.last, desconto_vr:0.13, cesta:102.59)
 Service.find_or_create_by!(
-		tipo_servico: 'Manutenção', 
-		company: Company.last,
-		desconto_vr:0.13,
-		cesta:102.59)
+		tipo_servico: 'Manutenção',	company: Company.last, desconto_vr:0.13, cesta:102.59)
 Service.find_or_create_by!(
-		tipo_servico: 'Jardinagem', 
-		company: Company.last,
-		desconto_vr:0.13,
-		cesta:102.59)
+		tipo_servico: 'Jardinagem', company: Company.last, desconto_vr:0.13, cesta:102.59)
 Service.find_or_create_by!(
-		tipo_servico: 'Outros', 
-		company: Company.last,
-		desconto_vr:0.13,
-		cesta:102.59)
+		tipo_servico: 'Outros', company: Company.last, desconto_vr:0.13, cesta:102.59)
+Service.find_or_create_by!(
+		tipo_servico: 'Segurança Parcial', company: Company.first,	desconto_vr:0.82,	cesta:49.11)
+Service.find_or_create_by!(
+		tipo_servico: 'Portaria Parcial', company: Company.last, desconto_vr:0.8,	cesta:127.5)
+Service.find_or_create_by!(
+		tipo_servico: 'Limpeza Parcial', company: Company.last,	desconto_vr:0.13,	cesta:102.59)
+Service.find_or_create_by!(
+		tipo_servico: 'Manutenção Parcial', company: Company.last, desconto_vr:0.13, cesta:102.59)
+Service.find_or_create_by!(
+		tipo_servico: 'Jardinagem Parcial', company: Company.last, desconto_vr:0.13,cesta:102.59)
 
 puts  "Tipos de serviços criados"
 							
@@ -253,7 +245,7 @@ Rotation.find_or_create_by(
 		efetivo:1.2,
 		dias_trabalhados:25.3646,
 		fator_escala:30.44,
-		v_reciclagem:28,78,
+		v_reciclagem:28.78,
 		period:Period.find_by(id:1),
 		ad_vespertido_noturno:0.0,
 		ad_noturno:0)
@@ -264,7 +256,7 @@ Rotation.find_or_create_by(
 		efetivo:1.2,
 		dias_trabalhados:25.3646,
 		fator_escala:30.44,
-		v_reciclagem:28,78,
+		v_reciclagem:28.78,
 		period:Period.find_by(id:1),
 		ad_vespertido_noturno:0.0,
 		ad_noturno:4)
@@ -278,29 +270,8 @@ Rotation.find_or_create_by(
 		v_reciclagem:28.78,
 		period:Period.find_by(id:6),
 		ad_vespertido_noturno:0.1,
-		ad_noturno:7)
+		ad_noturno:5)
 
-Rotation.find_or_create_by(
-		tipo_escala:'5x1 dois periodo Matutino e 1 escala 4h',
-		qtd_funcionarios:1,
-		efetivo:1.2,
-		dias_trabalhados:25.3646,
-		fator_escala:30.44,
-		v_reciclagem:28.78,
-		period:Period.find_by(id:6),
-		ad_vespertido_noturno:0,
-		ad_noturno:0)
-
-Rotation.find_or_create_by(
-		tipo_escala:'5x1 dois periodo Noturno e 1 escala 4h',
-		qtd_funcionarios:1,
-		efetivo:1.2,
-		dias_trabalhados:25.3646,
-		fator_escala:30.44,
-		v_reciclagem:28.78,
-		period:Period.find_by(id:6),
-		ad_vespertido_noturno:0.1,
-		ad_noturno:4)
 
 puts  "Escala criada"
 	
@@ -326,53 +297,53 @@ puts  "Escala criada"
 Role.find_or_create_by!(
 		cargo:'Vigilante',
 		salario:1486.9,
-		gratificacao:0,
+		gratificacao:0.0,
 		vale_refeicao:22.62,
 		assist_medica:231.92,
-		seg_vida:5.49,
+		seg_vida:7.76,
 		uniformes:36.79,
-		assist_Soc_Familiar:0,
-		beneficio_Natalidade:0,
-		ppr:0,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
 		service: Service.first)
 
 Role.find_or_create_by!(
 		cargo:'Vigilante Monitor de Segurança Eletrônica',
 		salario:1486.9,
-		gratificacao:5,
+		gratificacao:5.0,
 		vale_refeicao:22.62,
 		assist_medica:231.92,
-		seg_vida:5.49,
+		seg_vida:7.76,
 		uniformes:36.79,
-		assist_Soc_Familiar:0,
-		beneficio_Natalidade:0,
-		ppr:0,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
 		service: Service.first)
 
 Role.find_or_create_by!(
 		cargo:'Vigilante Condutor de Veículo / Cão',
 		salario:1486.9,
-		gratificacao:10,
+		gratificacao:10.0,
 		vale_refeicao:22.62,
 		assist_medica:231.92,
-		seg_vida:5.49,
+		seg_vida:7.76,
 		uniformes:36.79,
-		assist_Soc_Familiar:0,
-		beneficio_Natalidade:0,
-		ppr:0,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
 		service: Service.first)
 												
 Role.find_or_create_by!(
 		cargo:'Vigilante Lider',
 		salario:1486.9,
-		gratificacao:12,
+		gratificacao:12.0,
 		vale_refeicao:22.62,
 		assist_medica:231.92,
-		seg_vida:5.49,
+		seg_vida:7.76,
 		uniformes:36.79,
-		assist_Soc_Familiar:0,
-		beneficio_Natalidade:0,
-		ppr:0,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
 		service: Service.first)
 
 Role.find_or_create_by!(
@@ -383,8 +354,8 @@ Role.find_or_create_by!(
 		assist_medica:0.0,
 		seg_vida:1.84,
 		uniformes:26.38,
-		assist_Soc_Familiar:0,
-		beneficio_Natalidade:0,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
 		ppr:224.4,
 		service: Service.find(2))
 
@@ -400,7 +371,6 @@ Role.find_or_create_by!(
 		beneficio_Natalidade:3.76,
 		ppr:258.57,
 		service: Service.find(3))
-
 #*novos Cargos*#
 Role.find_or_create_by!(
 		cargo:'Jardineiro',
@@ -444,67 +414,107 @@ Role.find_or_create_by!(
 Role.find_or_create_by!(
 		cargo:'Vigilante/Condutor de Veículos Motorizados',
 		salario:1486.9,
-		gratificacao:10,
+		gratificacao:10.0,
 		vale_refeicao:22.62,
 		assist_medica:231.92,
-		seg_vida:5.49,
+		seg_vida:7.76,
 		uniformes:24.81,
-		assist_Soc_Familiar:0,
-		beneficio_Natalidade:0,
-		ppr:0,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
 		service: Service.first)
 
 Role.find_or_create_by!(
 		cargo:'Vigilante/Segurança Pessoal',
 		salario:1486.9,
-		gratificacao:10,
+		gratificacao:10.0,
 		vale_refeicao:22.62,
 		assist_medica:231.92,
-		seg_vida:5.49,
+		seg_vida:7.76,
 		uniformes:24.81,
-		assist_Soc_Familiar:0,
-		beneficio_Natalidade:0,
-		ppr:0,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
 		service: Service.first)
 
 Role.find_or_create_by!(
 		cargo:'Vigilante Balanceiro',
 		salario:1486.9,
-		gratificacao:10,
+		gratificacao:10.0,
 		vale_refeicao:22.62,
 		assist_medica:231.92,
-		seg_vida:5.49,
+		seg_vida:7.76,
 		uniformes:24.81,
-		assist_Soc_Familiar:0,
-		beneficio_Natalidade:0,
-		ppr:0,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
 		service: Service.first)
 
 Role.find_or_create_by!(
 		cargo:'Vigilante/Brigadista',
 		salario:1486.9,
-		gratificacao:10,
+		gratificacao:10.0,
 		vale_refeicao:22.62,
 		assist_medica:231.92,
-		seg_vida:5.49,
+		seg_vida:7.76,
 		uniformes:24.81,
-		assist_Soc_Familiar:0,
-		beneficio_Natalidade:0,
-		ppr:0,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
 		service: Service.first)
 
 Role.find_or_create_by!(
 		cargo:'Vigilante em Regime de Tempo Parcial',
 		salario:878.65,
-		gratificacao:10,
+		gratificacao:0.0,
 		vale_refeicao:22.62,
-		assist_medica:231.92,
-		seg_vida:5.49,
-		uniformes:24.81,
-		assist_Soc_Familiar:0,
-		beneficio_Natalidade:0,
-		ppr:0,
-		service: Service.first)
+		assist_medica:227.71,
+		seg_vida:7.76,
+		uniformes:36.79,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
+		service: Service.find(7))
+
+Role.find_or_create_by!(
+		cargo:'Vigilante Condutor em Regime de Tempo Parcial',
+		salario:878.65,
+		gratificacao:10.0,
+		vale_refeicao:22.62,
+		assist_medica:227.71,
+		seg_vida:7.76,
+		uniformes:36.79,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
+		service: Service.find(7))
+
+Role.find_or_create_by!(
+		cargo:'Controlador em Regime de Tempo Parcial',
+		salario:666.03,
+		gratificacao:0.0,
+		vale_refeicao:16.6,
+		assist_medica:0.0,
+		seg_vida:1.79,
+		uniformes:26.39,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:224.4,
+		service: Service.find(8))
+
+Role.find_or_create_by!(
+		cargo:'Auxiliar de Limpeza (piso)',
+		salario:555.35,
+		gratificacao:0.0,
+		vale_refeicao:14.73,
+		assist_medica:0.0,
+		seg_vida:1.79,
+		uniformes:16.89,
+		assist_Soc_Familiar:9.33,
+		beneficio_Natalidade:3.76,
+		ppr:258.57,
+		service: Service.find(9))
+
 puts  "Cargo criado"
 
 category = ["Acabamentos",
