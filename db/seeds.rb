@@ -570,31 +570,31 @@ Calculation.find_or_create_by(
 		horasDeCalculoAdNoturno:52.5)
 
 puts  "Campos de calculos criados"
-Admin.create!( 
-		nome: "Administrador",
-		email:"ti@grupoiron.com",
-		password:"123456",
-		password_confirmation:"123456",
-		privilegio: 0)
-Admin.create!( 
-		nome: "vivian",
-		email:"vivian@grupoiron.com",
-		password:"123456",
-		password_confirmation:"123456",
-		privilegio: 0)
-Admin.create!( 
-		nome: "usuario",
-		email:"usuario@grupoiron.com",
-		password:"123456",
-		password_confirmation:"123456",
-		privilegio: 1)
-Admin.create!( 
-		nome: "luiz",
-		email:"luiz@grupoiron.com",
-		password:"123456",
-		password_confirmation:"123456",
-		privilegio: 1)
-puts  "Campos de Admins criados"
+# Admin.create!( 
+# 		nome: "Administrador",
+# 		email:"ti@grupoiron.com",
+# 		password:"123456",
+# 		password_confirmation:"123456",
+# 		privilegio: 0)
+# Admin.create!( 
+# 		nome: "vivian",
+# 		email:"vivian@grupoiron.com",
+# 		password:"123456",
+# 		password_confirmation:"123456",
+# 		privilegio: 0)
+# Admin.create!( 
+# 		nome: "usuario",
+# 		email:"usuario@grupoiron.com",
+# 		password:"123456",
+# 		password_confirmation:"123456",
+# 		privilegio: 1)
+# Admin.create!( 
+# 		nome: "luiz",
+# 		email:"luiz@grupoiron.com",
+# 		password:"123456",
+# 		password_confirmation:"123456",
+# 		privilegio: 1)
+# puts  "Campos de Admins criados"
 =begin
 10.times do
 	Proposal.find_or_create_by!(
