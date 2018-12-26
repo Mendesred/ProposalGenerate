@@ -236,7 +236,6 @@
 										<td class="showFonteSize"><%= number_to_currency(@proposal.total_hr_extras_feriado)  %></td>  
 									</tr>
 								<% end %>
-
 								<tr>
 									<td class="showFonteSize">  Adicional noturno - vespertino:</td>
 									<td class="showFonteSize"> <%= (((@proposal.rotation.ad_vespertido_noturno*100)/@select_all_calculation.horasDeCalculoAdNoturno).round(4)*@proposal.rotation.fator_escala).round(4)%> Hs</td>  
@@ -269,7 +268,6 @@
 					</p>
 				</div>
 			</div>
-
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<strong> Obrigações sociais sobre massa salarial:</strong>
