@@ -87,7 +87,7 @@ class RolesController < ApplicationMainController
 		def role_params
 			delocalize_config = { :salario => :number,:assist_medica => :number, :seg_vida => :number, :uniformes => :number, 
 														:assist_Soc_Familiar => :number, :vale_refeicao => :number, :ppr => :number,:beneficio_Natalidade => :number, :uniformes => :number }
-			params.require(:role).permit(:cargo, :salario, :gratificacao, :assist_medica,:seg_vida, :uniformes, 
+			params.require(:role).permit(:reciclagem,:cargo, :salario, :gratificacao, :assist_medica,:seg_vida, :uniformes, 
 				:assist_Soc_Familiar, :beneficio_Natalidade, :ppr, :vale_refeicao, :service_id).delocalize(delocalize_config)
 		end
 end

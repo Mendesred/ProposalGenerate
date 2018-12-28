@@ -120,7 +120,7 @@
 										<tr>
 											<td class="showFonteSize"> Valor de Periculosidade:</td>  
 											<td class="showFonteSize">30% de <%=number_to_currency(@proposal.salario)%></td>
-											<td class="showFonteSize"><%=number_to_currency(0.3*@proposal.salario)%></td>
+											<td class="showFonteSize"><%=number_to_currency(@proposal.valor_peri_ou_isalubri)%></td>
 										</tr>
 									<% elsif @proposal.adcional_periculosidade_insalubridade == 2  %>
 										<tr>
@@ -128,33 +128,46 @@
 											<td class="showFonteSize"><%=((@proposal.grau_de_insalubridade)*100).round(0)%> % de 
 												<%= number_to_currency(@select_all_calculation.salario_minimo)%></td> 
 											<td class="showFonteSize"><%=number_to_currency(@proposal.grau_de_insalubridade*@select_all_calculation.salario_minimo)%></td> 
-										</tr>
+									</tr>
 									<% end %>
 									<% if @proposal.total_hr_extras >0 %>
 										<tr>                 
 											<td class="showFonteSize"> Hora extra intervalo e jornada: <b></td>  
 											<td class="showFonteSize"> <%= ((@proposal.horas_extras).round(2))%> Hs</td>  
 											<td class="showFonteSize"> <%= number_to_currency(@proposal.total_hr_extras) %></td>  
-											</tr>
-										<% end %>
-										<% if @proposal.h_feriado.nil? || @proposal.h_feriado ==0 %>
-										<% else %>
-										<tr>
-											<td class="showFonteSize"> Hora Feriado: </td>  
-											<td class="showFonteSize"> <%= (((@proposal.valor_feriados_de_cities_mv*@proposal.dois_terco)+(@proposal.valor_feriados_de_cities_n*@proposal.um_terco)).round(3)).round(3) %> Hs</td>  
-											<td class="showFonteSize"> <%= number_to_currency(@proposal.total_hr_extras_feriado) %></td>  
 										</tr>
 									<% end %>
-									<tr>
-										<td class="showFonteSize">  Adicional noturno - vespertino:</td>  
-										<td class="showFonteSize"> <%= (((@proposal.rotation.ad_vespertido_noturno*100)/@select_all_calculation.horasDeCalculoAdNoturno).round(4)*@proposal.rotation.fator_escala).round(4)%> Hs</td>  
-										<td class="showFonteSize"> <%= number_to_currency(@proposal.total_hrs_ad_noturno_vespertino) %></td>  
-									</tr>
-									<tr>
-										<td class="showFonteSize">  Adicional noturno - noturno:</td>  
-										<td class="showFonteSize"> <%=@proposal.show_horas.round(5)%> Hs</td>  
-										<td class="showFonteSize"> <%= number_to_currency(@proposal.total_hrs_ad_noturno) %></td>  
-									</tr>
+									<% if @proposal.h_feriado.nil? || @proposal.h_feriado ==0 %>
+									<% else %>
+										<tr>
+											<td class="showFonteSize"> Hora Feriado: </td>  
+												<% if @proposal.v_calc != 0 && @proposal.v_calc.nil?  %>
+												<%=@proposal.valor_feriados_de_cities_mv%> <%=@proposal.dois_terco%> <%=@proposal.valor_feriados_de_cities_n%> <%=@proposal.um_terco%>
+												<td class="showFonteSize"><%= (((@proposal.valor_feriados_de_cities_mv*@proposal.dois_terco)+(@proposal.valor_feriados_de_cities_n*@proposal.um_terco)).round(3)).round(3) %> Hs</td>  
+												<% else %>
+													<td class="showFonteSize"><%= (@proposal.v_calc).round(2)%> Hs</td>
+												<% end %>
+											<td class="showFonteSize"><%= number_to_currency(@proposal.total_hr_extras_feriado)  %></td>  
+										</tr>
+									<% end %>
+									<% if @proposal.rotation.ad_vespertido_noturno != 0.0 %>
+										<tr>
+											<td class="showFonteSize">  Adicional noturno - vespertino:</td>
+											<td class="showFonteSize"> <%= (((@proposal.rotation.ad_vespertido_noturno*100)/@select_all_calculation.horasDeCalculoAdNoturno).round(4)*@proposal.rotation.fator_escala).round(4)%> Hs</td>  
+											<td class="showFonteSize"> <%= number_to_currency(@proposal.total_hrs_ad_noturno_vespertino) %></td>  
+										</tr>
+									<%end%>
+									<% if @proposal.rotation.ad_noturno != 0.0 %>
+										<tr>
+											<td class="showFonteSize">  Adicional noturno - noturno:</td>  
+												<% if @proposal.total_hrs_ad_noturno != 0 && @proposal.total_hrs_ad_noturno.nil? %>
+													<td class="showFonteSize"> 30.44</td>  
+												<% else %>
+													<td class="showFonteSize"> <%=@proposal.show_horas.round(5)%></td>  
+												<% end%>
+											<td class="showFonteSize"> <%= number_to_currency(@proposal.total_hrs_ad_noturno) %></td>  
+										</tr>
+									<% end%>
 									<tr>
 										<td class="showFonteSize">Reflexos sobre a folha - DSR:</td>  
 										<td class="showFonteSize"> <%= %> </td>  

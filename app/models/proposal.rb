@@ -61,7 +61,7 @@ class Proposal < ActiveRecord::Base
 		vUniUniforme = 0,vUniVR = 0,vUniSegVida = 0, horas_vespertino = 0,vUniPpr = 0,descontoVr = 0,tipoServico = 0, valorCesta  = 0,
 		valorSocFamiliar = 0,valorBenNatalidade = 0, multiplicador = 0,totSocialFamiliar = 0,totBenNatalidade = 0,horas_trabalhadas = 0,
 		h_refeicao = 0, qtdPostos = 0,teste1 = 0,	teste2 = 0,	teste3 = 0,	teste4 = 0,teste5 = 'to no inicio'
-		depreciacaoValida =0.0,reservaTecnica = 0
+		depreciacaoValida =0.0,reservaTecnica = 0 , opcReciclagem = 0
 
 		self.proposal_equipaments.each do |proposal_equipament| # for usado para pegar todos os equipamentos adcionados na proposta.
 			unless (proposal_equipament.depreciacao_aux.nil?)
@@ -91,6 +91,7 @@ class Proposal < ActiveRecord::Base
 			####### Estou ciente que não é a melhor forma de pegar este dado porem foi a unica que encontei		########
 			####### NOTA PARA FUTURAS MANUTENÇÕES																															########
 			##########################################################################################################
+			opcReciclagem = proposal_role.role.reciclagem
 
 			vUniAssistMedica = proposal_role.role.assist_medica.to_f
 
@@ -175,8 +176,6 @@ class Proposal < ActiveRecord::Base
 		update_column(:dois_terco,(doisTerco))
 		horasMes = 0
 
-
-
 		if ((rotation.period_id == 2) || (rotation.period_id == 4) || (rotation.period_id == 6) || (rotation.period_id == 7)) 
 			
 			horas_vespertino = (((rotation.ad_vespertido_noturno*100)/select_calculation.horasDeCalculoAdNoturno).round(4)*rotation.fator_escala).round(4)
@@ -204,16 +203,19 @@ class Proposal < ActiveRecord::Base
 			totalHrsAdNoturno = (((((baseCalculoSalarioMedio + valorPeriOuIsalubri).round(2)/220)) * 0.2 *
 													((rotation.dias_trabalhados * rotation.ad_noturno)))*
 															(totalFuncionarios/rotation.qtd_funcionarios)/efetivoTotal).round(2) #adicional noturno
-		elsif (rotation.id == 17 || rotation.id == 19)
-			showHoras = (rotation.dias_trabalhados * rotation.ad_noturno)
-			totalHrsAdNoturno = (((((baseCalculoSalarioMedio + valorPeriOuIsalubri).round(2)/220)) * 0.2 *
-													((rotation.fator_escala)))*
-															(totalFuncionarios/rotation.qtd_funcionarios)/efetivoTotal).round(2) #adicional noturno
+		elsif (rotation.id == 18 || rotation.id == 19)
+			#showHoras = (rotation.dias_trabalhados * rotation.ad_noturno)
+			showHoras = (((ajusteDivPorZero * 60)/select_calculation.horasDeCalculoAdNoturno).round(6) * rotation.fator_escala * rotation.ad_noturno)
+			totalHrsAdNoturno = ((((((baseCalculoSalarioMedio + valorPeriOuIsalubri).round(2)/220)) * 0.2 * (showHoras))*
+																		(totalFuncionarios/rotation.qtd_funcionarios))/efetivoTotal).round(2) #adicional noturno
+			puts"#{rotation.dias_trabalhados}"
+			puts"parte #{rotation.ad_noturno}"
+
 		end
 		if totalHrsAdNoturno == 0
 			totalHrsAdNoturno = 0
 		else
-			totalHrsAdNoturno =totalHrsAdNoturno
+			totalHrsAdNoturno = totalHrsAdNoturno
 		end
 		update_column(:total_hrs_ad_noturno, (totalHrsAdNoturno))
 		update_column(:show_horas, (showHoras))
@@ -258,13 +260,13 @@ class Proposal < ActiveRecord::Base
 					if (rotation.id == 1) # if usado para tratar quando e Matutino/Vespertino/Noturno
 						horasExtras = (calculos_proposta.calculo_modelo_de_horas_extras(30.44,7,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)*2+
 														calculos_proposta.calculo_modelo_de_horas_extras(30.44,7,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)*1.142875).round(2)
-					elsif ((rotation.id == 2)||(rotation.id == 3)||(rotation.id == 4)||(rotation.id == 18)||(rotation.id == 19))# if usado para tratar quando e Matutino ou Vespertino ou Noturno
-						unless (rotation.id == 4) || (rotation.id == 19)
+					elsif ((rotation.id == 2)||(rotation.id == 3)||(rotation.id == 4)||(rotation.id == 17)||(rotation.id == 18))# if usado para tratar quando e Matutino ou Vespertino ou Noturno
+						unless (rotation.id == 4) || (rotation.id == 18)
 							horasExtras = (calculos_proposta.calculo_modelo_de_horas_extras(30.44,7,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)).round(2)
 						else
 							horasExtras = (calculos_proposta.calculo_modelo_de_horas_extras(30.44,7,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)*1.142857).round(2)
 						end
-					elsif ((rotation.id == 5)||(rotation.id == 6)||(rotation.id == 7)||(rotation.id == 4)||(rotation.id == 17)) # if usado para tratar quando e Matutino/Vespertino ou Matutino/Noturno ou Vespertino/Vespertino
+					elsif ((rotation.id == 5)||(rotation.id == 6)||(rotation.id == 7)||(rotation.id == 4)||(rotation.id == 19)) # if usado para tratar quando e Matutino/Vespertino ou Matutino/Noturno ou Vespertino/Vespertino
 						unless (rotation.id  == 6)||(rotation.id  == 7)
 							horasExtras = (calculos_proposta.calculo_modelo_de_horas_extras(30.44,7,diasJornadaExSemanaAll,feriadoParcial,qtdPostos,hExJornadaAll,mExJornadaAll)*2).round(2)
 						else
@@ -589,18 +591,16 @@ class Proposal < ActiveRecord::Base
 			totalHrExtrasFeriado = (((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220)*
 															((vFeriadosDeCitiesMV*doisTerco)+(vFeriadosDeCitiesN*umTerco))/(efetivoTotal)).round(2)
 			teste = ((vFeriadosDeCitiesMV*doisTerco)+(vFeriadosDeCitiesN*umTerco))
-			puts"#{teste}"
-			puts"#{baseCalculoSalarioMedio},#{valorPeriOuIsalubri},#{totalHrsAdNoturnoVespertino},#{totalHrsAdNoturno},#{vFeriadosDeCitiesMV},#{doisTerco},#{vFeriadosDeCitiesN},#{umTerco},efetivo toral->#{totalHrExtrasFeriado}"
 			if totalHrExtrasFeriado == 0
 				totalHrExtrasFeriado = 0
 			end
 			if (( rotation.id == 17 )||( rotation.id == 18)||( rotation.id == 19 ))
-				if  ( rotation.id ==19 )
+				if  ( rotation.id == 19 )
 					vCalc	= 4.33*(2*qtdPostos)
 					totalHrExtrasFeriado =(((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220)*
 															(vCalc)/(efetivoTotal)).round(2)
-				elsif ( rotation.id == 18)||( rotation.id == 17)
-					if ( rotation.id == 17)
+				elsif ( rotation.id == 18 )||( rotation.id == 17 )
+					if ( rotation.id == 17 )
 						totalHrsAdNoturnoSuporte = 0
 					else
 						totalHrsAdNoturnoSuporte = totalHrsAdNoturno
@@ -980,10 +980,6 @@ class Proposal < ActiveRecord::Base
 
 			totSocialFamiliar = (efetivoTotal*valorSocFamiliar).round(2) 
 			totBenNatalidade = (efetivoTotal*valorBenNatalidade).round(2) 
-			puts"qrdVrPagas"
-			puts"#{multiplicador}"
-			#puts"#{}"
-			#puts"#{}"
 
 			update_column(:multiplicador, (multiplicador))
 			update_column(:tot_social_familiar, (totSocialFamiliar))
@@ -1321,17 +1317,23 @@ class Proposal < ActiveRecord::Base
 		if totVT < 0
 			totVT = 0
 		end
-		
+
+		if opcReciclagem == 1
+			reciclagrem = rotation.v_reciclagem
+		else
+			reciclagrem = 0
+		end
+
 		if (company.id == 1)
-			totReciclagem = (rotation.v_reciclagem*efetivoTotal).round(2)
+			totReciclagem = (reciclagrem*efetivoTotal).round(2)
 		else
 			totReciclagem = 0.0
-		end    
+		end
 		if (company.id == 2)
 			totPpr = ((vUniPpr*efetivoTotal)/12).round(2)
 		else
 			totPpr = 0.0
-		end  
+		end 
 		totUniforme = (vUniUniforme*efetivoTotal).round(2)
 
 		totBeneficios =(totCesta+totVR+totAssiteciaMedica+totSeguroVida+totVT+totReciclagem+totUniforme+totPpr+totSocialFamiliar+totBenNatalidade).round(2)
