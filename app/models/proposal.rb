@@ -189,7 +189,6 @@ class Proposal < ActiveRecord::Base
 			update_column(:total_hrs_ad_noturno_vespertino, (totalHrsAdNoturnoVespertino))
 		end
 		### Valor de 9.14 usando para as Escalas 5x2 e 6x1 ###
-		
 		#adDoturno5x2e6x1 = 9.14
 		#else
 		#adDoturno5x2e6x1 = 1
@@ -208,8 +207,6 @@ class Proposal < ActiveRecord::Base
 			showHoras = (((ajusteDivPorZero * 60)/select_calculation.horasDeCalculoAdNoturno).round(6) * rotation.fator_escala * rotation.ad_noturno)
 			totalHrsAdNoturno = ((((((baseCalculoSalarioMedio + valorPeriOuIsalubri).round(2)/220)) * 0.2 * (showHoras))*
 																		(totalFuncionarios/rotation.qtd_funcionarios))/efetivoTotal).round(2) #adicional noturno
-			puts"#{rotation.dias_trabalhados}"
-			puts"parte #{rotation.ad_noturno}"
 
 		end
 		if totalHrsAdNoturno == 0
