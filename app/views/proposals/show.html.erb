@@ -227,7 +227,6 @@
 									<tr>
 										<td class="showFonteSize"> Hora Feriado: </td>  
 										<% if @proposal.v_calc != 0 && @proposal.v_calc.nil?  %>
-										<%=@proposal.valor_feriados_de_cities_mv%> <%=@proposal.dois_terco%> <%=@proposal.valor_feriados_de_cities_n%> <%=@proposal.um_terco%>
 											<td class="showFonteSize"><%= (((@proposal.valor_feriados_de_cities_mv*@proposal.dois_terco)+(@proposal.valor_feriados_de_cities_n*@proposal.um_terco)).round(3)).round(3) %> Hs</td>  
 										<% else %>
 											<td class="showFonteSize"><%= (@proposal.v_calc).round(2)%> Hs</td>

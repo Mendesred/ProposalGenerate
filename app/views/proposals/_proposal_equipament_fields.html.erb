@@ -12,28 +12,31 @@
   <#%= f.collection_select :country_id, Country.order(:name), :id, :name, include_blank: true %>
 	-->
   <%= f.collection_select :type_equipament_id, @select_all_equip_type, :id, :name_type,{ include_blank: true},{:required =>true,id:'type',class:'form-control',style:"width: 97%; margin-left: 14px;"} %>
-  	
   <div id="painelCollapse" class="collapse ">
   	<%= f.label "Sub-categoria",style:"width: 97%; margin-left: 14px;" %><br>
-  	  <%= f.grouped_collection_select :sub_type_id, @select_all_equip_type.order(:name_type){|p| [p.id]}, :sub_types, :name_type, :id, :name_select ,{ include_blank: true},class: 'form-control', id:'subType', style:"width: 97%; margin-left: 14px;" %>
+  	<%= f.grouped_collection_select :sub_type_id, @select_all_equip_type.order(:name_type){|p| [p.id]}, :sub_types, :name_type, :id, :name_select ,{ include_blank: true},class: 'form-control', id:'subType', style:"width: 97%; margin-left: 14px;" %>
   	<!--div id="painelCollapse2" class="collapse "-->
-  		<%= f.label "item",style:"width: 97%; margin-left: 14px;"%><br>
-			<%= f.grouped_collection_select :equipament_id, @select_all_sub_type.order(:name_sub_type){|p| [p.id]}, :equipaments, :name_select, :id, :name_select ,{ include_blank: true},class: 'form-control', id:'equipament', style:"width: 97%; margin-left: 14px;" %>
-		
-			<div class="col-md-6" style="padding-left: 0">
-  	  	<div id='quantidadeEquipament'class="field">
-					<%= f.label "Quantidade",style:"width: 97%; margin-left: 14px;" %><br>
-					<%= f.text_field :quantidade, step: 0.01,:required =>true,class:'form-control',style:"width: 97%; margin-left: 14px;"%>
-				</div>
+  	<%= f.label "item",style:"width: 97%; margin-left: 14px;"%><br>
+		<%= f.grouped_collection_select :equipament_id, @select_all_sub_type.order(:name_sub_type){|p| [p.id]}, :equipaments, :name_select, :id, :name_select ,{ include_blank: true},class: 'form-control', id:'equipament', style:"width: 97%; margin-left: 14px;" %>
+		<hr>
+		<div class="col-md-4" style="padding-left: 0">
+  	 	<div id='quantidadeEquipament'class="field">
+				<%= f.label "Quantidade",style:"width: 97%; margin-left: 14px;" %><br>
+				<%= f.text_field :quantidade, step: 0.01,:required =>true,class:'form-control',style:"width: 97%; margin-left: 14px;"%>
 			</div>
-			<div class="col-md-6">
-				<div id='depreciacaoAux'class="field">
-					<div class="paddingBottonProposalEquipament">
-						<strong>Depreciação alternativa</strong> (inserir valor em quantidade de mêses) <br>
-					</div>
-					<%= f.text_field :depreciacao_aux, step: 0.01,class:'form-control'%>
-				</div>
+		</div>
+		<div class="col-md-4" style="padding-left: 0">
+  	 	<div id='valorEquipSub'class="field">
+				<%= f.label "Valor alternativo do equipamento ",style:"width: 97%; margin-left: 14px;" %><br>
+				<%= f.text_field :valorEquipSub, :value => number_with_precision(f.object.valorEquipSub,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:100%",:data => {:mask=> '99.99'}%>
 			</div>
+		</div>
+		<div class="col-md-4">
+			<div id='depreciacaoAux'class="field">
+				<%= f.label "Depreciação alternativa",style:"width: 97%; margin-left: 14px;" %><br>
+				<%= f.text_field :depreciacao_aux, step: 0.01,class:'form-control'%>
+			</div>
+		</div>
 		<!--/div-->
 	</div>
 

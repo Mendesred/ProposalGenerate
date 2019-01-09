@@ -21,7 +21,6 @@ class Proposal < ActiveRecord::Base
 	accepts_nested_attributes_for :proposal_equipaments, allow_destroy:true
 	accepts_nested_attributes_for :proposal_roles, allow_destroy:true
 
-
 	after_save :execult_saving_routine
 	#after_save :prenche_vasio
 	#after_save :valida_tipo_select
@@ -83,7 +82,6 @@ class Proposal < ActiveRecord::Base
 			salario = proposal_role.role.salario.to_f #total Salario no posto 
 			efetivoIndivitual = self.rotation.efetivo/self.rotation.qtd_funcionarios.to_f
 			acumuladorFuncionarios+=self.rotation.qtd_funcionarios*proposal_role.qtd_postos
-
 
 			##########################################################################################################
 			####### Abaixo esta alguns valores que será usado para calculos mais abaixo 											########
@@ -161,6 +159,7 @@ class Proposal < ActiveRecord::Base
 		###############################################################################################################################################
 		## adicional noturno e vespertino #############################################################################################################
 		###############################################################################################################################################
+		
 		umTerco = totalFuncionarios / 3
 		if (rotation.ad_noturno == 0) # testa quando não tem adicional noturno
 			ajusteDivPorZero = 0 # ajuste de divizão por 0
@@ -170,13 +169,17 @@ class Proposal < ActiveRecord::Base
 			ajusteDivPorZero = rotation.ad_noturno / rotation.ad_noturno # correção de erro de divizão por 0
 			doisTerco = umTerco * 2 # pega apenas 2 terços quando adicional noturno for diferente de 0 e acrecenta para o calculo de horas extras feriados
 		end
-
+		if (rotation.period_id == 3)
+			umTerco = totalFuncionarios
+			doisTerco = 0
+			puts"dois terços {regra adcional noturno}" 
+		end
 		update_column(:ajuste_div_por_zero,(ajusteDivPorZero))
 		update_column(:um_terco,(umTerco))
 		update_column(:dois_terco,(doisTerco))
 		horasMes = 0
 
-		if ((rotation.period_id == 2) || (rotation.period_id == 4) || (rotation.period_id == 6) || (rotation.period_id == 7)) 
+		if ((rotation.period_id == 1) || (rotation.period_id == 4) || (rotation.period_id == 6) || (rotation.period_id == 7)) 
 			
 			horas_vespertino = (((rotation.ad_vespertido_noturno*100)/select_calculation.horasDeCalculoAdNoturno).round(4)*rotation.fator_escala).round(4)
 			update_column(:horas_vespertino,(horas_vespertino))
@@ -205,9 +208,8 @@ class Proposal < ActiveRecord::Base
 		elsif (rotation.id == 18 || rotation.id == 19)
 			#showHoras = (rotation.dias_trabalhados * rotation.ad_noturno)
 			showHoras = (((ajusteDivPorZero * 60)/select_calculation.horasDeCalculoAdNoturno).round(6) * rotation.fator_escala * rotation.ad_noturno)
-			totalHrsAdNoturno = ((((((baseCalculoSalarioMedio + valorPeriOuIsalubri).round(2)/220)) * 0.2 * (showHoras))*
-																		(totalFuncionarios/rotation.qtd_funcionarios))/efetivoTotal).round(2) #adicional noturno
-
+			totalHrsAdNoturno = (((((((baseCalculoSalarioMedio + valorPeriOuIsalubri).round(2)/220)) * 0.2 * (showHoras))*
+																					(totalFuncionarios/rotation.qtd_funcionarios))/efetivoTotal)).round(2) #adicional noturno
 		end
 		if totalHrsAdNoturno == 0
 			totalHrsAdNoturno = 0
@@ -585,9 +587,11 @@ class Proposal < ActiveRecord::Base
 
 		vCalc = 0
 		if (h_feriado == 1)
-			totalHrExtrasFeriado = (((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220)*
-															((vFeriadosDeCitiesMV*doisTerco)+(vFeriadosDeCitiesN*umTerco))/(efetivoTotal)).round(2)
-			teste = ((vFeriadosDeCitiesMV*doisTerco)+(vFeriadosDeCitiesN*umTerco))
+
+				totalHrExtrasFeriado = (((baseCalculoSalarioMedio+valorPeriOuIsalubri+totalHrsAdNoturnoVespertino+totalHrsAdNoturno)/220)*
+																((vFeriadosDeCitiesMV*doisTerco)+(vFeriadosDeCitiesN*umTerco))/(efetivoTotal)).round(2)
+				teste = ((vFeriadosDeCitiesMV*doisTerco)+(vFeriadosDeCitiesN*umTerco))
+
 			if totalHrExtrasFeriado == 0
 				totalHrExtrasFeriado = 0
 			end
@@ -646,7 +650,6 @@ class Proposal < ActiveRecord::Base
 		## > Obrigações sociais sobre massa salarial ##################################################################################################
 		###############################################################################################################################################
 
-
 		obgFGTS = ((select_calculation.fgts/100)*massaSalarial).round(2)
 		obgINSS = ((select_calculation.inss/100)*massaSalarial).round(2)
 		seguro_aci_trabalho = (company.seguro_aci_trabalho)
@@ -673,7 +676,6 @@ class Proposal < ActiveRecord::Base
 		## >  Provisões sobre massa salarial ##########################################################################################################
 		###############################################################################################################################################
 
-		
 		totalferiasUmDozeAvos = ((efetivoTotal*salarioMedioFinal)*((select_calculation.ferias)/100)).round(2)
 		totalumTercoConstiUmDozeAvos =((efetivoTotal*salarioMedioFinal)*((select_calculation.um_terco_constitucional)/100)).round(2)
 		totaldecimoTerceiroUmDozeAvos = ((efetivoTotal*salarioMedioFinal)*((select_calculation.decimo_terceito)/100)).round(2)
@@ -681,7 +683,6 @@ class Proposal < ActiveRecord::Base
 		totalFgtsSobFeriasUnTercoDecimo = ((totalferiasUmDozeAvos+totalumTercoConstiUmDozeAvos+totaldecimoTerceiroUmDozeAvos)*(select_calculation.pct_fgts_sob_soma_decimo_um_terco_ferias/100)).round(2)
 		totalAvisoPrevio = ((select_calculation.aviso_previo/100)*massaSalarial).round(2)
 		totalIndenizacaoSobreFGTS = ((totalFgtsSobFeriasUnTercoDecimo+obgFGTS)*(select_calculation.indenizacao_fgts/100)).round(2)
-
 
 		totalProvisaoMassaSalarial = (totalferiasUmDozeAvos+totalumTercoConstiUmDozeAvos+totaldecimoTerceiroUmDozeAvos+
 																		totalInssSobFeriasUnTercoDecimo+totalFgtsSobFeriasUnTercoDecimo+totalAvisoPrevio+totalIndenizacaoSobreFGTS ).round(2)
@@ -694,7 +695,6 @@ class Proposal < ActiveRecord::Base
 		update_column(:total_aviso_previo, (totalAvisoPrevio))
 		update_column(:total_indenizacao_sobre_fgts, (totalIndenizacaoSobreFGTS))
 		update_column(:total_provisao_massa_salarial, (totalProvisaoMassaSalarial))  
-
 
 		###############################################################################################################################################
 		## > Benefícios por Funcionário  ##############################################################################################################
@@ -1090,9 +1090,10 @@ class Proposal < ActiveRecord::Base
 					# (25,36(dias trablahados no mes /5 *dias na semana (dias no mes)) *(numero de efetivo manha)+ => dias da semana de 1a7
 						qtdVtPagas = ((15.22/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos.to_f)*4
 														#((15.22/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos.to_f)
-						controleDePostosParaCalculoVt = qtdPostos*2
+						controleDePostosParaCalculoVt = (qtdPostos*2)
 					elsif (rotation.id == 15)||(rotation.id == 16)# if usado para tratar quando e Matutino ou Noturno
 						qtdVtPagas = ((15.22/7 *ajustePgVtAll)+feriadoParcial)*(qtdPostos.to_f)*2
+						controleDePostosParaCalculoVt = qtdPostos
 					end
 				end
 			end
@@ -1297,7 +1298,9 @@ class Proposal < ActiveRecord::Base
 				qtdVtPagas = (qtdVtPagas1+qtdVtPagas3)
 				controleDePostosParaCalculoVt = qtdPostos.to_f*mut.to_f
 			end# fim do if que trata escala
+
 		end
+
 		update_column(:qtd_vt_pagas, (qtdVtPagas))
 
 		if (intermunicipal == 0 || intermunicipal.nil?)
@@ -1344,8 +1347,6 @@ class Proposal < ActiveRecord::Base
 		update_column(:total_ppr, (totPpr))
 		update_column(:total_uniforme, (totUniforme))
 		update_column(:total_beneficios, (totBeneficios))
-
-
 
 		###############################################################################################################################################
 		## > total mão de obra  #######################################################################################################################
@@ -1419,7 +1420,6 @@ class Proposal < ActiveRecord::Base
 		
 		vDeCalculoTotal = valorPis+valorCofins+valorCsll+valorIrrf+valorIssqn+totComOperacaoAdmReserva
 		## Valores de totais de calculo com impostos com a proposta sem sajuste
-
 		
 		## total com ajuste de escala 
 		

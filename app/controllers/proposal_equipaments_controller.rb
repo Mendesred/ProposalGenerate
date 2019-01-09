@@ -4,7 +4,7 @@ class ProposalEquipamentsController < ApplicationMainController
   # GET /proposal_equipaments
   # GET /proposal_equipaments.json
   def index
-    @proposal_equipaments = ProposalEquipament.all
+    #@proposal_equipaments = ProposalEquipament.all
   end
 
   # GET /proposal_equipaments/1
@@ -40,6 +40,7 @@ class ProposalEquipamentsController < ApplicationMainController
   # PATCH/PUT /proposal_equipaments/1
   # PATCH/PUT /proposal_equipaments/1.json
   def update
+    puts "teste sub "+@proposal_equipament.valorEquipSub
     respond_to do |format|
       if @proposal_equipament.update(proposal_equipament_params)
         format.html { redirect_to @proposal_equipament, notice: 'Proposal equipament was successfully updated.' }
@@ -69,7 +70,7 @@ class ProposalEquipamentsController < ApplicationMainController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def proposal_equipament_params
-      delocalize_config = { :intermunicipal => :number }
-      params.require(:proposal_equipament).permit(:equipament_id, :proposal_id, :quantidade,:depreciacao_aux,:name_equipament).delocalize(delocalize_config)
+      delocalize_config = { :valorEquipSub => :number}
+      params.require(:proposal_equipament).permit(:equipament_id, :proposal_id, :quantidade, :depreciacao_aux, :name_equipament, :valorEquipSub, :valor_equipament).delocalize(delocalize_config)
     end
 end

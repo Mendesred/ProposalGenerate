@@ -114,6 +114,7 @@ class ProposalsController < ApplicationMainController
   # PATCH/PUT /proposals/1.json
   def update
     #@selected_service = Service.find(@proposal.proposal_roles[0].role.service_id)
+    puts "asdasasdadadas"
     selected_service
     selected_role
     select_period
@@ -153,7 +154,7 @@ class ProposalsController < ApplicationMainController
 
   private
     def select_city
-      @select_all_city = City.all
+      @select_all_city = City.order("created_at").all
     end
     def select_rotation
       @select_all_rotarion = Rotation.all
@@ -211,13 +212,13 @@ class ProposalsController < ApplicationMainController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def proposal_params
-      delocalize_config = { :intermunicipal => :number,:txopracional => :number, :txadministrativa=> :number  }
+      delocalize_config = { :intermunicipal => :number,:txopracional => :number, :txadministrativa=> :number, :valorEquipSub => :number, proposal_equipaments_attributes: {:valorEquipSub => :number}}
       params.require(:proposal).permit(:admin_id,:cliente, :codigo_cliente, :company_id,:txopracional,:txadministrativa, :city_id, :rotation_id, :role_id,:period_id, 
-        :intermunicipal, :h_almoco,:h_feriado, :dias_vr, :dias_vt, :adcional_periculosidade_insalubridade,:grau_de_insalubridade, 
-        :controle_hora_extra,:h_extra_jornada_all,:dias_jornada_ex_semana_all,:h_ex_jornada_all,:m_ex_jornada_all,:h_ex_feriado_jornada_all,
-        :h_extra_jornada_matu,:dias_ex_semana_matu,:h_ex_jornada_matu,:m_ex_jornada_matu,:h_ex_feriado_jornada_matu,:h_extra_jornada_vesp,
-        :dias_ex_semana_vesp,:m_ex_jornada_vesp,:h_ex_jornada_vesp,:h_ex_feriado_jornada_vesp,   :h_extra_jornada_notur,:dias_ex_semana_notur,
-        :h_ex_jornada_notur,:m_ex_jornada_notur,:h_ex_feriado_jornada_notur,:controle_vr, :vr_all, :dias_pg_vr_semana_all, 
+        :intermunicipal, :h_almoco, :h_feriado, :dias_vr, :dias_vt, :adcional_periculosidade_insalubridade, :grau_de_insalubridade, 
+        :controle_hora_extra, :h_extra_jornada_all, :dias_jornada_ex_semana_all, :h_ex_jornada_all, :m_ex_jornada_all, :h_ex_feriado_jornada_all,
+        :h_extra_jornada_matu, :dias_ex_semana_matu, :h_ex_jornada_matu, :m_ex_jornada_matu, :h_ex_feriado_jornada_matu, :h_extra_jornada_vesp,
+        :dias_ex_semana_vesp, :m_ex_jornada_vesp, :h_ex_jornada_vesp, :h_ex_feriado_jornada_vesp, :h_extra_jornada_notur, :dias_ex_semana_notur,
+        :h_ex_jornada_notur, :m_ex_jornada_notur, :h_ex_feriado_jornada_notur, :controle_vr, :vr_all, :dias_pg_vr_semana_all, 
         :dias_pg_vr_feriado_all, :vr_matu, :dias_pg_vr_semana_matu, :dias_pg_vr_feriado_matu, :vr_vesp, :dias_pg_vr_semana_vesp, 
         :dias_pg_vr_feriado_vesp, :vr_notur, :dias_pg_vr_semana_notur, :dias_pg_vr_feriado_notur, :controle_vt, :vt_all, :dias_pg_vt_semana_all, 
         :dias_pg_vt_feriado_all, :vt_matu, :dias_pg_vt_semana_matu, :dias_pg_vt_feriado_matu, :vt_vesp, :dias_pg_vt_semana_vesp, 
