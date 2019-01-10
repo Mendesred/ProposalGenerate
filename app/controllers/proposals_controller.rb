@@ -114,7 +114,6 @@ class ProposalsController < ApplicationMainController
   # PATCH/PUT /proposals/1.json
   def update
     #@selected_service = Service.find(@proposal.proposal_roles[0].role.service_id)
-    puts "asdasasdadadas"
     selected_service
     selected_role
     select_period

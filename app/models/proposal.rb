@@ -60,7 +60,7 @@ class Proposal < ActiveRecord::Base
 		vUniUniforme = 0,vUniVR = 0,vUniSegVida = 0, horas_vespertino = 0,vUniPpr = 0,descontoVr = 0,tipoServico = 0, valorCesta  = 0,
 		valorSocFamiliar = 0,valorBenNatalidade = 0, multiplicador = 0,totSocialFamiliar = 0,totBenNatalidade = 0,horas_trabalhadas = 0,
 		h_refeicao = 0, qtdPostos = 0,teste1 = 0,	teste2 = 0,	teste3 = 0,	teste4 = 0,teste5 = 'to no inicio'
-		depreciacaoValida =0.0,reservaTecnica = 0 , opcReciclagem = 0
+		depreciacaoValida =0.0,reservaTecnica = 0 , opcReciclagem = 0, valorEquipament = 0
 
 		self.proposal_equipaments.each do |proposal_equipament| # for usado para pegar todos os equipamentos adcionados na proposta.
 			unless (proposal_equipament.depreciacao_aux.nil?)
@@ -68,9 +68,14 @@ class Proposal < ActiveRecord::Base
 			else
 				depreciacaoValida = proposal_equipament.equipament.depreciacao.to_f
 			end
+			if proposal_equipament.valorEquipSub == 0 || proposal_equipament.valorEquipSub.nil?
+				valorEquipament = proposal_equipament.equipament.valor.to_f
+			else
+				valorEquipament = proposal_equipament.valorEquipSub.to_f
+			end
+
 			unless (proposal_equipament.quantidade.blank? || proposal_equipament.equipament.nil? || proposal_equipament.equipament.depreciacao.nil?)
-				totalEquipamento += (proposal_equipament.quantidade*(proposal_equipament.equipament.valor.to_f / 
-																(depreciacaoValida.to_f == 0.0 ? 1 : depreciacaoValida.to_f))).round(2)# total do valor de equipamento (usar na soma de totais).
+				totalEquipamento += (proposal_equipament.quantidade*(valorEquipament.to_f / (depreciacaoValida.to_f == 0.0 ? 1 : depreciacaoValida.to_f))).round(2)# total do valor de equipamento (usar na soma de totais).
 			end
 		end
 		self.proposal_roles.each do |proposal_role| # for para contar e somar quantidades de funcionarios e somar seus salarios.
@@ -171,8 +176,7 @@ class Proposal < ActiveRecord::Base
 		end
 		if (rotation.period_id == 3)
 			umTerco = totalFuncionarios
-			doisTerco = 0
-			puts"dois terços {regra adcional noturno}" 
+			doisTerco = 0 
 		end
 		update_column(:ajuste_div_por_zero,(ajusteDivPorZero))
 		update_column(:um_terco,(umTerco))

@@ -130,7 +130,7 @@
 											<td class="showFonteSize"><%=number_to_currency(@proposal.grau_de_insalubridade*@select_all_calculation.salario_minimo)%></td> 
 									</tr>
 									<% end %>
-									<% if @proposal.total_hr_extras >0 %>
+									<% if @proposal.total_hr_extras > 0 %>
 										<tr>                 
 											<td class="showFonteSize"> Hora extra intervalo e jornada: <b></td>  
 											<td class="showFonteSize"> <%= ((@proposal.horas_extras).round(2))%> Hs</td>  
@@ -142,7 +142,6 @@
 										<tr>
 											<td class="showFonteSize"> Hora Feriado: </td>  
 												<% if @proposal.v_calc != 0 && @proposal.v_calc.nil?  %>
-												<%=@proposal.valor_feriados_de_cities_mv%> <%=@proposal.dois_terco%> <%=@proposal.valor_feriados_de_cities_n%> <%=@proposal.um_terco%>
 												<td class="showFonteSize"><%= (((@proposal.valor_feriados_de_cities_mv*@proposal.dois_terco)+(@proposal.valor_feriados_de_cities_n*@proposal.um_terco)).round(3)).round(3) %> Hs</td>  
 												<% else %>
 													<td class="showFonteSize"><%= (@proposal.v_calc).round(2)%> Hs</td>
