@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  proposal_hour_id: 1
+  role_hour_id.integer: MyString
+
+two:
+  proposal_hour_id: 1
+  role_hour_id.integer: MyString

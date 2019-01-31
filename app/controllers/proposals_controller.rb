@@ -158,7 +158,6 @@ class ProposalsController < ApplicationMainController
     def select_rotation
       @select_all_rotarion = Rotation.all
     end
-
     def select_all_equip_type
       @select_all_equip_type = TypeEquipament.all
     end
@@ -187,7 +186,7 @@ class ProposalsController < ApplicationMainController
       @select_role_from_params = Role.order("created_at").where(["service_id =?", params[:service_id]]) 
     end
     def selected_service
-      @selected_service = Service.where(["id =?", params[:service_id]]).first 
+      @selected_service = Service.where(["id =?", params[:service_id]]).first
     end
     def select_role_associate
       @select_role_associate = @proposal.proposal_roles.build

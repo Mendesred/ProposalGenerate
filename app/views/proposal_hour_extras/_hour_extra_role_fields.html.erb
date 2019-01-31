@@ -1,0 +1,12 @@
+<div class="nested-fields">
+  <%= f.label "Cargos" %><br>
+  <%= f.collection_select(:role_id, @select_role_from_params, :id, :cargo,{},class:'form-control',style:"width: 88%;" ) %>
+	<div class="tooltip-demo">
+  <%= link_to_remove_association '', f, class: 'btn btn-danger btn-circle pull-right fa fa-trash-o',style:"margin-top: -10%;",'data-toggle'=>'tooltip', "data-placement"=>'right', title:'Remover cargo adicionado' %>
+  </div>
+
+    <div class="field">
+			<%= f.label "Quantidade posto" %><br>
+			<%= f.text_field :qtd_postos, step: 01,class:'form-control', placeholder:'0', :required =>true  %>
+		</div>
+</div>

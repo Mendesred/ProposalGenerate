@@ -1,6 +1,7 @@
 class CreateCalculations < ActiveRecord::Migration
   def change
     create_table :calculations do |t|
+      
       t.float :salario_minimo
       t.float :fgts
       t.float :inss
@@ -22,6 +23,11 @@ class CreateCalculations < ActiveRecord::Migration
       t.float :valorIndiceAdministrativo
       t.float :valorIndiceOperacional
       t.float :horasDeCalculoAdNoturno
+      t.float :coberturas
+      t.float :aviso_previo_hx
+      t.float :ferias_h_ex
+      t.float :ferias_um_terco_constitucional
+      t.float :aux_enfermidade
 
       t.timestamps null: false
     end

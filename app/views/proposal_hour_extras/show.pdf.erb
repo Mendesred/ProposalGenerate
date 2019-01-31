@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+	<head>
+	
+			<meta charset="utf-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<meta name="description" content="">
+			<meta name="author" content="">
+	
+			<title>ProposalGenerate</title>
+			<%= wicked_pdf_stylesheet_link_tag  'application' %>
+			<%= wicked_pdf_javascript_include_tag "number_pages" %>
+	
+			<%= csrf_meta_tags %>
+	</head>
+	<body><!--<%# @select_all_calculation.salario_minimo %>-->
+	<div class="showFonteSize" style="padding-left: 0;padding-right: 0;">
+		<div class="row">
+			<div class="col-lg-12" style="padding-left: 0;padding-right: 0;">
+				<div class="bottons pull-right topHeader" style="position:fixed;right: 2%;z-index: 100">
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-default margin-5">
+			<div class="panel-heading">
+				<span class="font-30px"><strong>Cliente:</strong> <%= @proposal_hour_extra.client %></span> 
+				<span class="pull-right font-20px" style="bottom: 5px;position: relative;" >Proposta:<br> <%= @proposal_hour_extra.codigo_cliente %></span>
+			</div>
+			<div class="panel-body paddin-left-right">
+				<div class="col-lg-12 paddin-left-right"> 
+					<div class="row">
+						<div class="inline">
+							<div class="col-lg-5">
+								<p class="showFonteSize font-12px"><span class=""><strong>Cidade:</strong><%= (@proposal_hour_extra.city.nome) %></span></p>
+								<p class="showFonteSize font-12px"><span class=""><strong>Data de criação:</strong><%= criate_date(@proposal_hour_extra.created_at) %></span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default margin-5"> <!-- classe para pdf -->
+					<div class="panel-heading">
+							<strong> Cargos e Salarios </strong>
+						</div>
+						<div class="panel-body padding-bottom4">
+							<div class="table-responsive">
+								<table class="table table-striped table-bordered table-hover">
+									<thead>
+										<tr>
+											<th>Cargos</th>
+											<th>Salario</th>
+											<th>Qtd. de posto(s)</th>
+										</tr>
+									</thead>
+									<tbody>
+									<% @proposal_hour_extra.hour_extra_roles.each do |hour_extra| %>
+										<tr>
+											<!--td><%#= hExRoles.role.service.company.id %></td-->
+											<td class="showFonteSize">
+												<%= hour_extra.cargo %>
+											</td><!--Nome do cargo-->
+											<td class="showFonteSize">
+												<%= hour_extra.qtd_postos %>
+											</td><!--Quandidade de funcionarios-->
+											<td class="showFonteSize">
+												<%= hour_extra.salario %>
+											</td><!--Nome do cargo-->
+										</tr> 
+									<% end %>
+								</tbody>
+							</table>
+						</div>
+						<!-- /.table-responsive -->
+						<p class="showFonteSize totaisStyle">
+							<strong>Total de efetivo: </strong><%= (@proposal_hour_extra.efetivo_total).round(2)%><br>
+							<strong>Total dos salarios da escala: </strong><%= number_to_currency(@proposal_hour_extra.total_salario ) %><br><!--Salarios totais-->
+						</p>  
+					</div>
+					<!-- /.panel-body -->
+				</div>
+				<div class="panel panel-default margin-5">
+					<div class="panel-heading">
+						<strong> A - Salário </strong>
+					</div>
+					<div class="panel-body padding-4">
+						<div class="table-responsive">
+							<table class="table table-striped table-bordered table-hover">
+								<thead>
+									<tr>
+										<th class="padraoEspaco1">Nome do campo de calculo:</th>
+										<th class="padraoEspaco2">Valor do campo p/ calculo:</th>
+										<th>Total</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td class="showFonteSize"> Horas extras:</td>  
+										<td class="showFonteSize"> <%=(@proposal_hour_extra.horas_extras)%></td>
+										<td class="showFonteSize"> <%=number_to_currency(@proposal_hour_extra.calc_horas_extras)%></td>
+									</tr>
+									<% if @proposal_hour_extra.calc_ad_noturno==0 || @proposal_hour_extra.calc_ad_noturno.nil? %>
+									<% else %>
+									<tr>
+										<td class="showFonteSize"> Adicional noturno:</td>
+										<td class="showFonteSize"> <%=@proposal_hour_extra.ad_noturno*1.1429%>  
+										<td class="showFonteSize"> <%= number_to_currency(@proposal_hour_extra.calc_ad_noturno) %></td>  
+									</tr>
+									<% end %>
+									<tr>                 
+										<td class="showFonteSize"> Reflexos:</td>  
+										<td class="showFonteSize"> <%=%></td>  
+										<td class="showFonteSize"> <%= number_to_currency(@proposal_hour_extra.calc_reflexos) %></td>  
+									</tr>
+									<tr>
+										<td class="showFonteSize"> Remuneração base por vigilante:</td>  
+										<td class="showFonteSize"> <%= %> </td>  
+										<td class="showFonteSize"> <%= number_to_currency(@proposal_hour_extra.calc_remuneracao_base_p_func) %></td>  
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<p class="showFonteSize totaisStyle">
+							<strong>Total massa salarial: </strong><%=number_to_currency((@proposal_hour_extra.calc_total_salario).round(2))%>
+						</p>
+					</div>
+				</div>
+				<div class="panel panel-default margin-5">
+					<div class="panel-heading">
+						<strong> B - Encargos diretosl:</strong>
+					</div>
+					<div class="panel-body">
+						<div class="table-responsive">
+							<table class="table table-striped table-bordered table-hover">
+								<thead>
+									<tr >
+										<th class="padraoEspaco1">Tributo: </th>
+										<th class="padraoEspaco2">Valor em porcentagem: </th>
+										<th>Valor total sobre massa salarila:</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td class="showFonteSize">FGTS</td>
+										<td class="showFonteSize"><%=@select_all_calculation.fgts%><span>%</span></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.b_fgts)%></td>
+									</tr>
+									<tr>
+										<td class="showFonteSize">INSS</td>
+										<td class="showFonteSize"><%=@select_all_calculation.inss%><span>%</span></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.b_inss)%></td>
+									</tr>
+									<tr>
+										<td class="showFonteSize">Seguro acidente de trabalho</td>
+										<td class="showFonteSize"><%=@proposal_hour_extra.seguro_aci_trabalho%><span>%</span></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.b_seg_acidente_trabalho)%></td>
+									</tr>
+									<tr>
+										<td class="showFonteSize">Sebrae</td>
+										<td class="showFonteSize"><%=@select_all_calculation.sebrae%><span>%</span></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.b_sebrae)%></td>
+									</tr>
+									<tr>
+										<td class="showFonteSize">Incra</td>
+										<td class="showFonteSize"><%=@select_all_calculation.incra%><span>%</span></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.b_incra)%></td>
+									</tr>
+									<tr>
+										<td class="showFonteSize">Salario educação</td>
+										<td class="showFonteSize"><%=@select_all_calculation.salario_educacao%><span>%</span></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.b_salario_educacao)%></td>
+									</tr>
+									<tr>
+										<td class="showFonteSize">Sesc</td>
+										<td class="showFonteSize"><%=@select_all_calculation.sesc%><span>%</span></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.b_sesc)%></td>
+									</tr>
+									<tr>
+										<td class="showFonteSize">Senac</td>
+										<td class="showFonteSize"><%=@select_all_calculation.senac%><span>%</span></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.b_senac)%></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<p class="showFonteSize">
+							<strong>Total de encargos diretos: </strong><%=number_to_currency(@proposal_hour_extra.b_total_incargos_diretos)%>
+						</p>
+					</div>
+				</div>
+				<div class="panel panel-default margin-5">
+					<div class="panel-heading">
+						<strong>C - Provisões:</strong>
+					</div>
+					<div class="panel-body">
+						<div class="table-responsive">
+							<table class="table table-striped table-bordered table-hover">
+								<thead>
+									<tr >
+										<th class="padraoEspaco1">Provisões </th>
+										<th class="padraoEspaco2">Valor em porcentagem: </th>
+										<th>Valor total sobre provisões salarila:</th>
+									</tr>
+								</thead>
+								<tbody> 
+									<tr>
+										<td class="showFonteSize">Ferias</td>
+										<td class="showFonteSize"><%=@select_all_calculation.ferias%><span>%.</span></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.c_ferias)%></td>
+									</tr>
+									<tr>
+										<td class="showFonteSize">Ferias 1/3 constitucional</td>
+										<td class="showFonteSize"><%=@select_all_calculation.um_terco_constitucional%><span>%.</span></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.c_ferias_um_terco_constitucional)%></td>
+									</tr>
+									<tr>
+										<td class="showFonteSize"> 13º salario</td>
+										<td class="showFonteSize"><%=@select_all_calculation.decimo_terceito%><span>%.</span></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.c_decimo_terceiro_salario)%></td>
+									</tr>
+									<tr>
+										<td class="showFonteSize">Inss Sob Ferias </td>
+										<td class="showFonteSize"><%=@select_all_calculation.pct_inss_sob_soma_decimo_um_terco_ferias%><span>%.</span></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.c_inss)%></td>
+									</tr>
+									<tr>
+										<td class="showFonteSize"> FGTS</td>
+										<td class="showFonteSize"><%=@select_all_calculation.pct_fgts_sob_soma_decimo_um_terco_ferias%><span>%.</span></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.c_fgts)%></td>
+									</tr>
+									<tr>
+										<td class="showFonteSize">Aviso previo</td>
+										<td class="showFonteSize"><%=@select_all_calculation.aviso_previo%><span>%.</span></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.c_aviso_previo)%></td>
+									</tr>
+									<tr>
+										<td class="showFonteSize"> FGTS indenização sobre FGTS total</td>
+										<td class="showFonteSize"><%=@select_all_calculation.indenizacao_fgts%><span>%.</span></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.c_fgts_indenizado)%></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<p class="showFonteSize">
+							<strong>Total de provisões sobre massa salarial: </strong><%=number_to_currency(@proposal_hour_extra.c_total_previsões)%>
+						</p>
+					</div>
+				</div>
+				<div class="panel panel-default margin-5">
+					<div class="panel-heading">
+						<strong>D - Benefícios:</strong>
+					</div>  
+					<div class="panel-body">
+						<div class="table-responsive">
+							<table class="table table-striped table-bordered table-hover">
+								<thead>
+									<tr>
+										<th class="">Beneficio </th>
+										<th class="">valor unitario:</th>
+										<th>Valor total:</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td class="showFonteSize">Vale refeição.</td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.d_uni_vr)%></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.d_vr)%></td>
+									</tr>
+									<tr>
+										<td class="showFonteSize">Vale transporte.</td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.d_uni_vt)%></td>
+										<td class="showFonteSize"><%=number_to_currency(@proposal_hour_extra.d_vt)%></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<p class="showFonteSize">
+							<strong>Total dos beneficios: </strong><%=number_to_currency(@proposal_hour_extra.tot_beneficios)%>
+						</p>
+					</div>
+				</div>
+				<!--Colocar aqui -->
+				<h5><strong>Total ( I ) - Mão de obra:</strong><%= number_to_currency((@proposal_hour_extra.tot_mao_de_obra_parcial).round(2))%></h5>
+				<hr/>
+				<div class="panel panel-default margin-5">
+					<div class="panel-heading">
+						<strong><h4>E - Operação, F - Administração:</h4></strong>
+					</div>  
+					<div class="panel-body">
+						<div class="table-responsive">
+							<table class="table table-striped table-bordered table-hover">
+								<thead>
+									<tr>
+										<th class="padraoEspaco1"style="width: 60%;">Operação </th>
+										<th colspan="2"> </th>
+									</tr>
+								</thead>
+								<tbody> 
+									<tr>
+										<td class="showFonteSize">Gestão operacional</td>
+										<td class="showFonteSize"><%=@proposal_hour_extra.taxa_operacional%></td>
+										<td class="showFonteSize" style="width: 29%;"><%=number_to_currency(@proposal_hour_extra.gestao_operacional)%></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="table-responsive">
+							<table class="table table-striped table-bordered table-hover">
+								<thead>
+									<tr>
+										<th class="padraoEspaco1"style="width: 60%;">Adminstração </th>
+										<th colspan="2"> </th>
+									</tr>
+								</thead>
+								<tbody> 
+									<tr>
+										<td class="showFonteSize"> Gestão administrativa</td>
+										<td class="showFonteSize"><%=@proposal_hour_extra.taxa_administrativo%></td>
+										<td class="showFonteSize" style="width: 29%;"><%=number_to_currency(@proposal_hour_extra.gestao_administrativa)%></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div> 
+				<h5><strong>Total (II) - Operação e Administração: </strong><%=number_to_currency(@proposal_hour_extra.operacional_administrativo)%></h4>
+				<hr/>
+				<h5><strong>VALOR TOTAL DOS SERVIÇOS (I + II): </strong><%=number_to_currency(@proposal_hour_extra.valor_servico)%></h4>
+				<hr/>
+				<div class="panel panel-default margin-5">
+					<div class="panel-heading">
+						<strong>Impostos </strong>
+					</div>
+						<div class="panel-body">
+							<div class="table-responsive">
+								<table class="table table-striped table-bordered table-hover">
+									<thead>
+										<tr>
+											<th class="padraoEspaco1">Nome do campo de calculo:</th>
+											<th class="padraoEspaco2">Valor do campo p/ calculo:</th>
+										<th>Total</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td class="showFonteSize">Valor Issqn:</td>                
+										<td class="showFonteSize"><%= @proposal_hour_extra.city.issqn %><span>%</span></td>  
+										<td class="showFonteSize"><%= number_to_currency((@proposal_hour_extra.inss).round(2)) %></td>
+									</tr>
+									<tr>                 
+										<td class="showFonteSize">Valor Irrf:</td>  
+										<td class="showFonteSize"><%= @proposal_hour_extra.company.irrf %><span>%</span></td>
+										<td class="showFonteSize"><%= number_to_currency((@proposal_hour_extra.irrf).round(2)) %></td>  
+									</tr>
+									<tr>                 
+										<td class="showFonteSize">Valor Csll:</td>  
+										<td class="showFonteSize"><%= @proposal_hour_extra.company.csll %><span>%</span></td>  
+										<td class="showFonteSize"><%= number_to_currency((@proposal_hour_extra.csll).round(2)) %></td>  
+									</tr>
+									<tr>
+										<td class="showFonteSize">Valor Pis:</td>  
+										<td class="showFonteSize"><%= @proposal_hour_extra.company.pis %><span>%</span></td>
+										<td class="showFonteSize"><%= number_to_currency((@proposal_hour_extra.pis).round(2)) %></td>
+									</tr>
+									<tr>
+										<td class="showFonteSize">Valor Confins:</td>  
+										<td class="showFonteSize"><%= @proposal_hour_extra.company.cofins %><span>%</span></td> 
+										<td class="showFonteSize"><%= number_to_currency((@proposal_hour_extra.cofins).round(2)) %></td> 
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<h5>
+					<strong>Total (III) - Impostos sobre serviços </strong><%=number_to_currency((@proposal_hour_extra.tot_impostos_sob_servico).round(2))%>
+				</h5>
+				<hr/>   
+				<h5>
+					<strong>DEMONSTRATIVO  DO  CUSTO  FINAL:</strong>
+					<ul class="proposal-roda-pe">
+						<li>Valor dos Serviços: <%= number_to_currency((@proposal_hour_extra.valor_servico).round(2))%></li>
+						<li>Valor de Impostos: <%=number_to_currency((@proposal_hour_extra.tot_impostos_sob_servico).round(2))%></li>
+					</ul>
+				</h5>
+				<h5 class="page-header topHeader">
+					<strong>VALOR TOTAL MENSAL:</strong> <%=number_to_currency((@proposal_hour_extra.valor_servico+@proposal_hour_extra.tot_impostos_sob_servico).round(2))%>
+				</h5>
+				<p class="showFonteSize">
+					<strong>N° horas: </strong><%=@proposal_hour_extra.n_horas_extras%> <br>
+					<strong>Valor Hora: </strong><%=number_to_currency((@proposal_hour_extra.v_hora_proposta).round(2))%>
+				</p>
+			</div><!-- /.col-lg-12 -->
+		</div>
+	</div>
+</div>
+</body>

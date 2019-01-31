@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  client: MyString
+  local: MyString
+  city_id: 
+  rotation_id: 
+  company_id: 
+  admin_id: 
+
+two:
+  client: MyString
+  local: MyString
+  city_id: 
+  rotation_id: 
+  company_id: 
+  admin_id: 

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Hour Extra Role Fields</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Proposal hour</th>
+      <th>Role hour id.integer</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @hour_extra_role_fields.each do |hour_extra_role_field| %>
+      <tr>
+        <td><%= hour_extra_role_field.proposal_hour_id %></td>
+        <td><%= hour_extra_role_field.role_hour_id.integer %></td>
+        <td><%= link_to 'Show', hour_extra_role_field %></td>
+        <td><%= link_to 'Edit', edit_hour_extra_role_field_path(hour_extra_role_field) %></td>
+        <td><%= link_to 'Destroy', hour_extra_role_field, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Hour extra role field', new_hour_extra_role_field_path %>

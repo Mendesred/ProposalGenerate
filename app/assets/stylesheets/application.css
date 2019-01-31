@@ -10,10 +10,10 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_tree .
- *= require_self
  *= require font-awesome
  *= require bootstrap_sb_admin_base_v2
+ *= require_tree .
+ *= require_self
  */
 
 .font-30px{
@@ -108,8 +108,8 @@ div.cal-lg-12 .peddingsIndex{
 }
 .totaisStyle{
 	position: relative;
-    bottom: 10px;
-    margin-bottom: 0;
+	bottom: 10px;
+	margin-bottom: 0;
 }
 .page-break { 
   display:block; 
@@ -118,4 +118,15 @@ div.cal-lg-12 .peddingsIndex{
 }
 .corFundo{
 	background: #fff;
+}
+.botton-barra{
+ position: relative;
+ bottom: 7px;
+}
+.botton-barra-proposal{
+ position: relative;
+ bottom: 27px;
+}
+.dropdown-menu.proposta.drop-down-menu{
+		top: 16%;
 }

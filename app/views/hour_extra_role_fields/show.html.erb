@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Proposal hour:</strong>
+  <%= @hour_extra_role_field.proposal_hour_id %>
+</p>
+
+<p>
+  <strong>Role hour id.integer:</strong>
+  <%= @hour_extra_role_field.role_hour_id.integer %>
+</p>
+
+<%= link_to 'Edit', edit_hour_extra_role_field_path(@hour_extra_role_field) %> |
+<%= link_to 'Back', hour_extra_role_fields_path %>

@@ -86,6 +86,10 @@
             <td><%= calculation.aviso_previo %> %</td>
           </tr>
           <tr>
+            <td>Aviso previo planilha horas extras</td>
+            <td><%= calculation.coberturas%> %</td>
+          </tr>
+          <tr>
             <td>Indenização Fgts</td>
             <td><%= calculation.indenizacao_fgts %> %</td>
           </tr>
@@ -101,6 +105,11 @@
             <td>Horas de calculo adicional noturno:</td>
             <td><%= calculation.horasDeCalculoAdNoturno%> %</td>
           </tr>
+          <tr>
+            <td>Coberturas:</td>
+            <td><%= calculation.coberturas%> %</td>
+          </tr>
+
         </tbody>
       </table>
       <% end %>

@@ -8,18 +8,18 @@
 			<div class="col-lg-12">
 				<%= form_for [@selected_service,@proposal] do |f| %>
 				<% if @proposal.errors.any? %>
-				<div id="error_explanatio" class="alert alert-danger" >
-					<h4>
-						<%= pluralize(@proposal.errors.count, "error") %> prohibited this proposal from being saved:
-					</h4>
-					<ul>
-						<% @proposal.errors.values.each do |message| %>
-						<li>
-							<%= message[0] %>
-						</li>
-						<% end %>
-					</ul>
-				</div>
+					<div id="error_explanatio" class="alert alert-danger" >
+						<h4>
+							<%= pluralize(@proposal.errors.count, "error") %> prohibited this proposal from being saved:
+						</h4>
+						<ul>
+							<% @proposal.errors.values.each do |message| %>
+								<li>
+									<%= message[0] %>
+								</li>
+							<% end %>
+						</ul>
+					</div>
 				<% end %>
 
 				<%= f.collection_select :company_id, @select_all_company, :id, :name_company,{value:  @selected_service.company_id},style: "display:none"  %> <!--part de cliente codigo e cidade--> 
@@ -28,7 +28,7 @@
 						<div class="col-sm-4">
 							<div class="field">
 								<strong>Cliente:</strong><br>
-								<%= f.text_field :cliente, class:'form-control', placeholder:'Nomedo cliente',:required =>true %>
+								<%= f.text_field :cliente, class:'form-control', placeholder:'Nome do cliente',:required =>true %>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -37,7 +37,6 @@
 								<%= f.text_field :codigo_cliente, class:'form-control', placeholder:'Codigo da Proposta' %><!--:required =>true-->
 							</div>
 						</div>
-
 						<div class="col-sm-4">
 							<div class="field">
 								<strong>Cidade:</strong><br>
@@ -736,7 +735,6 @@
 								<button type="submit" class="btn btn-outline btn-success">Salvar</button>
 							</div>
 						</div>
-					</div>
 				</div>
 				<% end %>
 			</div>

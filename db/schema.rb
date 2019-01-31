@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190103124406) do
+ActiveRecord::Schema.define(version: 20190122184215) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,11 @@ ActiveRecord::Schema.define(version: 20190103124406) do
     t.float    "valorIndiceAdministrativo"
     t.float    "valorIndiceOperacional"
     t.float    "horasDeCalculoAdNoturno"
+    t.float    "coberturas"
+    t.float    "aviso_previo_hx"
+    t.float    "ferias_h_ex"
+    t.float    "ferias_um_terco_constitucional"
+    t.float    "aux_enfermidade"
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
   end
@@ -102,6 +107,20 @@ ActiveRecord::Schema.define(version: 20190103124406) do
   add_index "equipaments", ["sub_type_id"], name: "index_equipaments_on_sub_type_id", using: :btree
   add_index "equipaments", ["type_equipament_id"], name: "index_equipaments_on_type_equipament_id", using: :btree
 
+  create_table "hour_extra_roles", force: :cascade do |t|
+    t.integer  "proposal_hour_extra_id"
+    t.integer  "role_id"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.string   "cargo"
+    t.float    "salario"
+    t.float    "salario_um_cargo"
+    t.integer  "qtd_postos"
+  end
+
+  add_index "hour_extra_roles", ["proposal_hour_extra_id"], name: "index_hour_extra_roles_on_proposal_hour_extra_id", using: :btree
+  add_index "hour_extra_roles", ["role_id"], name: "index_hour_extra_roles_on_role_id", using: :btree
+
   create_table "meals", force: :cascade do |t|
     t.string   "type"
     t.float    "value"
@@ -135,6 +154,89 @@ ActiveRecord::Schema.define(version: 20190103124406) do
   add_index "proposal_equipaments", ["proposal_id"], name: "index_proposal_equipaments_on_proposal_id", using: :btree
   add_index "proposal_equipaments", ["sub_type_id"], name: "index_proposal_equipaments_on_sub_type_id", using: :btree
   add_index "proposal_equipaments", ["type_equipament_id"], name: "index_proposal_equipaments_on_type_equipament_id", using: :btree
+
+  create_table "proposal_hour_extras", force: :cascade do |t|
+    t.string   "client"
+    t.string   "detail"
+    t.string   "codigo_cliente"
+    t.integer  "city_id"
+    t.integer  "company_id"
+    t.integer  "admin_id"
+    t.float    "salario"
+    t.float    "n_funcionario"
+    t.float    "horas_extras"
+    t.float    "ad_noturno"
+    t.float    "reflexos"
+    t.float    "calc_horas_extras"
+    t.float    "calc_ad_noturno"
+    t.float    "calc_reflexos"
+    t.float    "calc_remuneracao_base_p_func"
+    t.float    "calc_total_salario"
+    t.float    "acumulador_funcionarios"
+    t.float    "remuneracao_base_p_func"
+    t.float    "total_funcionarios"
+    t.float    "total_salario"
+    t.float    "efetivo_total"
+    t.float    "efetivo_indivitual"
+    t.float    "b_fgts"
+    t.float    "b_inss"
+    t.float    "b_seg_acidente_trabalho"
+    t.float    "b_sebrae"
+    t.float    "b_incra"
+    t.float    "b_salario_educacao"
+    t.float    "b_sesc"
+    t.float    "b_senac"
+    t.float    "b_total_incargos_diretos"
+    t.float    "c_ferias"
+    t.float    "c_ferias_um_terco_constitucional"
+    t.float    "c_decimo_terceiro_salario"
+    t.float    "c_fgts"
+    t.float    "c_inss"
+    t.float    "c_auxilio_enfermidade"
+    t.float    "c_aviso_previo"
+    t.float    "c_fgts_indenizado"
+    t.float    "c_cooberturas"
+    t.float    "c_total_previsões"
+    t.float    "d_uni_vr"
+    t.float    "d_vr"
+    t.float    "d_uni_vt"
+    t.float    "d_vt"
+    t.float    "tot_beneficios"
+    t.float    "tot_mao_de_obra_parcial"
+    t.float    "gestao_operacional"
+    t.float    "gestao_administrativa"
+    t.float    "operacional_administrativo"
+    t.float    "seguro_aci_trabalho"
+    t.float    "irrf"
+    t.float    "csll"
+    t.float    "inss"
+    t.float    "pis"
+    t.float    "cofins"
+    t.float    "tot_impostos_sob_servico"
+    t.float    "valor_servico"
+    t.float    "valor_hora"
+    t.float    "valor_total"
+    t.float    "qtd_postos"
+    t.float    "v_hora_base"
+    t.float    "intermunicipal"
+    t.float    "tx_opracional"
+    t.float    "taxa_operacional"
+    t.float    "tx_administrativa"
+    t.float    "taxa_administrativo"
+    t.float    "n_horas_extras"
+    t.float    "v_hora_proposta"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.string   "tipo_servico"
+    t.string   "user_criate"
+    t.string   "user_update"
+    t.string   "tipo_escala"
+    t.string   "cidade"
+  end
+
+  add_index "proposal_hour_extras", ["admin_id"], name: "index_proposal_hour_extras_on_admin_id", using: :btree
+  add_index "proposal_hour_extras", ["city_id"], name: "index_proposal_hour_extras_on_city_id", using: :btree
+  add_index "proposal_hour_extras", ["company_id"], name: "index_proposal_hour_extras_on_company_id", using: :btree
 
   create_table "proposal_roles", force: :cascade do |t|
     t.float    "qtd_postos"
@@ -406,10 +508,15 @@ ActiveRecord::Schema.define(version: 20190103124406) do
 
   add_foreign_key "equipaments", "sub_types"
   add_foreign_key "equipaments", "type_equipaments"
+  add_foreign_key "hour_extra_roles", "proposal_hour_extras"
+  add_foreign_key "hour_extra_roles", "roles"
   add_foreign_key "proposal_equipaments", "equipaments"
   add_foreign_key "proposal_equipaments", "proposals"
   add_foreign_key "proposal_equipaments", "sub_types"
   add_foreign_key "proposal_equipaments", "type_equipaments"
+  add_foreign_key "proposal_hour_extras", "admins"
+  add_foreign_key "proposal_hour_extras", "cities"
+  add_foreign_key "proposal_hour_extras", "companies"
   add_foreign_key "proposal_roles", "proposals"
   add_foreign_key "proposal_roles", "roles"
   add_foreign_key "proposals", "admins"

@@ -25,22 +25,6 @@
 								<%= f.text_field :salario_minimo, :value => number_with_precision(f.object.salario_minimo,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:100%",:data => {:mask=> '99.99'} %>
 							</div>
 						</div>
-						<!-- <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button> -->
-						<!-- <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button> -->
-						<!-- <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button> -->
-						<!-- <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button> -->
-						<!-- <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button> -->
-						<!-- <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button> -->
-						<!-- <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button> -->
-						<!-- <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button> -->
-						<!-- <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button> -->
-						<!-- <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button> -->
-						<!-- <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button> -->
-						<!-- <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button> -->
-						<!-- <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button> -->
-						<!-- <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button> -->
-						<!-- <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button> -->
-						<!-- <button type="button" class="btn btn-primary btn-circle btn-xs pull-right"><i class="fa fa-info"></i></button> -->
 						<div class="col-sm-4">
 							<div class="field">
 								<strong>FGTS </strong><br>
@@ -149,6 +133,40 @@
 							<div class="field">
 								<strong>Horas de calculo adicional noturno </strong><br>
 								<%= f.text_field :horasDeCalculoAdNoturno, :value => number_with_precision(f.object.horasDeCalculoAdNoturno,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:100%",:data => {:mask=> '99.99'} %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Coberturas </strong><br>
+								<%= f.text_field :coberturas, :value => number_with_precision(f.object.coberturas,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:100%",:data => {:mask=> '99.99'} %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Ferias hora extra </strong><br>
+								<%= f.text_field :ferias_h_ex, :value => number_with_precision(f.object.ferias_h_ex,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:100%",:data => {:mask=> '99.99'} %>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="inline">
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Aviso previo hora extra </strong><br>
+								<%= f.text_field :aviso_previo_hx, :value => number_with_precision(f.object.aviso_previo_hx,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:100%",:data => {:mask=> '99.99999'} %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Ferias um terço constitucional </strong><br>
+								<%= f.text_field :ferias_um_terco_constitucional, :value => number_with_precision(f.object.ferias_um_terco_constitucional,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:100%",:data => {:mask=> '99.99999'} %>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="field">
+								<strong>Auxílio enfermidade</strong><br>
+								<%= f.text_field :aux_enfermidade, :value => number_with_precision(f.object.aux_enfermidade,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:100%",:data => {:mask=> '99.99999'} %>
 							</div>
 						</div>
 					</div>

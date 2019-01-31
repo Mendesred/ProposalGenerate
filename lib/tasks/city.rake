@@ -7,8 +7,8 @@ namespace :city do
 			valeTransporte:valorVt,
 			issqn:pcyIssqn)
 
-		puts  "Cidade criada"
 	end
+	puts  "Cidades criadas"
 
   desc "TODO"
   task seed: :environment do

@@ -3,31 +3,33 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<strong>Propostas</strong>
-		<button class="btn btn-success dropdown-toggle pull-right" type="button" data-toggle="dropdown">criar proposta
-			<span class="caret"></span>
-		</button>
-		<ul class="dropdown-menu proposta pull-right">
-			<% @select_all_service.order("created_at").each do |service| %>
-				<% if service.id< 7 %>
-					<li>
-						<div class="">
-							<%= link_to "/services/#{service.id}/proposals/new",class:"btn btn-success TamanhaBotoes", type:"button" do %>
-								Proposta <%=service.tipo_servico%>
-							<% end %>
-						</div>
-					</li>
-				<% else %>
-					<li>
-						<div class="">
-							<%= link_to "/services/#{service.id}/proposals/new",class:"btn btn-warning TamanhaBotoes", type:"button" do %>
-								Proposta <%=service.tipo_servico%>
-							<% end %>
-						</div>
-					</li>
+		<div>
+			<button class="btn btn-success dropdown-toggle pull-right botton-barra-proposal" type="button" data-toggle="dropdown">criar proposta
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu proposta pull-right drop-down-menu">
+				<% @select_all_service.order("created_at").each do |service| %>
+					<% if service.id< 7 %>
+						<li>
+							<div class="">
+								<%= link_to "/services/#{service.id}/proposals/new",class:"btn btn-success TamanhaBotoes", type:"button" do %>
+									Proposta <%=service.tipo_servico%>
+								<% end %>
+							</div>
+						</li>
+					<% else %>
+						<li>
+							<div class="">
+								<%= link_to "/services/#{service.id}/proposals/new",class:"btn btn-warning TamanhaBotoes", type:"button" do %>
+									Proposta <%=service.tipo_servico%>
+								<% end %>
+							</div>
+						</li>
+					<% end %>
 				<% end %>
-			<% end %>
-	 	</ul>
-		</div>
+	 		</ul>
+	 	</div>
+	</div>
 			<!--/.panel-heading-->
 			<div class="panel-body" style="">
 				<table id="proposalTab" class="table table-striped table-bordered table-hover">

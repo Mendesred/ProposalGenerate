@@ -1,0 +1,126 @@
+<div class="col-lg-12">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			Formulario de criação
+		</div>
+		<div class="panel-body">
+			<div class="col-lg-12">
+				<%= form_for [@selected_service,@proposal_hour_extra] do |f| %>
+					<% if @proposal_hour_extra.errors.any? %>
+						<div id="error_explanatio" class="alert alert-danger" >
+							<h4>
+								<h2><%= pluralize(@proposal_hour_extra.errors.count, "error") %> prohibited this proposal_hour_extra from being saved:</h2>
+							</h4>
+						<ul>
+							<% @proposal.errors.values.each do |message| %>
+								<li>
+									<%= message[0] %>
+								</li>
+							<% end %>
+						</ul>
+					</div>
+					<% end %>
+					<%= f.collection_select :company_id, @select_all_company, :id, :name_company,{value:  @selected_service.company_id},style: "display:none"  %> <!--part de cliente codigo e cidade--> 
+					<div class="inline">
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="field">
+									<strong>Cliente:</strong><br>
+									<%= f.text_field :client, class:'form-control', placeholder:'Nomedo cliente',:required =>true%>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="field">
+									<strong>Codigo proposta:</strong><br>
+									<%= f.text_field :codigo_cliente,class:'form-control', placeholder:'Codigo da proposta' %>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="field">
+									<strong>Detalhes:</strong><br>
+									<%= f.text_field :detail,class:'form-control', placeholder:'Detalhes desta propostas' %>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="inline">
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="field">
+									<strong>Cidade:</strong><br>
+									<%= collection_select(:proposal_hour_extra, :city_id, @select_all_city, :id, :nome,{},class:'form-control' ) %>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="field">
+									<strong>Horas extras:</strong><br>
+									<%= f.text_field :horas_extras,class:'form-control', placeholder:'HH', step: 0.01 %>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="field">
+									<strong>Horas adciona noturno:</strong><br>
+									<%= f.text_field :ad_noturno,class:'form-control', placeholder:'HH', step: 0.01 %>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="inline">
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="field">
+									<strong>Horas base para calculo:</strong><br>
+									<%= f.text_field :v_hora_base,class:'form-control', placeholder:'HH', step: 0.01,:required =>true %>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="field">
+									<strong>Gestão Administrativa</strong><br>
+									<%= f.text_field :tx_administrativa, :value => number_with_precision(f.object.tx_administrativa,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:100%",:data => {:mask=> '99.99'} %>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="field">
+									<strong>Gestão Operacional</strong><br>
+									<%= f.text_field :tx_opracional, :value => number_with_precision(f.object.tx_opracional,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:100%",:data => {:mask=> '99.99'} %>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="field">
+									<strong>Valor de um vt caso haja</strong><br>
+									<%= f.text_field :intermunicipal, :value => number_with_precision(f.object.intermunicipal,precision: 2, locale: :"pt-BR"),class:'form-control', placeholder:'0,01',style:"width:100%",:data => {:mask=> '99.99'} %>
+								</div>
+							</div>
+							<div class="col-sm-12" style="height: 22px;position: relative;bottom: 10px;"> 
+								<hr style="margin-top: 10px;margin-bottom: 10px;">
+							</div>
+						</div>
+					</div>
+					<!--part Adicionar funcionarios--> 
+					<div class="inline">
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="field">
+									<div class="hour_extra_roles">
+										<%= link_to_add_association 'Add Cargo', f, :hour_extra_roles, class: 'btn btn-outline btn-info', data: { association_insertion_node: '.hour_extra_roles', association_insertion_method: :append} %><br>
+										<%= f.fields_for :hour_extra_roles do |er|%>
+											<%= render 'hour_extra_role_fields', f: er %>
+										<% end %>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="actions">
+								<button type="submit" class="btn btn-outline btn-success">Salvar</button>
+							</div>
+						</div>
+					</div>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>

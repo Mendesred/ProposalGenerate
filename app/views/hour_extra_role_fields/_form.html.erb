@@ -1,0 +1,25 @@
+<%= form_for(@hour_extra_role_field) do |f| %>
+  <% if @hour_extra_role_field.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@hour_extra_role_field.errors.count, "error") %> prohibited this hour_extra_role_field from being saved:</h2>
+
+      <ul>
+      <% @hour_extra_role_field.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :proposal_hour_id %><br>
+    <%= f.number_field :proposal_hour_id %>
+  </div>
+  <div class="field">
+    <%= f.label :role_hour_id.integer %><br>
+    <%= f.text_field :role_hour_id.integer %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

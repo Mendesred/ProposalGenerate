@@ -5,11 +5,11 @@
 	<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
 		<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
 			<span class="navbar-brand">Sistema de Proposta</span>
 			<span class="navbar-brand">Olá <%=current_admin.nome%></span>
 		</div>
@@ -35,18 +35,35 @@
 						</li>
 					<% if current_admin.full_access? || current_admin.partial_access?  %>
 						<li>
-							<a href="/services/1/proposals"><i class="fa fa-clipboard fa-fw"></i>Proposta</a>
+								<a href="#"><i class="fa fa-clipboard fa-fw"></i>Propostas<span class="fa arrow"></span></a>
+								<ul class="nav nav-second-level">
+									<li>
+										<a href="/services/1/proposals"><i class="fa fa-clipboard fa-fw"></i>Proposta</a>
+									</li>
+									<li>
+										<a href="/services/1/proposal_hour_extras"><i class="fa fa-clipboard fa-fw"></i>Proposta Hs</a>
+									</li>
+									<!-- <li>
+										<a href="#">Second Level Item</a>
+									</li>
+									<li>
+										<a href="#">Second Level Item</a>
+									</li>
+									<li>
+										<a href="#">Second Level Item</a>
+									</li> -->
+								</ul>
 						</li>
 						<li>
 							<a href="/roles"><i class="fa fa-user fa-fw"></i>Cargos</a>
 						</li>
 						<li>
 							<a href="/equipaments"><i class="fa fa-wrench fa-fw"></i>Equipamento e acessorios</a>
-             </li>
+						 </li>
 						<li>
 							<a href="/cities"><i class="fa fa-hospital-o fa-fw"></i>Cidades</a>
 						</li>
-          <% end %>
+					<% end %>
 					<% if current_admin.full_access? %>
 						<li>
 							<%= link_to dashboard_admin_index_path do %><i class="fa fa-users fa-fw"></i>Dashboard<%end%>
@@ -67,8 +84,6 @@
 							<a href="/rotations"><i class="fa fa-plane fa-fw"></i>Escala</a>
 						</li>
 					<%end%>
-					
-					
 				</ul>
 			</div>
 			<!-- /.sidebar-collapse -->

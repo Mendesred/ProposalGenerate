@@ -1,0 +1,9 @@
+<%= link_to service_proposal_hour_extras_path,class:"btn btn-outline btn-success pull-right topHeader", type:"button" do %>
+  <i class="fa fa-clipboard fa-fw"></i> Voltar
+<% end %>   
+<%= link_to "/services/#{@proposal_hour_extra.hour_extra_roles[0].role.service_id}/proposal_hour_extras/#{@proposal_hour_extra.id}/edit",class:"btn btn-outline btn-success pull-right topHeader ", type:"button" do %> 
+  <i class="fa fa-edit"></i> Exibir
+<% end %>
+<h1  class="page-header topHeader">Editando proposta de horas extras</h1>
+
+<%= render 'form' %>

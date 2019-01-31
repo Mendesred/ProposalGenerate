@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  #resources :hour_extra_role_fields
+  # resources :hour_estra_role_fields
   resources :sub_types
   resources :type_equipaments
   resources :meals
@@ -9,11 +11,12 @@ Rails.application.routes.draw do
   end
 
   resources :calculations
-  resources :proposal_roles
-  resources :proposal_equipaments
   resources :equipaments
   resources :services do
     resources :proposals
+  end
+  resources :services do
+    resources :proposal_hour_extras
   end
   resources :rotations
   resources :roles

@@ -1,0 +1,111 @@
+<h1 class="page-header topHeader">Lista de Propostas de Horas Extras</h1>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong>Propostas</strong>
+    <div>
+      <button class="btn btn-success dropdown-toggle pull-right botton-barra-proposal" type="button" data-toggle="dropdown">criar proposta
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu proposta pull-right drop-down-menu">
+        <% @select_all_service.order("created_at").each do |service| %>
+          <% if service.id <0 %>
+            <li>
+              <div class="">
+                <%= link_to "/services/#{service.id}/proposal_hour_extras/new",class:"btn btn-success TamanhaBotoes", type:"button" do %>
+                  Proposta <%=service.tipo_servico%>
+                <% end %>
+              </div>
+            </li>
+          <% elsif service.id == 12 ||service.id == 13 ||service.id == 14 %>
+            <li>
+              <div class="">
+                <%= link_to "/services/#{service.id}/proposal_hour_extras/new",class:"btn btn-warning TamanhaBotoes", type:"button" do %>
+                  Proposta <%=service.tipo_servico%>
+                <% end %>
+              </div>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+      <!--/.panel-heading-->
+      <div class="panel-body" style="">
+        <table id="proposalTab" class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="idProposta" colspan="1" style="width: 30px;padding-left: 7px;padding-right: 7px;">
+                ID:
+              </th>             
+              <th style="width:98px;">
+                Cliente:
+              </th>
+              <th class="idProposta" style="width:127px;">
+                Codigo do cliente:
+              </th>
+              <th>
+                Cidade:
+              </th>
+              <!--th>Escala</th-->
+              <th style="width: 12%;padding-left: 4px;padding-right: 2px;">
+                Tipo de Serviço:
+              </th>
+              <th class="idProposta" style="width:12%;">
+                Criado por:
+              </th>
+              <th class="idProposta" style="width:13%;padding: 7px;">
+                Atualizado por:
+              </th>
+              <th class="idProposta" style="width:14%;">
+                Data de criação:
+              </th>             
+              <th colspan="1" class="espaco3EProposal" style="width: 12%">
+                <!-- epaço dos botões -->
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @proposal_hour_extras.order("id").each do |proposal_hour_extra| %>
+              <tr>
+                <td class="reductionVertical idProposta alinhaTopProposal" ><%= proposal_hour_extra.id %></td>
+                <td class="reductionVertical alinhaTopProposal" ><%= proposal_hour_extra.client %></td>
+                <td class="reductionVertical alinhaTopProposal" ><%= proposal_hour_extra.codigo_cliente %></td>
+                <td class="reductionVertical" ><%= proposal_hour_extra.city.nome %></td>
+                <td class="reductionVertical alinhaTopProposal" ><%= proposal_hour_extra.tipo_servico %></td>
+                <td class="reductionVertical alinhaTopProposal" ><%= proposal_hour_extra.user_criate %></td>
+                <td class="reductionVertical alinhaTopProposal" ><%= proposal_hour_extra.user_update %></td>
+                <td class="reductionVertical alinhaTopProposal"style="font-size:11px;"><%= update_date(proposal_hour_extra.created_at)%></td>
+                <td class="reductionVertical">
+                  <%= link_to [Service.find(proposal_hour_extra.hour_extra_roles[0].role.service_id),proposal_hour_extra],class:"btn btn-default btn-sm ", type:"button",title:"Exibir" do %>
+                    <i class="fa fa-search"></i>
+                  <% end  %>
+                  <%= link_to "/services/#{proposal_hour_extra.hour_extra_roles[0].role.service_id}/proposal_hour_extras/#{proposal_hour_extra.id}/edit/",class:"btn btn-default btn-sm ", type:" button",title:"Editar" do %>
+                    <i class="fa fa-edit"></i>
+                  <% end %>
+                  <%= link_to [Service.find(proposal_hour_extra.hour_extra_roles[0].role.service_id),proposal_hour_extra], method: :delete, data: { confirm: 'Are you sure?' },class:"btn btn-default btn-danger btn-sm ", type:"button",title:"Excluir" do %>
+                    <i class="fa fa-trash-o"></i>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <!--button id="toggleCheckBox" class="btn btn-default pull-left" style="position: relative;bottom: 0px;right: 2px">Selecionar conjuto de proposta</button-->
+        <button class="btn btn-default pull-left"  style="position: relative;bottom: 0px;
+        " onclick="functionSelect()"><i class="fa fa-print"></i> Imprimir intens selecionados</button>
+      </div>
+      <!-- /.panel-body -->
+    </div>
+  </div>
+</div>
+<br>
+<script>
+    $(document).ready(function(){
+    $("#toggleCheckBox").click(function(){
+        $(".check_box_Print").toggle(500);
+    });
+  });
+</script>
+
+<br>

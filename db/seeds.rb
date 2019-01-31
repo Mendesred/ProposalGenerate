@@ -25,6 +25,7 @@ Company.find_or_create_by(
 		pct_reserva_tecnica:3.73)
 
 puts "Empresas criadas"
+
 Service.find_or_create_by!(
 		tipo_servico: 'Segurança', company: Company.first, desconto_vr:0.82, cesta:49.11)
 Service.find_or_create_by!(
@@ -47,6 +48,12 @@ Service.find_or_create_by!(
 		tipo_servico: 'Manutenção Parcial', company: Company.last, desconto_vr:0.13, cesta:102.59)
 Service.find_or_create_by!(
 		tipo_servico: 'Jardinagem Parcial', company: Company.last, desconto_vr:0.13,cesta:102.59)
+Service.find_or_create_by!(
+		tipo_servico: 'Segurança Hora Extra', company: Company.first, desconto_vr:0.82, cesta:49.11)
+Service.find_or_create_by!(
+		tipo_servico: 'Portaria Hora Extra',	company: Company.last, desconto_vr:0.8,	cesta:127.5)
+Service.find_or_create_by!(
+		tipo_servico: 'Limpeza Hora Extra', 	company: Company.last, desconto_vr:0.13, cesta:102.59)
 
 puts  "Tipos de serviços criados"
 							
@@ -271,6 +278,16 @@ Rotation.find_or_create_by(
 		period:Period.find_by(id:6),
 		ad_vespertido_noturno:0.1,
 		ad_noturno:5)
+Rotation.find_or_create_by(
+		tipo_escala:'Escala hora Extra diurno',
+		qtd_funcionarios:1,
+		efetivo:1,
+		dias_trabalhados:1.0,
+		fator_escala:1.0,
+		v_reciclagem:1.0,
+		period:Period.find_by(id:1),
+		ad_vespertido_noturno:1.0,
+		ad_noturno:8)
 
 
 puts  "Escala criada"
@@ -531,6 +548,104 @@ Role.find_or_create_by!(
 		ppr:258.57,
 		service: Service.find(9))
 
+Role.find_or_create_by!(
+		cargo:'Vigilante horas extras',
+		salario:1932.97,
+		gratificacao:0.0,
+		vale_refeicao:22.62,
+		assist_medica:0,
+		seg_vida:0,
+		uniformes:0,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
+		reciclagem:1,
+		service: Service.find(12))
+
+Role.find_or_create_by!(
+		cargo:'Vigilante Cond Veículo Motorizado horas extras',
+		salario:1932.97,
+		gratificacao:0.0,
+		vale_refeicao:22.62,
+		assist_medica:0,
+		seg_vida:0,
+		uniformes:0,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
+		reciclagem:1,
+		service: Service.find(12))
+
+Role.find_or_create_by!(
+		cargo:'Vigilante Lider horas extras',
+		salario:2081.66,
+		gratificacao:0.0,
+		vale_refeicao:22.62,
+		assist_medica:0,
+		seg_vida:0,
+		uniformes:0,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
+		reciclagem:1,
+		service: Service.find(12))
+
+Role.find_or_create_by!(
+		cargo:'Vigilante Lider horas extras',
+		salario:2111.4,
+		gratificacao:0.0,
+		vale_refeicao:22.62,
+		assist_medica:0,
+		seg_vida:0,
+		uniformes:0,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
+		reciclagem:1,
+		service: Service.find(12))
+
+Role.find_or_create_by!(
+		cargo:'Porteiro horas extras',
+		salario:1435.34,
+		gratificacao:0.0,
+		vale_refeicao:16.6,
+		assist_medica:0,
+		seg_vida:0,
+		uniformes:0,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
+		reciclagem:1,
+		service: Service.find(13))
+
+Role.find_or_create_by!(
+		cargo:'Controlador de Acesso horas extras',
+		salario:1296.69,
+		gratificacao:0.0,
+		vale_refeicao:16.6,
+		assist_medica:0,
+		seg_vida:0,
+		uniformes:0,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
+		reciclagem:1,
+		service: Service.find(12))
+
+Role.find_or_create_by!(
+		cargo:'Vigilante Lider horas extras',
+		salario:1110.7,
+		gratificacao:0.0,
+		vale_refeicao:14.73,
+		assist_medica:0,
+		seg_vida:0,
+		uniformes:0,
+		assist_Soc_Familiar:0.0,
+		beneficio_Natalidade:0.0,
+		ppr:0.0,
+		reciclagem:1,
+		service: Service.find(13))
+
 puts  "Cargo criado"
 
 category = ["Acabamentos",
@@ -574,16 +689,21 @@ Calculation.find_or_create_by(
 		salario_educacao:2.5,
 		sesc:1.5,
 		senac:1.0,
-		ferias:8.3333 ,
+		ferias:8.3333,
+		ferias_h_ex:8.3333,
 		um_terco_constitucional:2.7775 ,
 		decimo_terceito: 8.3333,
 		pct_inss_sob_soma_decimo_um_terco_ferias: 28.8,
-		pct_fgts_sob_soma_decimo_um_terco_ferias: 8,
+		pct_fgts_sob_soma_decimo_um_terco_ferias: 8.0,
 		aviso_previo:0.18 ,
 		indenizacao_fgts: 50.0,
 		indiceAdministrativo: 5.6,
 		indiceOperacional: 9.85,
-		horasDeCalculoAdNoturno:52.5)
+		horasDeCalculoAdNoturno:52.5,
+		coberturas:3.73,
+		aviso_previo_hx:0.18,
+		ferias_um_terco_constitucional:2.7775,
+		aux_enfermidade:0.3)
 
 puts  "Campos de calculos criados"
 Admin.create!( 

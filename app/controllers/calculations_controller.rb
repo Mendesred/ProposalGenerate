@@ -84,9 +84,9 @@ class CalculationsController < ApplicationMainController
 									:salario_educacao => :number,:sesc => :number,:senac => :number,:decimo_terceito => :number,:um_terco_constitucional => :number,
 									:ferias => :number,:pct_inss_sob_soma_decimo_um_terco_ferias => :number,:pct_fgts_sob_soma_decimo_um_terco_ferias => :number,
 									:aviso_previo => :number,:indenizacao_fgts => :number,:pct_reserva_tecnica => :number,:indindexceOperacional => :number,
-									:indiceAdministrativo => :number,:horasDeCalculoAdNoturno => :number }
+									:indiceAdministrativo => :number,:horasDeCalculoAdNoturno => :number, :seguro_aci_trabalho => :number }
 			params.require(:calculation).permit(:salario_minimo, :fgts, :inss, :sebrae, :incra, :salario_educacao, :sesc, :senac,:decimo_terceito,:um_terco_constitucional,
-																					:ferias,:pct_inss_sob_soma_decimo_um_terco_ferias,:pct_fgts_sob_soma_decimo_um_terco_ferias,:aviso_previo,
+																					:ferias,:pct_inss_sob_soma_decimo_um_terco_ferias,:pct_fgts_sob_soma_decimo_um_terco_ferias,:aviso_previo,:seguro_aci_trabalho,
 																					:indenizacao_fgts,:pct_reserva_tecnica,:indindexceOperacional,:indiceAdministrativo,:horasDeCalculoAdNoturno).delocalize(delocalize_config)
 		end
 end

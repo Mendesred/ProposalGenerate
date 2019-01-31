@@ -43,9 +43,8 @@ div {
 
 .field_with_errors {
   padding: 2px;
-  box-shadow: inset 0 0 1em #ff000070, 0 0 1em red;
+  background-color: red;
   display: table;
-  width: 100%
 }
 
 #error_explanation {
@@ -67,64 +66,8 @@ div {
     color: #fff;
   }
 
-
   ul li {
     font-size: 12px;
     list-style: square;
   }
-
-}
-.page-header.topHeader{
-  margin-top: 10px;
-}
-.topHeader{
-    margin-top: 10px;
-}
-.dropdown-toggle.pull-right{
- margin-top: -7px;
-}
-.dropdown-menu.proposta.pull-right{
-  top: 114px;
-  right: 29px;
-  padding-top: 0;
-  padding-bottom:0;
-}
-/* espaço para priemria colula da planilha proposal */
-.padraoEspaco1{
-
-  width: 28%;
-
-}
-/* espaço para segunda colula da planilha proposal */
-.padraoEspaco2 { 
-  width: 43%;
-}
-/* espaço para segunda colula da planilha proposal */
-.padraoEspaco3 { 
-  width: 24%;
-}
-
-/* espaço para coluna de exibir, editar e excluir */
-.espaco3E{
-
-  width: 238px;
-}
-
-.sidebar.ajusteWidthADireita{
-  width: 217px;
-}
-#page-wrapper.ajusteAreaTotal{
-  margin: 0 0 0 217px;
-}
-.ajusteButton{
-  margin-top: -4px;
-}
-.nav>li>a {
-    position: relative;
-    display: block;
-    padding: 10px 15px;
-}
-a {
-    color: #337ab7;
-    text-decoration: none;
 }

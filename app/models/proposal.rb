@@ -89,10 +89,10 @@ class Proposal < ActiveRecord::Base
 			acumuladorFuncionarios+=self.rotation.qtd_funcionarios*proposal_role.qtd_postos
 
 			##########################################################################################################
-			####### Abaixo esta alguns valores que será usado para calculos mais abaixo 											########
+			####### Abaixo esta alguns valores que será usado para calculos mais abaixo 					  ########
 			####### aproveitei a requisição de porposal roles para armasenar o valor do ultimo cago adcionado ########
-			####### Estou ciente que não é a melhor forma de pegar este dado porem foi a unica que encontei		########
-			####### NOTA PARA FUTURAS MANUTENÇÕES																															########
+			####### Estou ciente que não é a melhor forma de pegar este dado porem foi a unica que encontei	  ########
+			####### NOTA PARA FUTURAS MANUTENÇÕES															  ########
 			##########################################################################################################
 			opcReciclagem = proposal_role.role.reciclagem
 

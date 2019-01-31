@@ -5,7 +5,7 @@ class Dashboard::AdminController < ApplicationMainController
   # GET /calculations.json
   def index
   	@admins = policy_scope(Admin)
-    @admins = @admins.limit(5).order(:created_at)
+    @admins = @admins.limit(10).order(:created_at)
   end
 
   # GET /calculations/1
